@@ -1,0 +1,57 @@
+\documentclass[twocolumn, aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, doublefloatfix, table-of-contents, eqsecnum, rmp]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[breaklinks]{hyperref}
+    
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+    
+\begin{document}
+
+\title{Graph state digital signature scheme}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\section{Graph states}
+
+* Definition via stabilisers.
+
+* Transformation and measurement rules.
+
+\section{Graph states signature scheme}
+
+* Describe one-way interpretation: $G\to\rho(G)$.
+
+* Describe commit-reveal interpretation.
+
+* Random graph construction.
+
+* Describe protocol.
+
+* How encoding via pairwise measurements works.
+
+* Local correction rules.
+
+\section{Security proof}
+
+* Proof that adjacency matrix exponentially converges to uniform and separable random edge set.
+
+* Argue that this affords information theoretic security, parameterised by statistical security $\varepsilon=1/2^n$.
+
+\end{document}
