@@ -1,0 +1,48 @@
+\documentclass[rmp, twocolumn, nofootinbib, superscriptaddress, longbibliography, eqsecnum]{revtex4-2}
+
+\usepackage{lmodern}
+\usepackage[T1]{fontenc}
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs, amsfonts, amsmath, amsthm}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage{caption}
+\usepackage{braket}
+\usepackage{enumitem}
+\usepackage{qcircuit}
+\usepackage{mdframed}
+
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+
+\begin{document}
+
+\title{Information security in the quantum era}
+
+\input{sections/authors}
+
+\date{\today}
+
+\frenchspacing
+
+\input{sections/abstract}
+
+\maketitle
+
+\tableofcontents
+
+\input{sections/introduction}
+\input{sections/classical_cryptography}
+\input{sections/classical_attack_vectors}
+\input{sections/quantum_attack_vectors}
+\input{sections/quantum_cryptography}
+\input{sections/post_quantum_cryptography}
+\input{sections/hybrid_cryptography}
+\input{sections/cryptocurrencies_and_the_blockchain}
+\input{sections/strategic_threats}
+\input{sections/conclusion}
+\input{sections/acknowledgements}
+
+\bibliography{bibliography} \label{references}
+
+\end{document}

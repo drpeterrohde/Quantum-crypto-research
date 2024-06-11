@@ -1,0 +1,23 @@
+\section{Hybrid cryptography} \label{hybrid-cryptography}
+
+Since messages can be multiply encrypted using different keys and different protocols it is often wise to do so. This was the exact principle behind:
+\begin{itemize}
+	\item Multi-path routing in trusted node QKD networks.
+	\item Classical ratchets as employed, for example, by the Signal protocol.
+	\item Diffie-Hellmann key exchange, in which the master key is established via communication in \emph{both} directions.
+\end{itemize}
+Indeed, no matter how secure a protocol is considered to be, it is wise to employ redundancy in encryption on the basis that with multiple encryption \emph{all} layers of encryption must fail in order for it to fail at all.
+
+In the context of military conflict it would be extremely unwise to rely exclusively on QKD for top-secret communications, as it would be very easy to disable the means of communication via denial-of-service attack. It would instead be more preferable to use hybrid quantum/classical encryption, such that if the QKD link fails the classical backup channel remains available. This would ensure maximum security when both channels are available, but in the worst case would reduce to the security of the classical channel alone. This creates a system that in the best case is more secure than relying on either protocol alone, but in the worst case as secure as one of them. When large-scale QKD becomes available, it would be foolish to rely on it alone.
+
+Similarly, since post-quantum encryption is very new and less well studied than existing public key encryption techniques, we might be a little nervous at the thought of immediately switching over to it completely. What if someone clever finds a previously unknown vulnerability?
+
+To offset this anxiety we can use hybrid schemes where we simultaneously use both conventional RSA/ECC public key cryptography and say lattice-based cryptography. Similar to the ratcheting and multi-path QKD schemes, we use both public key encryption schemes to simultaneously share two independent private keys, which we XOR together to create our master private key. This bestows the properly that the master key is secure so long as \emph{at least} one of the individual private keys was secure. That is, the security of the overall scheme is at least as strong as the individual encryption schemes and cannot be worse than either. This provides us with an anxiety-free pathway to transition to post-quantum encryption, without the worry that because it's so new and not as well studied it might have presently unknown vulnerabilities.
+
+OpenSSH, a protocol for creating secure tunnels for remote login, recently announced \cite{bib:OpenSSH} a transition to this methodology, where existing ECC encryption is paired with NTRU lattice-based cryptography to create a scheme believed to be robust against future quantum computers. But if it turns out for whatever reason that NTRU is not as secure as currently understood, the protocol remains at least as strong as the existing ECC algorithm. From their release notes:
+
+\begin{quote}
+``The NTRU algorithm is believed to resist attacks enabled by future quantum computers and is paired with the X25519 ECDH key exchange (the previous default) as a backstop against any weaknesses in NTRU Prime that may be discovered in the future. The combination ensures that the hybrid exchange offers at least as good security as the status quo.''
+\end{quote}
+
+The philosophy here is that a cryptographic algorithm represents a point of failure should it be compromised and a single point of failure compromises the entire system. By using multiple layers of encryption we create a system that requires multiple points of failure to fail.
