@@ -1,0 +1,69 @@
+\resizebox{0.31\columnwidth}{!}{
+\begin{tikzpicture}[genericStyle]
+    \def\N{6}
+    \def\nskip{8}
+    \def\conn{3}
+    \def\UVsep{2.8}
+    
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+          \node[draw=none] (a\i) at (0,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_m$
+            \else
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_{\i}$
+            \fi
+        \fi
+    }
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+            \node[draw=none] (b\i) at (\UVsep,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_n$
+            \else
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_{\i}$
+            \fi
+        \fi
+    }
+    
+     \foreach \i in {1,...,\N} {
+     	\foreach \j in {1,...,\N} {
+               \ifnum\i=\nskip
+                \else
+                	\ifnum\j=\nskip
+                    \else
+                        \draw[graphNonEdgeStyle] ($(a\i.east)$) -- ($(b\j.west)$);
+                    \fi
+                \fi
+        }
+    }
+    
+    \draw[graphEdgeStyle] ($(a1.east)$) -- ($(b2.west)$);
+    \draw[graphEdgeStyle] ($(a1.east)$) -- ($(b4.west)$);
+    \draw[graphEdgeStyle] ($(a1.east)$) -- ($(b6.west)$);
+    
+    \draw[graphEdgeStyle] ($(a2.east)$) -- ($(b1.west)$);
+    \draw[graphEdgeStyle] ($(a2.east)$) -- ($(b3.west)$);
+    \draw[graphEdgeStyle] ($(a2.east)$) -- ($(b5.west)$);
+    
+    \draw[graphEdgeStyle] ($(a3.east)$) -- ($(b4.west)$);
+    \draw[graphEdgeStyle] ($(a3.east)$) -- ($(b5.west)$);
+    \draw[graphEdgeStyle] ($(a3.east)$) -- ($(b6.west)$);
+    
+    \draw[graphEdgeStyle] ($(a4.east)$) -- ($(b1.west)$);
+    \draw[graphEdgeStyle] ($(a4.east)$) -- ($(b2.west)$);
+    \draw[graphEdgeStyle] ($(a4.east)$) -- ($(b3.west)$);
+    
+    \draw[graphEdgeStyle] ($(a5.east)$) -- ($(b2.west)$);
+    \draw[graphEdgeStyle] ($(a5.east)$) -- ($(b3.west)$);
+    \draw[graphEdgeStyle] ($(a5.east)$) -- ($(b4.west)$);
+    
+    \draw[graphEdgeStyle] ($(a6.east)$) -- ($(b1.west)$);
+    \draw[graphEdgeStyle] ($(a6.east)$) -- ($(b5.west)$);
+    \draw[graphEdgeStyle] ($(a6.east)$) -- ($(b6.west)$);    
+
+	\node[draw=none, text=black] (labelTop) at ($(a1)!0.5!(b1) + (0,0.5)$) {\Large $\mathcal{X}_\mathcal{N}$};
+\end{tikzpicture}
+}

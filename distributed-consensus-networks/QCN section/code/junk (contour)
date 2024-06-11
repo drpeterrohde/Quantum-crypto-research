@@ -1,0 +1,49 @@
+# #using Contour
+
+# # zc = [logPmajority(xi, yi) for xi in x, yi in y]
+# # c = Contour.contours(x, y, zc, levels)
+
+# # for cl in Contour.levels(c)
+# #     lvl = Contour.level(cl)
+# #     for line in Contour.lines(cl)
+# #         xs, ys = Contour.coordinates(line)
+# #         plot!(xs, ys, color=:red, lw=1)
+# #     end
+# # end
+
+# function random_assignment(degU, degV)
+#     valU = sort(deepcopy(degU), rev=true)
+#     valV = sort(deepcopy(degV), rev=true)
+#     E = []
+
+#     for u in 1:length(valU)
+#         if valU[u] > 0
+#             vSet = []
+#             for v in 1:length(valV)
+#                 if valV[v] > 0
+#                     push!(vSet, v)
+#                 end
+#             end
+#             if length(vSet) < valU[u]
+#                 println(Crayon(foreground=:red), "Error: BING unrealisable graph.")
+#                 return []
+#             else
+#                 println(Crayon(foreground=:green), "Realised.")
+#             end
+#             choices = shuffle(vSet)[1:valU[u]]
+#             valU[u] = 0
+#             for v in choices
+#                 push!(E, [u v])
+#                 valV[v] -= 1
+#             end
+#         end
+#     end
+
+#     remainder = sum(valU) + sum(valV)
+#     if remainder > 0
+#         println(Crayon(foreground=:red), "Error: unrealisable graph.")
+#         return []
+#     end
+
+#     return E
+# end

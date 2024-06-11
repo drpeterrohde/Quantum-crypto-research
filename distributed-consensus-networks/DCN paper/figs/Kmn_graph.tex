@@ -1,0 +1,46 @@
+\begin{tikzpicture}[genericStyle]
+    \def\Km{5}
+    \def\Kn{4}
+    \def\Kmskip{4}
+    \def\Knskip{3}
+    \def\voff{-0.575}
+    \def\dotsoff{0.15}
+    \def\UVsep{2.8}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (a\i) at (0,\dotsoff-\i) {\LARGE $\vdots$};
+            \else
+                \ifnum\i=\Km
+                    \node[nodeNetworkStyle] (a\i) at (0,-\i) {$u_m$};
+                \else
+                    \node[nodeNetworkStyle] (a\i) at (0,-\i) {$u_{\i}$};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (b\i) at (\UVsep,\dotsoff+\voff-\i) {\LARGE $\vdots$};
+            \else
+                \ifnum\i=\Kn
+                    \node[nodeConsensusStyle] (b\i) at (\UVsep,\voff-\i) {$v_n$};
+                \else
+                    \node[nodeConsensusStyle] (b\i) at (\UVsep,\voff-\i) {$v_{\i}$};
+                \fi
+            \fi
+        }
+
+    \foreach \i in {1,...,\Km} {
+            \foreach \j in {1,...,\Kn} {
+                    \ifnum\i=\Kmskip
+                    \else
+                        \ifnum\j=\Knskip
+                        \else
+                            \draw[graphEdgeStyle] ($(a\i.east)$) -- ($(b\j.west)$);
+                        \fi
+                    \fi
+                }
+        }
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.5)$) {$K_{m,n}$};
+\end{tikzpicture}

@@ -1,0 +1,57 @@
+\begin{tikzpicture}[genericStyle, every node/.style={circle, draw, minimum size=1.7em, text width=1em, align=center, inner sep=0pt}]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    % Figure 1
+    \node[nodeUStyle] (a1) at (0,0) {$u_i$};
+    \node[nodeUStyle] (a2) [below=\hStep of a1] {$u_j$};
+    \node[nodeVStyle, right=\UVsep of a1] (b1) {$v_i$};
+    \node[nodeVStyle, right=\UVsep of a2] (b2) {$v_j$};
+
+    \draw[graphEdgeStyle] (a1) -- (b1); 
+    \draw[graphEdgeStyle] (a2) -- (b2);
+
+    \coordinate (midA) at ($(a1.south)!0.5!(a2.north)$);
+    \node[draw=none, left=0.4em of midA]
+    {$\Big\updownarrow$};
+
+    \node[nodeUStyle, right=\colSep of b1] (c1) {$u_i$};
+    \node[nodeUStyle, right=\colSep of b2] (c2) {$u_j$};
+    \node[nodeVStyle, right=\UVsep of c1] (d1) {$v_i$};
+    \node[nodeVStyle, right=\UVsep of c2] (d2) {$v_j$};
+
+    \draw[graphEdgeStyle] (c1) -- (d2); 
+    \draw[graphEdgeStyle] (c2) -- (d1);
+
+    \coordinate (midB) at ($(b1.east)!0.5!(b2.east)$); 
+    \coordinate (midC) at ($(c1.west)!0.5!(c2.west)$);
+    \coordinate (midBC) at ($(midB)!0.5!(midC)$);
+    \node[draw=none, text width=2em] at (midBC) {$\Longleftrightarrow$};  
+
+    % Figure 2
+    \node[nodeUStyle] (a3) [below=\rowSep of a2] {};
+    \node[nodeUStyle] (a4) [below=\hStep of a3] {};
+
+    \coordinate (midA2) at ($(a3.south)!0.5!(a4.north)$);
+    \node[draw=none, left=0.4em of midA2]
+    {$\Big\updownarrow$};
+
+    \coordinate (midA3) at ($(a3.east)!0.5!(a4.east)$);
+    \node[nodeVStyle, right=\UVsep of midA3] (b3) {};
+    \draw[graphEdgeStyle] (a3) -- (b3);
+    \draw[graphEdgeStyle] (a4) -- (b3);
+
+    \node[nodeUStyle, below=\rowSep of c2] (c3) {};
+    \node[nodeUStyle, below=\hStep of c3] (c4) {};
+
+    \coordinate (midC3) at ($(c3.east)!0.5!(c4.east)$);
+    \node[nodeVStyle, right=\UVsep of midC3] (d3) {};
+    \draw[graphEdgeStyle] (c3) -- (d3);
+    \draw[graphEdgeStyle] (c4) -- (d3);
+
+    \coordinate (midC2) at ($(c3.west)!0.5!(c4.west)$);
+    \coordinate (midBC2) at ($(b3.east)!0.5!(midC2)$);
+    \node[draw=none, text width=2em] at (midBC2) {$\Longleftrightarrow$};  
+\end{tikzpicture}

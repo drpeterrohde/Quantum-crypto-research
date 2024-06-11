@@ -1,0 +1,287 @@
+\resizebox{0.49\columnwidth}{!}{
+\begin{tikzpicture}[every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}, >=latex,
+    myshadow/.style={
+        blur shadow={shadow blur steps=5}
+    }
+]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightorange}{orange!20}
+    \colorlet{verylightblue}{cyan!20}
+
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw gray lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[-,blue!20, opacity=0.5,line width=1.5,line cap=round] (node\x) -- (node\y);
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,blue!20, opacity=0.5,line width=1.5,line cap=round] at (0,0) {};
+
+  % Draw red lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[-,red,line width=1.5,line cap=round] (node\x) -- (node\y);
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,red,line width=1.5,line cap=round] at (0,0) {};
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+    \ifnum\x=1
+        \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {$i$};
+    \else
+       \ifnum\x=2
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {$j$};
+        \else
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \fi
+    \fi
+  }
+
+  % Labels
+  \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-1.8em)$); 
+  \node[draw=none, rectangle, text width=8em] () at (mid) {$s_{i,j}=\mathrm{QKD}_{i,j}$};
+  \node[draw=none,rectangle, right=0.5em of node5,text=red] () {$K_n$};
+\end{tikzpicture}
+}
+\hfill
+\resizebox{0.49\columnwidth}{!}{
+\begin{tikzpicture}[every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}, >=latex,
+    myshadow/.style={
+        blur shadow={shadow blur steps=5}
+    }
+]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightorange}{orange!20}
+    \colorlet{verylightblue}{cyan!20}
+
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw gray lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[-,lightgray, opacity=0.25,line width=1.5,line cap=round] (node\x) -- (node\y);
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,lightgray, opacity=0.25,line width=1.5,line cap=round] at (0,0) {};
+
+  % Draw red lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \pgfmathparse{(\x==1 && \y==3) || (\x==1 && \y==4) || (\x==3 && \y==5) || (\x==3 && \y==6) || (\x==3 && \y==7) || (\x==4 && \y==6) || (\x==4 && \y==8) || (\x==5 && \y==7) ? 1 : 0}
+            \ifnum \pgfmathresult=0
+            \draw[-,red,line width=1.5,line cap=round] (node\x) -- (node\y);
+            \fi
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,red,line width=1.5,line cap=round] at (0,0) {};
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+    \ifnum\x=1
+        \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {$i$};
+    \else
+       \ifnum\x=2
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {$j$};
+        \else
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \fi
+    \fi
+  }
+
+  % Labels
+  \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-1.8em)$); 
+  \node[draw=none, rectangle, text width=10em] () at (mid) {$e_{i,j}=f_\mathrm{QKD}(s_{i,j},s_{j,i})$};
+\end{tikzpicture}
+}
+\\
+\resizebox{0.49\columnwidth}{!}{
+\begin{tikzpicture}[every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}, >=latex,
+    myshadow/.style={
+        blur shadow={shadow blur steps=5}
+    }
+]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightorange}{orange!20}
+    \colorlet{verylightblue}{cyan!20}
+
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw gray lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[-,lightgray, opacity=0.25,line width=1.5,line cap=round] (node\x) -- (node\y);
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,verylightgray, opacity=0.5,line width=1.5,line cap=round] at (0,0) {};
+
+  % Draw red lines
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node2);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node5);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node6);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node8);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node5);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node6);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node8);
+  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node6);
+%  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node8);
+  \draw[-,red,line width=1.5,line cap=round] (node6) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node6) -- (node8);
+  \draw[-,red,line width=1.5,line cap=round] (node7) -- (node8);
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+    \ifnum\x=1
+        \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+    \else
+       \ifnum\x=2
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \else
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \fi
+    \fi
+  }
+
+  % Labels
+  \coordinate (midK) at ($(node3)!0.5!(node4)$);
+  \node[draw=none, left=0.9em of midK,text=red]
+    {$K_{|\mathrm{QKD}|}$};
+   
+  \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-1.8em)$); 
+  \node[draw=none, rectangle, text width=8em] () at (mid) {$\mathcal{G}_\mathrm{QKD}=K_{|\mathrm{QKD}|}$};
+\end{tikzpicture}
+}
+\hfill
+\resizebox{0.49\columnwidth}{!}{
+\begin{tikzpicture}[every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}, >=latex,
+    myshadow/.style={
+        blur shadow={shadow blur steps=5}
+    }
+]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightorange}{orange!20}
+    \colorlet{verylightblue}{cyan!20}
+
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw gray lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[-,lightgray, opacity=0.25,line width=1.5,line cap=round] (node\x) -- (node\y);
+        \fi
+    }
+  }
+ \node[draw, circle, minimum size=2*\radius,verylightgray, opacity=0.5,line width=1.5,line cap=round] at (0,0) {};
+
+  % Draw red lines
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node2);
+%  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node5);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node6);
+%  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node1) -- (node8);
+%  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node5);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node6);
+%  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node2) -- (node8);
+%  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node6);
+%  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node7);
+%  \draw[-,red,line width=1.5,line cap=round] (node5) -- (node8);
+%  \draw[-,red,line width=1.5,line cap=round] (node6) -- (node7);
+  \draw[-,red,line width=1.5,line cap=round] (node6) -- (node8);
+%  \draw[-,red,line width=1.5,line cap=round] (node7) -- (node8);
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+    \ifnum\x=1
+        \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+    \else
+       \ifnum\x=2
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \else
+            \node[circle,fill=verylightblue,myshadow] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \fi
+    \fi
+  }
+
+  % Labels
+  \coordinate (midK) at ($(node3)!0.5!(node4)$);
+  \node[draw=none, left=0.9em of midK,text=red]
+    {$K_{|\mathrm{QKD}|}$};
+   
+  \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-1.8em)$); 
+  \node[draw=none, rectangle, text width=8em] () at (mid) {$\mathcal{G}_\mathrm{QKD}=K_{|\mathrm{QKD}|}$};
+\end{tikzpicture}
+}

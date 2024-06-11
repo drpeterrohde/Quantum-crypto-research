@@ -1,0 +1,186 @@
+\resizebox{0.32\columnwidth}{!}{
+  \begin{tikzpicture}[genericStyle, every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    % Radius of the circle
+    \def\radius{5em}
+    \def\numnodes{8}
+    \def\degree{360/\numnodes}
+
+    % Draw dummy nodes
+    \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+      }
+
+    % Draw gray lines
+    \foreach \x in {1,...,\numnodes} {
+        \foreach \y in {\x,...,\numnodes} {
+            \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+            \ifnum \pgfmathresult=1
+              \draw[graphNonEdgeStyle] (node\x) -- (node\y);
+            \fi
+          }
+      }
+    \node[draw, circle, minimum size=2*\radius, graphNonEdgeStyle] at (0,0) {};
+
+    % Draw red lines
+    \foreach \x in {1,...,\numnodes} {
+        \foreach \y in {\x,...,\numnodes} {
+            \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+            \ifnum \pgfmathresult=1
+              \draw[graphRedEdgeStyle] (node\x) -- (node\y);
+            \fi
+          }
+      }
+    \node[draw, circle, minimum size=2*\radius, graphRedEdgeStyle] at (0,0) {};
+
+    % Visible nodes
+    \foreach \x in {1,...,\numnodes} {
+        \ifnum\x=1
+          \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {\large $i$};
+        \else
+          \ifnum\x=2
+            \node[nodeConsensusStyle, text=black] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {\large $j$};
+          \else
+            \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+          \fi
+        \fi
+      }
+
+    % Labels
+    \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-2.2em)$);
+    \node[draw=none, rectangle, text width=8em] () at (mid) {\large $s_{i,j}=\mathrm{QKD}_{i,j}$};
+    \node[draw=none, rectangle, right=0.5em of node5, text=red] () {\large $K_n$};
+  \end{tikzpicture}
+}
+\hfill
+\resizebox{0.32\columnwidth}{!}{
+  \begin{tikzpicture}[genericStyle, every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    % Radius of the circle
+    \def\radius{5em}
+    \def\numnodes{8}
+    \def\degree{360/\numnodes}
+
+    % Draw dummy nodes
+    \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+      }
+
+    % Draw gray lines
+    \foreach \x in {1,...,\numnodes} {
+        \foreach \y in {\x,...,\numnodes} {
+            \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+            \ifnum \pgfmathresult=1
+              \draw[graphNonEdgeStyle] (node\x) -- (node\y);
+            \fi
+          }
+      }
+    \node[draw, circle, minimum size=2*\radius, graphNonEdgeStyle] at (0,0) {};
+
+    % Draw red lines
+    \foreach \x in {1,...,\numnodes} {
+        \foreach \y in {\x,...,\numnodes} {
+            \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+            \ifnum \pgfmathresult=1
+              \pgfmathparse{(\x==1 && \y==3) || (\x==1 && \y==4) || (\x==3 && \y==5) || (\x==3 && \y==6) || (\x==3 && \y==7) || (\x==4 && \y==6) || (\x==4 && \y==8) ? 1 : 0}
+              \ifnum \pgfmathresult=0
+                \draw[graphRedEdgeStyle] (node\x) -- (node\y);
+              \fi
+            \fi
+          }
+      }
+    \node[draw, circle, minimum size=2*\radius, graphRedEdgeStyle] at (0,0) {};
+
+    % Visible nodes
+    \foreach \x in {1,...,\numnodes} {
+        \ifnum\x=1
+          \node[nodeConsensusStyle, text=black] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {\large $i$};
+        \else
+          \ifnum\x=2
+            \node[nodeConsensusStyle, text=black] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {\large $j$};
+          \else
+            \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+          \fi
+        \fi
+      }
+
+    % Labels
+    \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-2.2em)$);
+    \node[draw=none, rectangle, text width=10em] () at (mid) {\large $e_{i,j}=f_\mathrm{QKD}(s_{i,j})$};
+  \end{tikzpicture}
+}
+\hfill
+\resizebox{0.32\columnwidth}{!}{
+  \begin{tikzpicture}[genericStyle, every node/.style={circle, draw, minimum size=1.8em, text width=1em, align=center, inner sep=0pt}]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+    % Radius of the circle
+    \def\radius{5em}
+    \def\numnodes{8}
+    \def\degree{360/\numnodes}
+
+    % Draw dummy nodes
+    \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+      }
+
+    % Draw gray lines
+    \foreach \x in {1,...,\numnodes} {
+        \foreach \y in {\x,...,\numnodes} {
+            \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+            \ifnum \pgfmathresult=1
+              \draw[graphNonEdgeStyle] (node\x) -- (node\y);
+            \fi
+          }
+      }
+    \node[draw, circle, minimum size=2*\radius, graphNonEdgeStyle] at (0,0) {};
+
+    % Draw red lines
+    \draw[graphRedEdgeStyle] (node1) -- (node2);
+    \draw[graphRedEdgeStyle] (node1) -- (node5);
+    \draw[graphRedEdgeStyle] (node1) -- (node6);
+    \draw[graphRedEdgeStyle] (node1) -- (node7);
+    \draw[graphRedEdgeStyle] (node1) -- (node8);
+    \draw[graphRedEdgeStyle] (node2) -- (node5);
+    \draw[graphRedEdgeStyle] (node2) -- (node6);
+    \draw[graphRedEdgeStyle] (node2) -- (node7);
+    \draw[graphRedEdgeStyle] (node2) -- (node8);
+    \draw[graphRedEdgeStyle] (node5) -- (node6);
+    \draw[graphRedEdgeStyle] (node5) -- (node7);
+    \draw[graphRedEdgeStyle] (node5) -- (node8);
+    \draw[graphRedEdgeStyle] (node6) -- (node7);
+    \draw[graphRedEdgeStyle] (node6) -- (node8);
+    \draw[graphRedEdgeStyle] (node7) -- (node8);
+
+    % Visible nodes
+    \foreach \x in {1,...,\numnodes} {
+        \ifnum\x=3
+          \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+        \else
+          \ifnum\x=4
+            \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+          \else
+            \node[nodeConsensusStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+          \fi
+        \fi
+      }
+
+    % Labels
+    \coordinate (midK) at ($(node2)!0.5!(node5)$);
+    \node[draw=none, right=-0.25em of midK, text=red] {\large $K_{|\mathrm{QKD}|}$};
+
+    \coordinate (mid) at ($(node1.east)!0.5!(node2.west) + (0,-2.2em)$);
+    \node[draw=none, rectangle, text width=10em] () at (mid) {\large $\mathcal{G}_\mathrm{QKD}=K_{|\mathrm{QKD}|}$};
+  \end{tikzpicture}
+}

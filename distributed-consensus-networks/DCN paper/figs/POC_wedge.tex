@@ -1,0 +1,126 @@
+\pgfkeys{%
+   /piechartthreed/.cd,
+   scale/.code                =  {\def\piechartthreedscale{#1}},
+   mix color/.code            =  {\def\piechartthreedmixcolor{#1}},
+   background color/.code     =  {\def\piechartthreedbackcolor{#1}},
+   name/.code                 =  {\def\piechartthreedname{#1}},
+   shadowop/.code             =  {\def\shadowop{#1}},
+   wedgeout/.code             =  {\def\wedgeout{#1}},
+}
+
+\newcommand\piechartthreed[2][]{% 
+   \pgfkeys{/piechartthreed/.cd,
+      scale            = 1,
+      mix color        = gray,
+      background color = white,
+      name             = pc,
+      shadowop         = 0,
+      wedgeout         = 0,}
+
+   \pgfqkeys{/piechartthreed}{#1}
+   \begin{scope}[scale=\piechartthreedscale]
+      \begin{scope}[xscale=5,yscale=3]
+         \ifnum\shadowop=1
+            \path[preaction={fill=gray,opacity=0.8,
+                     path fading=circle with fuzzy edge 20 percent,
+                     transform canvas={yshift=-15mm*\piechartthreedscale}}] (0,0) circle (1cm);
+            \fill[gray](0,0) circle (0.5cm);
+            \path[preaction={fill=\piechartthreedbackcolor,opacity=.8,
+                     path fading=circle with fuzzy edge 20 percent,
+                     transform canvas={yshift=-10mm*\piechartthreedscale}}] (0,0) circle (0.5cm);
+         \fi
+         \pgfmathsetmacro\totan{0}
+         \global\let\totan\totan
+         \pgfmathsetmacro\bottoman{180} \global\let\bottoman\bottoman
+         \pgfmathsetmacro\toptoman{0}   \global\let\toptoman\toptoman
+         \begin{scope}[draw=black,thin]
+            \foreach \an/\col [count=\xi] in {#2}{%
+                  \def\thisdraw{1}
+                  \def\thisop{1}
+                  \def\thisoff{0}
+                  \ifnum\xi=5
+                     \ifnum\wedgeout=1
+                        \def\thisoff{-1.5}
+                     \fi
+                  \fi
+
+                  \ifnum\wedgeout=1
+                     \ifnum\xi=5
+                        \def\thisdraw{1}
+                     \else
+                        \def\thisdraw{0}
+                     \fi
+                  \fi
+
+                  \def\space{ }
+                  \coordinate (\piechartthreedname\space\xi) at (\totan+\an/2:0.75cm);
+                  \ifdim 180pt>\totan pt
+                     \ifdim 0pt=\toptoman pt
+                        \ifnum\thisdraw=1
+                           \shadedraw[shift={(0,\thisoff)},left color=\col!20!\piechartthreedmixcolor,
+                              right color=\col!5!\piechartthreedmixcolor,
+                              draw=black,very thin,opacity=\thisop] (0:.5cm) -- ++(0,-3mm) arc (0:\totan+\an:.5cm)
+                           -- ++(0,3mm)  arc (\totan+\an:0:.5cm);
+                        \fi
+                        \pgfmathsetmacro\toptoman{180}
+                        \global\let\toptoman\toptoman
+                     \else
+                        \ifnum\thisdraw=1
+                           \shadedraw[shift={(0,\thisoff)},left color=\col!20!\piechartthreedmixcolor,
+                              right color=\col!5!\piechartthreedmixcolor,
+                              draw=black,very thin,opacity=\thisop](\totan:.5cm)-- ++(0,-3mm) arc(\totan:\totan+\an:.5cm)
+                           -- ++(0,3mm)  arc(\totan+\an:\totan:.5cm);
+                        \fi
+                     \fi
+                  \fi
+                  \ifnum\thisdraw=1
+                     \fill[shift={(0,\thisoff)},\col!20!gray,draw=black,opacity=\thisop] (\totan:0.5cm)--(\totan:1cm)  arc(\totan:\totan+\an:1cm)
+                     --(\totan+\an:0.5cm) arc(\totan+\an:\totan :0.5cm);
+                  \fi
+                  \pgfmathsetmacro\finan{\totan+\an}
+                  \ifdim 180pt<\finan pt
+                     \ifdim 180pt=\bottoman pt
+                        \ifnum\thisdraw=1
+                           \shadedraw[shift={(0,\thisoff)},left color=\col!20!\piechartthreedmixcolor,
+                              right color=\col!5!\piechartthreedmixcolor,
+                              draw=black,very thin,opacity=\thisop] (180:1cm) -- ++(0,-3mm) arc (180:\totan+\an:1cm)
+                           -- ++(0,3mm)  arc (\totan+\an:180:1cm);
+                        \fi
+                        \pgfmathsetmacro\bottoman{0}
+                        \global\let\bottoman\bottoman
+                     \else
+                        \ifnum\thisdraw=1
+                           \shadedraw[shift={(0,\thisoff)},left color=\col!20!\piechartthreedmixcolor,
+                              right color=\col!5!\piechartthreedmixcolor,
+                              draw=black,very thin,opacity=\thisop](\totan:1cm)-- ++(0,-3mm) arc(\totan:\totan+\an:1cm)
+                           -- ++(0,3mm)  arc(\totan+\an:\totan:1cm);
+                        \fi
+                     \fi
+                  \fi
+                  \pgfmathsetmacro\totan{\totan+\an}  \global\let\totan\totan
+               }
+         \end{scope}
+         \ifnum\wedgeout=0
+            \draw[thin,black](0,0) circle (0.5cm);
+         \fi
+      \end{scope}
+   \end{scope}
+}
+
+\begin{tikzpicture}
+   \piechartthreed[scale=0.5, mix color=lightgray,shadowop=1,wedgeout=0]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \begin{scope}[shift={(0,0.5)}]
+      \piechartthreed[scale=0.5, mix color=lightgray,shadowop=0,wedgeout=0]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \end{scope}
+   \begin{scope}[shift={(0,1)}]
+      \piechartthreed[scale=0.5, mix color=lightgray,shadowop=0,wedgeout=0]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \end{scope}
+
+   \piechartthreed[scale=0.6, mix color=lightgray,shadowop=0,wedgeout=1]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \begin{scope}[shift={(0,0.6)}]
+      \piechartthreed[scale=0.6, mix color=lightgray,shadowop=0,wedgeout=1]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \end{scope}
+   \begin{scope}[shift={(0,1.2)}]
+      \piechartthreed[scale=0.6, mix color=lightgray,shadowop=0,wedgeout=1]{60/gray,60/gray,60/gray,60/gray,60/cyan,60/gray}
+   \end{scope}
+\end{tikzpicture}

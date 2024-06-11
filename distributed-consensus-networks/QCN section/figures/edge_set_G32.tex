@@ -1,0 +1,29 @@
+\begin{tikzpicture}
+  \tikzset{square node/.style={draw, minimum size=2.2em}}
+    \colorlet{color1}{blue}
+    \colorlet{color2}{cyan}
+    \colorlet{color3}{green}
+    
+    \colorlet{colorA}{red}
+    \colorlet{colorB}{orange}
+    \colorlet{colorC}{yellow}
+
+	\def\x{2.2em}
+
+    \node[square node, fill=color1!20] (u1) at (\x,-\x) {$u_1$};
+    \node[square node, fill=colorA!20] (v1) at (2*\x,-\x) {$v_1$};
+    \node[square node, fill=color1!20] at (\x,-2*\x) {$u_1$};
+    \node[square node, fill=colorB!20] at (2*\x,-2*\x) {$v_2$};
+
+    \node[square node, fill=color2!20] at (\x,-3*\x) {$u_2$};
+    \node[square node, fill=colorB!20] at (2*\x,-3*\x) {$v_2$};
+    \node[square node, fill=color2!20] at (\x,-4*\x) {$u_2$};
+    \node[square node, fill=colorC!20] at (2*\x,-4*\x) {$v_3$};
+
+    \node[square node, fill=color3!20] at (\x,-5*\x) {$u_3$};
+    \node[square node, fill=colorC!20] at (2*\x,-5*\x) {$v_3$};
+    \node[square node, fill=color3!20] at (\x,-6*\x) {$u_3$};
+    \node[square node, fill=colorA!20] at (2*\x,-6*\x) {$v_1$};
+    
+    \node[draw=none] at ($(u1)!0.5!(v1) + (0,0.75)$) {$E$};
+\end{tikzpicture}

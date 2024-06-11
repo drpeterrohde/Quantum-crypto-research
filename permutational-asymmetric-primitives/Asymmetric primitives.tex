@@ -1,0 +1,746 @@
+\documentclass[twocolumn, aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, doublefloatfix, table-of-contents, eqsecnum, rmp]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{url}
+\usepackage[breaklinks]{hyperref}
+\usepackage{stmaryrd}
+    
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+    
+\def\sk{\mathtt{sk}}
+\def\pk{\mathtt{pk}}
+\def\kp{\mathtt{kp}}
+\def\sig{\mathtt{sig}}
+\def\ver{\mathtt{ver}}
+\def\enc{\mathtt{enc}}
+\def\dec{\mathtt{dec}}
+\def\zerovec{\mathbf{0}}
+\def\diff#1#2{\llbracket #1,#2\rrbracket}
+\def\asym#1#2#3{\langle #1_#3 #2_{#3^{-1}}\rangle}
+\def\asymd#1#2#3#4{\langle #1_{#3} \cdot #2_{#4}\rangle}
+\def\braid#1#2#3#4{\langle#1,#2\rangle_{#3}^{#4}}
+\def\selfbraid#1#2#3{\langle#1\rangle_{#2}^{#3}}
+
+\begin{document}
+
+\title{Information theoretically secure post-quantum cryptography}
+
+\author{Peter P. Rohde}
+\email[]{peter@peterrohde.org}
+\homepage{https://www.peterrohde.org}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+%\tableofcontents
+
+\section{Links \& chats}
+
+\begin{itemize}
+	\item One way functions and P vs NP: \url{https://en.wikipedia.org/wiki/One-way_function}: "The existence of such one-way functions is still an open conjecture. Their existence would prove that the complexity classes P and NP are not equal,"
+	\item GapP, NP, binary optimisation problems: \url{https://chatgpt.com/share/2e9f8c0f-fa1d-4d97-9af0-c195ad3cd22c}
+	\item Homomorphism between $B_n$ and $S_n$: \url{https://chatgpt.com/share/c0390897-77f1-403e-bce9-ca2bf5c9fccc}
+	\item Even Hamming weight for $H(x\oplus y)\in 2\mathbb{Z}$ if $H(x)=H(y)$. Hence also for $y=\pi\circ x$ where $\pi\in S_n$.
+	\item Word problem for the braid group $B_n$ is poly-time solvable: \url{https://chatgpt.com/c/f8827503-7af9-4b81-b3dd-a79f1891746e}
+	\item Wreath product \url{https://en.wikipedia.org/wiki/Wreath_product}
+	\item Braid permutations \mbox{$\pi: B_n \to S_n$}, for $\beta\in B_n$ we have $\pi(\beta)$: \url{https://chatgpt.com/share/6c61f5ef-a33d-4c76-8f1f-0d8bdf1bb4aa}
+\end{itemize}
+
+\section{Overview}
+
+The goal is to create information-theoretically secure asymmetric PQC primitives where the only hardness assumption is the hardness of brute-force, reducing all arguments to entropic ones.
+
+There are multiple primitives we will combine together.
+
+The purpose of differential encoding is create differential pairs encoded against a secret, where the differential term is public and cannot reveal the secret itself.
+
+Combining differential encoding with random codewords we have a codespace where all codewords are unique (statistical security assumption) and errors on differentials are always detectable (but not correctable).
+
+Permutation codes and their respective algebra are used to create asymmetric primitives from random codewords. This closely relates to and is inspired by hash algebra. Here the central concept is that any permutation on the bits in codewords creates a distinct codeword (statistical security assumption). The asymmetric objects introduced here are defines under the algebra of the symmetric group and their inversion assuming random codewords is only via brute force as the objects are provably non-invertible.
+
+The security of asymmetric objects relates to their pre-image space which decomposes into collisional and non-collisional partitions. The former is insecure (ambiguous secrets) while the latter is secure. Quantifying the size of these respective spaces affords provable statements on statistical security alone.
+
+The schemes resulting from this are compositional under binary XOR algebra.
+
+\section{Differential encoding}
+
+A pair of bit-strings $\{x,y\}\in\{0,1\}^n$ may be expressed differentially using the tuple,
+\begin{align}
+	\diff{x}{y} &\equiv [x,x\oplus y] \nonumber\\
+	&\equiv [x\oplus y,x].
+\end{align}
+Here the differential term $x\oplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
+
+Differential encodings are composable under $\oplus$,
+\begin{align}
+	\diff{x_1}{y_1} \oplus \diff{x_2}{y_2} \Rightarrow \diff{x_1\oplus x_2}{y_1 \oplus y_2},
+\end{align}
+with the properties,
+\begin{align}
+	\diff{\zerovec}{x\oplus y} &= \diff{x}{y}, \nonumber\\
+	\diff{x}{y} &\Rightarrow x=y.
+\end{align}
+
+\section{Entropy codes}
+
+Entropy codes employ random codewords,
+\begin{align}
+	\mathcal{X}: x \in \{0,1\}^n,
+\end{align}
+sampled using random variable $\mathcal{X}$ with respective per-bit Shannon entropy,
+\begin{align}
+	0\leq H(\mathcal{X})\leq 1.
+\end{align}
+Under maximum entropy $H(\mathcal{X})=1$ conditions all codewords are sampled with probability,
+\begin{align}
+	\mathbb{P}(x) = \frac{1}{2^n},	
+\end{align}
+and are orthogonal,
+\begin{align}
+	x_i \oplus x_j \neq \mathbf{0}.
+\end{align}
+Under differential encoding,
+\begin{align}
+	[x,x\oplus y],
+\end{align}
+entropy addition implies the differential term $x\oplus y$ exhibits entropy at least,
+\begin{align}
+	H(x\oplus y) \geq \min(H(x),H(y)).
+\end{align}
+Hence parity terms form unique random codewords.
+
+For known $\{x,y\}$, its differential code $\diff{x}{y}$ affords both detection and correction of all bit-errors.
+
+\subsection{Collision space}
+
+The collision space of an $n$-bit function,
+\begin{align}
+	f_n(x) \to y,\quad x,y\in\{0,1\}^n,
+\end{align}
+is the number of images $y$ with multiple pre-images $x$,
+\begin{align}
+	\mathrm{Col}(f) = |\{\mathrm{Im}(x)\,|\,\mathrm{Im}(x)=\mathrm{Im}(y\neq x)\}|,
+\end{align}
+defining the non-invertible image subspace. In the collision-free subspace all images have single pre-images,
+\begin{align}
+	\overline{\mathrm{Col}}(f_n) + \mathrm{Col}(f_n) = 2^n,
+\end{align}
+paritioning the image space.
+
+Random codes are vulnerable only when multiple secrets map to the same asymmetric encoding,
+\begin{align}
+	f:\, x,y \to \selfbraid{x}{\pi}{\pi^{-1}},\quad x\neq y.
+\end{align}
+Now the collision-free subspace of the public object is defined as secure while the collision space is insecure via pre-image ambiguity.
+
+A birthday attack is a statistical attack on collision space where the goal is to find \emph{any} collision rather than a \emph{specific} collision, affording quadratically enhanced scaling. For an $n$-bit random bit-string with $2^n$ possible values, upon taking $k$ random samples the likelihood of finding a collision scales as,
+\begin{align}
+	\mathbb{P}(n,k) &\approx 1 - \exp\left[-\frac{k^2}{2^{n+1}}\right].
+\end{align}
+For $k=\mathrm{poly}(n)$ this ensures the asymptotic statistical security of random codewords $x$.
+
+The collision space of asymmetric objects of the form $\selfbraid{x}{\pi}{\pi^{-1}}$ is given by the set of satisfying $y$ such that,
+\begin{align}
+	\selfbraid{x}{\pi}{\pi^{-1}} &= \selfbraid{y}{\pi}{\pi^{-1}},
+\end{align}
+the satisfiability problem of finding bit-strings which under a random braid have a given symmetric difference. This presumably mandates a brute-force search of pre-image space given that the group is the symmetric group with no hidden structure.
+
+%\section{Algebraic cryptography}
+
+\section{Permutation codes}
+
+We define the algebra,
+\begin{align}
+	(\mathbb{Z}_2^n \times S_n, \oplus,\pi),
+\end{align}
+comprising the bitwise binary $(\mathbb{Z}_2^n,\oplus)$ operator and the unary $(S_n,\pi)$ operator. Defining permutations over bit-string elements,
+\begin{align}
+	\pi &\in S_n,\nonumber\\
+	\pi\circ x &\equiv x_\pi,
+\end{align}
+as unary operators we inherit algebraic properties from the symmetric group.
+\begin{itemize}
+	\item \emph{Composition}: $\pi_i \circ \pi_j \sim x_{\pi_i\circ \pi_j}$.
+	\item \emph{Distributivity}: $\pi\circ(x\oplus y) = x_\pi \oplus y_\pi$.
+\end{itemize}
+For unknown $x$, the permuted bit-string $x_\pi$ can be decoded to $x$ given $\pi$.
+
+Structures of the form,
+\begin{align}
+	x_\pi x \equiv x_\pi \oplus x,
+\end{align}
+cannot be decoded from $\pi$ alone. However, the action of $x$ or $x_\pi$ on $x_\pi x$ reveals the other,
+\begin{align}
+	x \oplus (x_\pi \oplus x) & = x_\pi,\nonumber\\
+	x_\pi \oplus (x_\pi \oplus x) &= x.
+\end{align}
+Via distributivity we have the additional symmetric property,
+\begin{align}
+	\pi^{-1} \circ (x_\pi x)	 = x_{\pi^{-1}} x.
+\end{align}
+
+Differential codes preserve their differential structure under common global permutations but not under non-uniform permutations,
+\begin{align}
+	\pi\circ \diff{x}{y}	 &\equiv \diff{x_\pi}{y_\pi},\nonumber\\
+ 	\diff{x_\pi}{y_\pi} &\sim \diff{x}{y},\nonumber\\
+	\diff{x}{y_\pi} &\not\sim \diff{x}{y} \nonumber\\
+	\diff{x_\pi}{y} &\not\sim \diff{x}{y}
+\end{align}
+
+\section{Asymmetric codes}
+
+We use the notation,
+\begin{align}
+	x_{\pi_1} y_{\pi_2} \equiv \braid{x}{y}{\pi_1}{\pi_2},\nonumber\\
+	x_{\pi} x_{\pi^{-1}} \equiv \selfbraid{x}{\pi}{\pi^{-1}}.
+\end{align}
+If a $\pi$ index is not written it's implied the identity permutation $\pi_0$.
+
+This encoding under pairs of permutations implies a braid representation.
+
+Sloppily we'll also use $x\oplus y \equiv x \cdot y \equiv xy$ as shorthand.
+
+\subsection{One-way functions}
+
+For secret $x$ we define the public object,
+\begin{align} \label{eq:one_way_sum}
+	x \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}}.
+\end{align}
+This defines a one-way function enabling verification given $x$ and $\pi$ but does not allow reverse evaluation of $x$ even if $\pi$ is known via pre-image resistance.
+
+\subsection{Provable one-way functions}
+
+The one-way function from Eq.~\eqref{eq:one_way_sum} acts distributively over $\oplus$,
+\begin{align}
+	x\oplus y \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus \selfbraid{y}{\pi}{\pi^{-1}}.
+\end{align}
+For known $x$ and unknown $y$ the object $y_\pi y$ acts as a one-time zero-knowledge proof of $y$. The proof is one-time as it is the same for all $x$.
+
+\subsection{Hash function model}
+
+Using the asymmetric model,
+\begin{align}
+	h: x\oplus \selfbraid{y}{\pi}{\pi^{-1}} \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus y,
+\end{align}
+the $\braid{y}{y}{\pi}{\pi^{-1}}$ term acts a known pre-image modulation based on the hidden underlying action of unknown $\{y,\pi\}$, reproducing the property of hash pre-image salting. This provides a model for a deterministic pseudo-random hash function with hidden evaluation, while remaining verifiable.
+
+This model implies the hash function cannot be collision free even over the same input and output domains. While in principle a function can be bijective over matching input and output domains the hash function model cannot be.
+
+There may be an inherent underlying connection here via complexity arguments. Uniquely encoding arbitrary bijective maps \mbox{$\{0,1\}^n\to \{0,1\}^n$} has $O(2^n)$ space and time complexity. With polynomial time/space encoding this is unachievable if the function is modelled as random and unstructured.
+
+\section{Encrytpion}
+
+Given secrets $\{x,m\}$ with respective public objects $\{\selfbraid{x}{\pi^{-1}}{\pi},\selfbraid{m}{{\pi}^{-1}}{\pi}\}$, public information can be expressed,
+\begin{align}
+	\selfbraid{x}{\pi^{-1}}{\pi} \cdot \selfbraid{m}{{\pi}^{-1}}{\pi} &= \selfbraid{m\cdot x}{{\pi}^{-1}}{\pi} \nonumber\\
+	&= x_{\pi}x_{\pi^{-1}} \cdot m_\pi m_{\pi^{-1}}.
+\end{align}
+Now the solution revealing $m_\pi$ is,
+\begin{align}
+	\mathtt{sol} = x_\pi x_{\pi^{-1}} m_{\pi^{-1}},
+\end{align}
+hence unlocking $m$ under known $\pi$.
+
+
+Applying known $\pi$ yields public,
+\begin{align}
+	x_{\pi^2}x \cdot m_{\pi^2} m.
+\end{align}
+Provision of,
+\begin{align}
+	\mathtt{sig} = m_{\pi^2} \cdot x_{\pi^2} \cdot x,
+\end{align}
+affords,
+\begin{align}
+	\mathtt{sig} \oplus \pi \circ \selfbraid{x\oplus m}{\pi^{-1}}{\pi} = m.
+\end{align}
+
+$\braid{x}{y}{\pi}{\pi^{-1}}$
+
+%From the object,
+%\begin{align}
+%	x_\pi \oplus y,
+%\end{align}
+%* $y$ is released if $x$ and $\pi$ are known.\\
+%* $x_\pi$ is released if $y$ is known.\\
+%* $x$ is released if $\pi$ and $y$ are known.
+
+An asymmetric trapdoor function on the differential $x\oplus y$ defined as,
+\begin{align}
+	[x,x\oplus y] \xrightarrow{\pi} [x, x \oplus y_\pi].
+\end{align}
+For known $\pi$, knowing $x$
+
+$\pi$-symmeterised objects are pre-image resistant and public-safe, while their pre-images are not.
+
+Via composition, differential codes for $\pi$-symmeterised objects preserve differentiality of their pre-image codes,
+\begin{align}
+	\diff{x}{y} \Rightarrow \diff{x_\pi x}{y_\pi y}.
+\end{align}
+
+Defining a secret key $s$ and public key $s\oplus p$ differentially we obtain,
+\begin{align}
+	\diff{s}{p} &= [s, s\oplus p],\nonumber\\
+	[s, s\oplus p] &= [p\oplus s, p],\nonumber\\
+	\diff{s_\pi s}{p_\pi p} &= [s\oplus p, s_\pi\oplus p_\pi],\nonumber\\
+\end{align}
+
+Similarly defining a message $m$ differentially encoded against the same secret key $s$ we have,
+\begin{align}
+	\diff{s}{m} = [s,s\oplus m].
+\end{align}
+
+Under composition this implies,
+\begin{align}
+	[s,s\oplus p] \oplus [s,s\oplus m] = [\mathbf{0},p\oplus m].	
+\end{align}
+
+Hence treating differential terms as shared information affords evaluation of $p\oplus m$ independent of $s$.
+
+Introduce the term asymmetric term $m_\pi h(m)$ encoding a permuted message against its hash.
+
+%$m_\pi h(m) \oplus $
+
+Let us introduce symmetrised public terms,
+\begin{align}
+	s_\pi s, \nonumber\\
+	p_\pi p.	
+\end{align}
+
+Using the permuted differential codes we have the identity,
+\begin{align}
+	[s,s \oplus p] \oplus [s, s_\pi \oplus m_\pi] = [\mathbf{0}, s_\pi s \oplus m_\pi p].
+\end{align}
+
+\begin{align}
+	[s,s \oplus p] \oplus [p,p_\pi \oplus m_\pi] = [\mathtt{pk}, p_\pi s \oplus m_\pi p].
+\end{align}
+
+If the differential term is publicly shared this affords decoding under,
+%\begin{align}
+%	(m_\pi p) \oplus (m) = m
+%\end{align}
+
+\section{Old}
+
+We define asymmetric key-pairs via their differential encoding,
+\begin{align}
+	\mathtt{sk}, \mathtt{pk} &\in \{0,1\}^n,
+\end{align}
+
+\begin{align}
+	\kp &= \diff{\sk}{\pk} \nonumber\\
+	&= [\sk,\sk \oplus \pk],
+\end{align}
+
+\section{Digital signatures}
+
+Generate signature,
+\begin{align}
+	\sig(m,\sk) &= \diff{\sk}{\pk} \oplus \diff{\sk}{m} \nonumber\\
+	&= \diff{\mathbf{0}}{\pk\oplus m} \nonumber\\
+	&= \pk \oplus m.
+\end{align}
+
+Verify signature,
+\begin{align}
+	\ver(\sig,\pk) &= \Delta(m,\pk) \oplus \Delta() \nonumber\\
+	&= \pk.
+\end{align}
+
+\section{Asymmetric encryption}
+
+Encode,
+\begin{align}
+	\tilde{m} &= \enc(m,\pk) \nonumber\\
+	&= \diff{m}{\sk} \nonumber\\
+	&= \sk \oplus m.
+\end{align}
+
+Decode,
+\begin{align}
+	\dec(\tilde{m},\sk) &= \tilde{m} \oplus \bar\kp \nonumber\\
+	&= \enc(\sk,m) \oplus \diff{\pk}{\sk} \nonumber\\
+	&= \sk \oplus m.
+\end{align}
+
+\section{Authentication}
+
+* $auth = (s1+p1)+(s2+p2) = p1+p2$
+
+\section{Key reuse}
+
+Consider multiple messages $m_i$ signed by the same public key,
+\begin{align}
+	\enc(m_i,\pk) &= \pk \oplus m_i, \nonumber\\
+\end{align}
+
+Verify signature,
+\begin{align}
+	\ver(\sig,\pk) &= \Delta(m,\pk) \oplus \Delta() \nonumber\\
+	&= \pk.
+\end{align}
+
+\subsection{Key-establishment \& secret sharing}
+
+\section{Old stuff}
+
+\section{Differential hash codes}
+
+A pair of bit-strings $\{x,y\}$ may be expressed differentially using the tuple,
+\begin{align}
+	[x,x\oplus y]_\oplus,
+\end{align}
+where the differential term $x\oplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
+
+We define the differential hash operators,
+\begin{align}
+	\Delta(x) &= h(x)\oplus x,\nonumber\\
+	\Delta_\pi(x) &= h(x_\pi)\oplus x,
+\end{align}
+where $\pi\in S_n$ for $x\in\{0,1\}^n$ is a permutation over the elements of $x$. These encode a hash's image and pre-image together while revealing neither assuming hash pre-image resistance. We have the properties,
+\begin{align}
+	h(x) &= \Delta(x) \oplus x,\nonumber\\
+	x &= \Delta(x) \oplus h(x).
+\end{align}
+The $\Delta$ operator inherits pre-image resistance from $h(\cdot)$. Knowing $\Delta(x)$ alone reveals neither $x$ nor $h(x)$, however additionally knowing $x$ or $h(x)$ enables verification of $\Delta(x)$. Finding $x$ for given $\Delta(x)$ reduces to the pre-image resistance of the hash function $h(\cdot)$.
+
+The non-differentially encoded tuple $\{x,h(x)\}$ allows $x$ to unlock $h(x)$, while $h(x)$ cannot unlock $x$. The second element reveals $h(x)$ alone, but not $x$ via pre-image resistance. Under the differential encoding,
+\begin{align}
+	[x,\Delta(x)]_\oplus =[x,h(x)\oplus x]_\oplus,
+\end{align}
+the second element reveals neither $x$ nor $h(x)$, while the first element reveals both, given that $h(x)$ can be efficiently forward-evaluated. Alternately, under the differential encoding,
+\begin{align}
+	[h(x),\Delta(x)] = [h(x),h(x)\oplus x],
+\end{align}
+the non-differential term $h(x)$ affords unlocking the code but does not on its own reveal $x$ via hash pre-image resistance. Under both encodings knowing either $x$ or $h(x)$ alone enables verification.
+
+The differential operator is distributive only over its unhashed components,
+\begin{align}
+	\Delta(x\oplus y) &= h(x\oplus y)\oplus x\oplus y \nonumber\\
+	\Delta(x)\oplus\Delta(y) &= h(x)\oplus h(y)\oplus x\oplus y.
+\end{align}
+%Thus knowing $h(x\oplus y)$ does not unlock the object, whereas knowing both $x$ and $y$ does.
+
+%Tuples of the form,
+%\begin{align}
+%	D(x,h(x)) &= [x, \Delta(x)], \nonumber\\
+%	D(h(x),x) &= [h(x), \Delta(x)],
+%\end{align}
+%provide alternate differential encodings for $\{x,h(x)\}$, both affording efficient verification. A convenience is to collect terms known to different parties over the two sides of the encoding. Under both encodings knowing either $x$ or $h(x)$ unlocks both.
+
+% We will generally treat the differential term as public and the non-differential term as private information.
+
+%Taking bit-permuted tuples of this form, hash verification only succeeds if the correct inverse permutation is first applied.
+
+%\subsection{Algebraic properties}
+
+The symmetric difference between $\Delta(x\oplus y)$ and $\Delta(x)\oplus\Delta(y)$ gives the `distributor' (equivalent of commutator for distributivity),
+\begin{align}
+	\Delta(x\oplus y)\oplus \Delta(x)\oplus \Delta(y) = h(x\oplus y) \oplus h(x)\oplus h(y),
+\end{align}
+defining the distributivity of $\Delta$ operator over the action of $\oplus$.
+
+Standard differential codes are composable,
+\begin{align}
+	[x,x\oplus y)]_\oplus \oplus [x',x'\oplus y']_\oplus\nonumber\\
+	\sim [x\oplus x', x\oplus y \oplus x' \oplus y']_\oplus.
+\end{align}
+For differential hash codes,
+\begin{align}
+	[x,\Delta(x)]_\oplus,\nonumber\\
+	[y,\Delta(y)]_\oplus,
+\end{align}
+we have distinct composition rules,
+\begin{align}
+	[x\oplus y,\Delta(x\oplus y)]_H,\nonumber\\
+	[x\oplus y,\Delta(x) \oplus \Delta(y))]_\oplus.
+\end{align}
+The $[\cdot,\cdot]_H$ composition is verifiable by hashing the left hand term. The $[\cdot,\cdot]_\oplus$ composition is not hash-verifiable but preserves all differential encoding constraints.
+
+Permutations $\pi$ are distributive over $\oplus$ but not commutative,
+\begin{align}
+	\pi(x\oplus y) &= \pi(x) \oplus \pi(y),\nonumber\\
+	\pi(x) \oplus y &\neq x \oplus \pi(y),
+\end{align}
+whereas $\oplus$ is commutative but not distributive (in general, depending on parity of number of terms under distribution),
+\begin{align}
+	x\oplus y &= y \oplus x.
+\end{align}
+
+\begin{itemize}
+	\item $h(m\oplus s)$ will reveal the private $h(s)$ for chosen $m=\mathbf{0}$.
+	\item $h(m\oplus s \oplus x)$ will reveal the private $h(x)$ for chosen $m=x$ if $x$ is public.
+	\item $h(\pi(m\oplus s)) = h(m_\pi \oplus s_\pi)$ can only reveal $h(s_\pi)$ (not secret) for public $\pi$ and chosen $m$, but cannot reveal secret $h(s)$.
+\end{itemize}
+
+\section{Asymmetric codes}
+
+We define key-pairs as,
+\begin{align}
+	\mathtt{sk} &\in \{0,1\}^n, \nonumber\\
+	\mathtt{pk} &= \{\mathtt{pk}_\Delta,\mathtt{pk}_\pi\},\nonumber\\
+	\mathtt{pk}_\Delta &= \Delta(\mathtt{sk}),\nonumber\\
+	\mathtt{pk}_\pi &\in S_n,
+\end{align}
+where $\mathtt{sk}$ be a secret bit-string, $h(\{0,1\}^n)\to\{0,1\}^n$ an $n$-bit endomorphic hash function, and $\pi\in S_n$ a permutation on $n$ bits. Since $|S_n|=n!$ encoding $\pi$ requires $\lceil\log_2(n!)\rceil$ bits. For $n=256$ we have $\lceil\log_2(n!)\rceil = 1684$ bits.
+
+%and,
+%\begin{align}
+%	\pi &= h(\Delta(\mathtt{sk})),
+%\end{align}
+%is a non-unlocking public identifier, where,
+%\begin{align}
+%	x_\pi \equiv x\oplus h(\pi).
+%\end{align}
+Since $\mathtt{pk} = \Delta(\mathtt{sk})$ is public both $\mathtt{sk}$ and $h(\mathtt{sk})$ must be private to prevent unlocking the public key, both acting as trapdoors for the differential encoding.
+
+
+%The signature confirms consistency between private and public information while revealing only $h(\mathtt{sk}_pi)$ about the private key. To use Alice's private key as $s$ we inhibit the disclosure of $\mathtt{sk}$ by applying a publicly known pre-image manipulation prevents the signature from revealing the secret key, instead using,
+
+\begin{align}
+	[m_\pi \oplus s_\pi, \Delta_\pi(m_\pi\oplus s_\pi)],
+\end{align}
+
+\begin{align}
+	\Delta_\pi(m_\pi\oplus s_\pi) &= \Delta_\pi(m_\pi) \Delta_\pi(s_\pi) \nonumber\\
+	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi)
+\end{align}
+
+%Hence for,
+%\begin{align}
+%	[\mathtt{sig}, \Delta_\pi(m_\pi) \oplus \Delta(s_\pi)],
+%\end{align}
+%we require,
+%\begin{align}
+%	h(\mathtt{sig}) = \Delta_\pi(m_\pi) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi).
+%\end{align}
+
+
+%--
+%We will employ the two alternate differential encodings as asymmetric primitives,
+%\begin{align}
+%	&[m\oplus s, \Delta(h(m)\oplus s)],\nonumber\\
+%	&[h(m)\oplus s, \Delta(m\oplus s)],
+%\end{align}
+%with the identities,
+%\begin{align}
+%	\Delta(m\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(m\oplus s) \oplus h(m)\oplus h(s),\nonumber\\
+%	\Delta(h(m)\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(h(m)\oplus s) \oplus m\oplus h(s).
+%\end{align}
+%
+%\begin{align} 
+%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%\end{align}
+%
+%\begin{align} 
+%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%\end{align}
+%
+%---
+%
+%
+%\begin{align}
+%	\Delta(m_\pi \oplus s) &= h(m_\pi \oplus s) \oplus m_\pi \oplus s,\nonumber\\
+%	\Delta(m_\pi) \oplus \Delta(s) &= h(m_\pi) \oplus h(s) \oplus m_\pi \oplus s,
+%\end{align}
+%
+%Assume the message is known,
+%\begin{align}
+%	\Delta(m_\pi \oplus s_\pi) &= h(m_\pi \oplus s_\pi) \oplus m_\pi \oplus s_\pi \nonumber\\
+%	&= \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s_\pi.
+%\end{align}
+%
+%\begin{align}
+%	\Delta(m_\pi \oplus s_\pi) = \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s.
+%\end{align}
+%
+%%\begin{align}
+%%	\Delta(s_\pi) &= h(s_\pi) \oplus s_\pi, \nonumber\\
+%%	\Delta(s) &= \Delta(s_\pi) \oplus h(s_\pi) \oplus s_\pi.
+%%\end{align}
+%
+%
+%Hence (2): given $\Delta(m_\pi)$ Alice can extract the message via,
+%\begin{align}
+%		m = \Delta(\pi \oplus m) \oplus \Delta(s) \oplus h(\pi \oplus m) \oplus \pi,
+%\end{align}
+%
+%--
+%
+%\begin{align}
+%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi \oplus s_\pi)],\nonumber\\
+%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi ) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi  \oplus s_\pi))],\nonumber\\
+%\end{align}
+%
+%\begin{align}
+%	h(m_\pi \oplus s_\pi) &= \Delta(m_\pi) \oplus \Delta(s_\pi) \nonumber\\
+%	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi),\nonumber\\
+%\end{align}
+
+\section{Digital signatures}
+
+To sign message \mbox{$m\in\{0,1\}^n$} Alice makes public the differentially encoded, signed message $\Delta(m_\pi)$ and signature,
+\begin{align}
+	 \mathtt{sig}_\pi(m) = h(m_\pi \oplus \mathtt{sk}_\pi).
+\end{align}
+The signature has the property that when combined with public information it reveals the hash of the message being signed,
+\begin{align}
+	 \mathtt{sig}_\pi(m) \oplus \Delta(m) \oplus \Delta(\mathtt{sk}_\pi) = h(m).
+\end{align}
+Employing the modulated public key $\Delta(\mathtt{sk}_\pi)$,
+\begin{align}
+	\mathtt{sk}_\pi \equiv \mathtt{sk} \oplus h(\mathtt{pk}),
+\end{align}
+prevents the signature from revealing the trapdoor $h(\mathtt{sk})$ which unlocks the public key,
+\begin{align}
+	h(\mathtt{sk}) \oplus \Delta(\mathtt{sk}) &= \mathtt{sk},\nonumber\\
+	h(\mathtt{sk}_\pi) \oplus \Delta(\mathtt{sk}) &\neq \mathtt{sk}.
+\end{align}
+
+%To verify Alice's signature Bob evaluates,
+%\begin{align}
+%	\mathtt{sig}_\pi(m) \oplus \Delta(s_\pi) \oplus \Delta(m) = m,
+%\end{align}
+%revealing $m$, which can be compared against its hash to verify the signature's validity.
+
+%Taking Eq.~\eqref{eq:diff_sol} and grouping public information on the right we obtain,
+%\begin{align}
+%	h(m\oplus s) &= \Delta(m)\oplus \Delta(s),\nonumber\\
+%	\mathtt{sig} &= h(m\oplus s).
+%\end{align}
+
+\section{Encryption}
+
+For asymmetric encryption we reverse the roles of $m$ and $h(m)$. Bob wishes to send message $m$ to Alice and makes public,
+\begin{align}
+	\mathtt{enc}(m) &= \{\Delta(m), h(m)\}. 
+\end{align}
+Alice now decrypts using the message hash $h(m)$ to reveal the original message,
+\begin{align}
+	\Delta(s_\pi) \oplus \Delta(m) \oplus h(m) = m.
+\end{align}
+
+\subsection{Multi-sigs}
+
+Signatures are commutative, additive and composable.
+\begin{align}
+	\mathtt{sig}_\pi(m) = \Delta(s_\pi) \oplus h(m),
+\end{align}
+
+\subsection{Key-establishment \& secret sharing}
+
+Using the asymmetric encryption protocol, Alice finally communicates the verification hash,
+\begin{align}
+	\mathtt{key} = h(\mathtt{sk}\oplus m),
+\end{align}
+back to Bob, who also able to verify its validity. The verification hash now provides confirmation of a jointly prepared hash-based random number given by  the XOR-salted hash of Alice's secret key and Bob's chosen salt, which cannot be spoofed by either.
+
+\section{Notes}
+
+* The hash collision space translates to decoding failure.
+
+Differentially encoded tuples are composable under bitwise XOR,
+\begin{align}
+	[x,\Delta(x)] \oplus [y,\Delta(y)] = [x\oplus y, \Delta(x)\oplus \Delta(y)],
+\end{align}
+via the commutativity of $\oplus$.
+
+Compare above rhs,
+\begin{align}
+	h(x\oplus y) \oplus x \oplus y = h(x \oplus y) \oplus h(x) \oplus h(y).
+\end{align}
+
+$\pi$ known by inverting $\pi$ and multiplying the tuple elements to confirm consistency. For unknown or incorrect $\pi$ hash verification fails.
+
+The bit permutation operator, $\pi(\cdot)$, is distribute over the bit-wise XOR operator, $\oplus$,
+\begin{align}
+	\pi(x)\oplus \pi(y) = \pi(x\oplus y).
+\end{align}
+Hence differential encoding relationships are preserved under the uniform action of $\pi$,
+\begin{align}
+	[x,x\oplus y] &\sim [\pi(x), \pi(x\oplus y)],
+\end{align}
+but are in general not preserved under non-uniform action of $\pi$,
+\begin{align}
+	[x,x\oplus y] \not\sim [\pi(x), x\oplus y].
+\end{align}
+We'll employ the shorthand,
+\begin{align}
+	\pi\circ[x,y] = [\pi(x),\pi(y)].,
+\end{align}
+to denote the uniform action of $\pi$ over a differential code.
+
+While permutations are distributive over $\oplus$ they do not commute through hashes,
+\begin{align}
+	\pi(h(x)) \neq h(\pi(x)).	
+\end{align}
+
+\begin{align}
+	\Delta(\pi(x\oplus y)) = h(\pi(x\oplus y)) \oplus \pi(x) \oplus \pi(y).
+\end{align}
+
+\subsection{Symmetric encryption}
+
+Consider a single shared secret random bit-string differentially encoded against unique, single-use random bit-strings, also secret,
+\begin{align}
+	&\mathcal{X}: s,x_i \in \{0,1\}^n,\nonumber\\
+	&[s,s\oplus x_i].
+\end{align}
+Upon publicly communicating only the differential terms other parties in possession of $s$ can decode all $x_i$. Upon repeating using independent samples of $x_i$ but with the same secret Eve is in possession of $s\oplus x_i$ for each sample. Combining multiple interceptions Eve can produce,
+\begin{align}
+	s\oplus x_i \oplus s \oplus x_j &= x_i \oplus x_j,
+\end{align}
+which is independent of $s$ and reveals no information about $s$ in the absence of knowing any $x_i$. Thus over $n$ iterations the parties securely share $\{x\}$ where all $x_i$ are statistically independent, maximum entropy random variables. Concatenation enables a finite length shared secret to facilitate the secure sharing of arbitrarily long random bit-strings which can subsequently be employed in a one-time pad cipher, affording statistical security bounded by the entropy rate.
+
+The security of $s\oplus x$ can be information-theoretically interpreted in terms of the mutual information between the secret $s$ and public information in $s\oplus x$. For random variables $X$ and $Y$ their mutual information is given by,
+\begin{align}
+	I(X;Y) = H(X) + H(Y) - H(X,Y).	
+\end{align}
+Let,
+\begin{align}
+ 	&X\equiv \{s,x\},\nonumber\\
+ 	&Y\equiv s\oplus x,
+\end{align} 
+where $X$ denotes private information and $Y$ public information. We have the identities,
+\begin{align}
+ 	H(X) &\leq H(Y) \leq 1,\nonumber\\
+	H(X,Y) &= 2H(X),\nonumber\\
+	I(X;Y) &= 2H(X)-H(X,Y)\nonumber\\
+	&= 0,\nonumber\\
+	I(E) &= I(X_s;Y) = I(X_x;Y)\nonumber\\
+	&= H(X)+H(Y)-H(X,Y)\nonumber\\
+	&= H(Y) - H(X)\nonumber\\
+	&\leq 1-H(X).
+\end{align}
+Hence the mutual information between either private random variables and the encoded public random variable, equivalently the extractable information by an eavesdropper, is upper bounded by $1-H(X)$ where $0\leq H(X)\leq 1$. For perfect entropy sources where $H(X)=1$ this implies zero information leakage to Eve.
+
+\subsubsection{Quantum key distribution}
+
+QKD can be equivalently conceptualised. Consider the entanglement-based E91 QKD protocol where for each Bell pair Alice and Bob choose random measurement bases with random measurement outcomes,
+\begin{align}
+	b_{A,B} &\in \{Z\equiv 0, X\equiv 1\},\nonumber\\
+	m_{A,B} &\in \{0,1\}.
+\end{align}
+Post-selecting on outcomes where the measurement bases chosen by Alice and Bob are consistent, their respective measurement outcomes are dictated by parity constraints,
+\begin{align}
+	m_A\oplus m_B = p_b,\quad (b_A=b_B,\, p_b\in\{0,1\}).
+\end{align}
+where $p_b$ is imposed by the choice of Bell pair and measurement basis. Under this model for QKD security is statistical and associated with the entropy of $b$ and $m$, mediated by entanglement enforcing their parity constraints.
+
+\bibliography{bibliography.bib}
+
+\end{document}

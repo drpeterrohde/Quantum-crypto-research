@@ -1,0 +1,37 @@
+\begin{tikzpicture}[genericStyle, every node/.style={circle, draw, minimum size=2em}]
+    \def\UVsep{2.8}
+
+    \foreach \i in {1,...,5} {
+            \node[draw=none] (a\i) at (0,-\i) {};
+        }
+    \foreach \i in {1,...,5} {
+            \node[draw=none] (b\i) at (\UVsep,-\i) {};
+        }
+
+    \node[nodeNetworkStyle, rectangle, rounded corners=5pt, fit=(a1) (a5), inner sep=4pt] (rectU) {};
+    \node[nodeConsensusStyle, rectangle, rounded corners=5pt, fit=(b1) (b5), inner sep=4pt] (rectV) {};
+
+    \node[draw=none, above=-0.2em of rectU] (labelU) {$U$};
+    \node[draw=none, above=-0.2em of rectV] (labelV) {$V$};
+    \node[draw=none] at ($(labelU)!0.5!(labelV)$) {$E$};
+
+    \node[nodeGrayStyle] (a1) at (0,-1) {};
+    \node[nodeGrayStyle] (a2) at (0,-2) {$u_i$};
+    \node[nodeGrayStyle] (a3) at (0,-3) {};
+    \node[draw=none] (a4) at (0,-4) {\LARGE $\vdots$};
+    \node[nodeGrayStyle] (a5) at (0,-5) {};
+
+    \node[nodeGrayStyle] (b1) at (\UVsep,-1) {};
+    \node[nodeGrayStyle] (b2) at (\UVsep,-2) {};
+    \node[nodeGrayStyle] (b3) at (\UVsep,-3) {$v_j$};
+    \node[draw=none] (b4) at (\UVsep,-4) {\LARGE $\vdots$};
+    \node[nodeGrayStyle] (b5) at (\UVsep,-5) {};
+
+    \foreach \i in {1,...,5} {
+            \foreach \j in {1,...,5} {
+                    \draw[graphNonEdgeStyle] ($(rectU.east |- a\i) + (0.01,0)$) -- ($(rectV.west |- b\j) + (-0.01,0)$);
+                }
+        }
+
+    \draw[->, black, line width=0.8, line cap=round] (rectU.east |- a2) -- node[draw=none, draw=none, text=black, above=-1em,midway] {$e=(u_i,v_j)$} (rectV.west |- b3);
+\end{tikzpicture}

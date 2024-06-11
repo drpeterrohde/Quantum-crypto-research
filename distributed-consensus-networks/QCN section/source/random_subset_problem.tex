@@ -1,0 +1,212 @@
+
+\begin{figure}[!htb]
+	\centering
+	\resizebox{0.5\columnwidth}{!}{
+	\input{figures/random_subsets.tex}
+	}
+	\caption{\textbf{Random subsets.} Vertices represent network nodes coloured by the consensus sets to which they are assigned. Each subfigure illustrates a distinct random assignment of 36 nodes to 6 consensus sets comprising 6 nodes.} \label{fig:random_subsets}
+\end{figure}
+
+The \emph{random subset problem} is to choose a random subset $A$ uniformly from $B$, where $A\subseteq B$, of which there are $\binom{|B|}{|A|}$ combinations. If the proportion of parties acting dishonestly and collusively is $r$, the probability a random subset of size $N$ contains at least $k$ dishonest parties is,
+\begin{align}
+	P(N,k,r) & = \sum_{n=k}^{N} \binom{N}{n} {r}^n (1-r)^{N-n} \nonumber \\
+	%	&= 1 - I_{1-r}(N-k+1,k) \nonumber\\
+	         & = I_r(k,N-k+1),
+\end{align}
+where $I_x(a,b)$ is the regularised incomplete beta function. Compromising vote integrity via false-majority requires,
+\begin{align}
+	k_\mathrm{maj} = \lfloor N/2 \rfloor + 1.
+\end{align}
+Hence, the likelihood of compromise is,
+\begin{align}
+	P_c(N,r) = I_r(\lfloor N/2 \rfloor + 1,N-\lfloor N/2 \rfloor).
+\end{align}
+
+While in principle all parties are associated with independent likelihood of compromise, $r_i$, choosing subsets uniformly at random ensures the probabilities of set members being dishonest are independently and identically sampled with the average-case probability $r$,
+\begin{align} \label{eq:av_r_uniform}
+	r = \frac{1}{N} \sum_{i=1}^N r_i.
+\end{align}
+Hence, $P_c$ is independent of how dishonest nodes are distributed and what strategies they might employ (Fig.~\ref{fig:strategy_entropy}).
+
+\begin{figure}[!htb]
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_S_r01.pdf}
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_R_r01.pdf}\\
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_S_r03.pdf}
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_R_r03.pdf}
+	\caption{\textbf{Random sampling as a defence against strategic alignment.} (left) A minority of strategically aligned nodes may form false-majority if their alignment overlaps with a known allocation for consensus sets. (right) Random sampling erases strategic alignment and ensures node honesty is sampled with average-case $r$.} \label{fig:strategy_entropy}
+\end{figure}
+
+To uphold the integrity of majority votes, we require the likelihood of a minority gaining false-majority by chance to be upper-bounded by an exponentially small threshold $\varepsilon = 2^{-\lambda}$,
+\begin{align}
+	P_c(N,r) & \leq\varepsilon,
+\end{align}
+for statistical security parameter $\lambda>1$, a subjective parameter which may be application- or user-dependent. %As more stringent $\varepsilon$ implies larger $N_C$ hence workload, the cost of consensus is parameterised by $\varepsilon$.
+
+We define the required consensus set size, $N_\mathrm{min}$, as the smallest set size satisfying this inequality,
+\begin{align}
+	N_\mathrm{min}(r,\varepsilon) & = \underset{N\in\mathbb{Z}^+}{\arg\min}(P_c(N,r)\leq\varepsilon).
+\end{align}
+
+For consensus to maintain $\varepsilon$-security, consensus sets should never be smaller than $N_\mathrm{min}$. Simultaneously, choosing consensus sets larger than $N_\mathrm{min}$ is unnecessary and wasteful. Tradeoff curves for $N_\mathrm{min}(r,\varepsilon)$ are shown in Fig.~\ref{fig:P_M}.
+
+%\footnote{The number of distinct partitions of a set of nodes $\mathcal{S}$ into consensus sets of sizes $\{|\mathcal{C}_i|\}$ where,
+%\begin{align}
+%		|\mathcal{S}| = \sum_i |\mathcal{C}_i|,
+%\end{align}
+%is given by,
+%\begin{align}
+%	\# = \prod_i \binom{|\mathcal{S}|-\sum_{j=1}^{i-1}|\mathcal{C}_j|}{|\mathcal{C}_i|}.
+%\end{align}
+%}
+
+\begin{figure}
+	\includegraphics[width=\columnwidth]{figures/majority_prob.pdf}\\
+	\includegraphics[width=\columnwidth]{figures/majority_prob_zoom.pdf}
+	\caption{\textbf{Security tradeoffs with consensus set size.} $P_c(N,r)\leq\varepsilon$ is the probability that dishonest nodes within a random subset of size $N$ form a false-majority when the proportion of dishonest nodes is $r$, where $\varepsilon=2^{-\lambda}$ is the statistical security parameter. The oscillatory artefacts are associated with the non-linearity of \mbox{$\lfloor N/2\rfloor$} for even- and odd-valued $N$.} \label{fig:P_M}
+\end{figure}
+
+\subsection{Centralised algorithm}
+
+The random subset problem has a trivial centralised solution (Alg.~\ref{alg:random_subset}). We assign unique random bit-strings to each node, order them by their random number, and partition the ordered list piecewise into units of length $N_\mathrm{min}$. These partitions form non-intersecting random subsets, each defining an independent consensus set.
+
+\begin{algorithm}[H]
+	\begin{algorithmic}
+		\Function{RandomSubsets}{$\mathcal{S}$, $\{|\mathcal{C}|\}$} $\to \{\mathcal{C}\}$
+		\LComment{Assign a random number to each node}
+		\For{$i\in\mathcal{S}$}
+		\State $\mathtt{random}_i \gets \textsc{Random}(\{0,1\}^n)$	\EndFor
+		\LComment{Sort nodes by their random number}
+		\State{$\mathtt{ordered}$ = \textsc{Sort}($\mathcal{S}$, $\mathtt{random}$)}
+		\LComment{Partition the list into consensus sets}
+		\State{$\{\mathcal{C}\}$ = \textsc{Partition}(\texttt{ordered}, $\{|\mathcal{C}|\}$)}
+		\State \Return{$\{\mathcal{C}\}$}
+		\EndFunction
+	\end{algorithmic}
+	\caption{Centralised algorithm for the random subset problem, assigning a set of nodes $\mathcal{S}$ to a set of independent random subsets $\{\mathcal{C}\}$ of given sizes $\{|\mathcal{C}|\}$.} \label{alg:random_subset}
+\end{algorithm}
+
+The challenge is to securely implement this algorithm in a decentralised environment, such that nodes are unable to compromise the randomness of the assignments of consensus sets.
+
+\subsection{Proof-of-work} \label{sec:PoW}
+
+* Hashcash: \cite{pow_email, hashcash}
+
+Proof-of-work has been widely employed in blockchains such as Bitcoin \cite{Nakamoto08} as a distributed protocol for choosing random subsets of nodes. Here, nodes compete to find satisfying inputs to hash functions whose outputs satisfy a constraint dictating the likelihood of success. This distributed algorithm effectively asks nodes to find solutions to randomised problems with very low probability of success, $p_\mathrm{mine}\ll 1$, such that winners are randomly allocated across nodes in the network.
+
+Since hash functions are pseudo-random and exhibit pre-image resistance\footnote{For $\textsc{Hash}(x)\to y$ it is computationally hard to find a satisfying input $x\in\{0,1\}^*$ for given output $y\in\{0,1\}^n$.}, the only viable approach to finding such solutions is via brute-force, repeatedly hashing random bit-strings until a satisfying input is found. Winning nodes are hence allocated at random and cannot be spoofed under a computational hardness assumption. The distributed algorithm for proof-of-work is shown in Alg.~\ref{alg:PoW}.
+
+\begin{algorithm}[H]
+	\begin{algorithmic}
+		\Function{ProofOfWork}{$\mathcal{S}$, \texttt{id}, \texttt{size}} $\to \mathcal{C}$
+		\State $\mathcal{C} = \{\}$ \Comment{Consensus set}
+		\While{$|\mathcal{C}|<\mathtt{size}$}
+		\For{$i\in\mathcal{N}$} \Comment{In parallel}
+		\State $\mathtt{random}_i = \textsc{Random}(\{0,1\}^n)$
+		\State $\mathtt{output}_i = \textsc{Hash}(\mathtt{id}\,||\,\mathtt{random}_i)$
+		\If{$\textsc{Valid}(\mathtt{output}_i)$}
+		\State $\mathcal{C} \gets \mathcal{C} \cup \mathcal{S}_i$
+		\EndIf
+		\EndFor
+		\EndWhile
+		\State \Return{$\mathcal{C}$}
+		\EndFunction
+		\State
+		\Function{Valid}{$x\in\{0,1\}^n$} $\to \{0,1\}$
+		\If{$x/2^n \leq p_\mathrm{mine}$}
+		\State \Return{\texttt{true}}
+		\Else
+		\State \Return{\texttt{false}}
+		\EndIf
+		\EndFunction
+	\end{algorithmic}
+	\caption{Random subsets via proof-of-work. Nodes $\mathcal{S}$ hash random bit-strings, salted by a problem instance specified by the previous block $\mathtt{id}$, where the per-hash success rate is $p_\mathrm{mine}$.} \label{alg:PoW}
+\end{algorithm}
+
+Proof-of-work has no requirement that nodes be known or trusted, providing a very general protocol suited to open networks in which anyone can participate. However, while affording a distributed solution to the random subset problem, this approach is inherently wasteful. The expected mining rate is,
+\begin{align}
+	R_\mathrm{mine} = p_\mathrm{mine}\cdot R_\mathrm{hash},
+\end{align}
+where $R_\mathrm{hash}$ is the network's net hash-rate\footnote{Bitcoin's cumulative network hash-rate was $\sim$500EH/s \mbox{($500\times 10^{18}\mathrm{H/s}$)} as of January, 2024 \cite{hash_rate}.}. To inhibit the formation of multiple, simultaneous consensus sets (double-mining), potentially manifesting itself as forks in the blockchain, proof-of-work systems may introduce \emph{friction} by algorithmically adjusting the \emph{difficulty parameter} to ensure consistent mining times. To achieve constant mining time, difficulty must scale with cumulative network hash-rate, making the distributed algorithm less efficient as network size grows. For example, maintaining constant mining rate implies efficiency scales inversely with network size,
+\begin{align}
+	p_\mathrm{waste}=1-O\left(\frac{1}{n}\right),
+\end{align}
+asymptotically perfectly inefficient.
+
+\subsection{Secure shared randomness} \label{sec:secure_shared_randomness}
+
+An environment comprising a network of known nodes affords a more efficient solution to the random subset problem. The key observation is to utilise  \emph{secure shared randomness} to randomly permute and partition sets of nodes as per Alg.~\ref{alg:random_subset}. The source of shared randomness should be secure, in the sense that its randomness be robust against manipulation by dishonest nodes.
+
+Secure shared randomness can be achieved by first requiring network nodes ($\mathcal{N}$) to present transaction \texttt{id}s whose hashes act as unique random numbers,
+\begin{align}
+	\mathcal{X}_i &= \textsc{Hash}(\mathtt{id}_i).\end{align}
+A global key is then defined relative to the set $\mathcal{N}$ as,
+\begin{align} \label{eq:global_K}
+	\mathcal{X}_\mathcal{N} = \textsc{Hash}\left[\underset{i\in\mathcal{N}}{\big{|}\big{|}} \mathcal{X}^{\downarrow}_i\right],
+\end{align}
+our shared random source, where ${||}_i$ denotes concatenation over elements $i$, and \mbox{$\chi^{\downarrow}=\textsc{Sort}(\chi)$} denotes the sorted set.
+
+Under the rules of entropy addition (Sec.~\ref{sec:entropy_add}), the randomness of the global key, $\mathcal{X}_\mathcal{N}$, cannot be compromised unless all $\mathcal{X}_i$ are compromised.
+
+\subsection{Secure random subsets} \label{sec:hash_based_random_subsets}
+
+* Change 'global key' to 'secure shared random source'.
+
+From a secure global key, $\mathcal{X}_\mathcal{N}$, as per Eq.~\eqref{eq:global_K} the random subset problem affords a simple solution. Individual keys are assigned to each node,
+\begin{align}
+	K_i = \textsc{Hash}(\mathcal{X}_\mathcal{N} || \mathcal{X}_i).
+\end{align}
+Ordering and partitioning nodes by their associated $\{K_i\}$ assigns them to consensus sets as per Alg.~\ref{alg:random_subset}.
+
+Multiple random subset allocations may be derived from a single global key by rehashing individual keys,
+\begin{align}
+	K_i^{(n)} = \textsc{Hash}^n(\mathcal{X}_\mathcal{N} || \mathcal{X}_i),
+\end{align}
+where $K_i^{(n)}$ denote keys for the $n$th round.
+
+While nodes may choose their contributed \texttt{id}s, thereby influencing the established random source, $\mathcal{X}_\mathcal{N}$, this does not provide an avenue for compromising the integrity of random subset assignment. Adversarial nodes attempting to compromise $\varepsilon$-security by manipulating $\mathcal{X}_\mathcal{N}$ must find the necessary satisfying pre-images $\mathtt{id}_i$. Searching over $\mathrm{poly}(\lambda)$ pre-images, each associated with unique, independently random instances of $\mathcal{X}_\mathcal{N}$, preserves the exponentially decreasing likelihood of compromise,
+\begin{align}
+	\varepsilon' \leq \frac{\mathrm{poly}(\lambda)}{2^\lambda}.
+\end{align}
+
+This approach to random subset assignment necessarily assumes a collectively agreed upon known set of nodes, as the global key $\mathcal{X}_\mathcal{N}$ cannot be established from an undefined set, nor can an undefined set be ordered.
+
+%\subsection{Quantum-random subsets} \label{sec:QRSS}
+%
+%Hash-based random subsets inherit their security from the pre-image resistance and pseudo-random characteristics of hash functions. While these assumptions are strongly believed to be sound, they nonetheless afford only computational security.
+%
+%Ideal implementation of the random subset problem demands information-theoretic security, achievable with the introduction quantum random number (QRN) sources. 
+%
+
+%Quantum random numbers exhibit in-principle maximum entropy, affording classical networks the ability to observe 
+
+%Since uniformly distributed QRNs exhibit maximum entropy, a global key $X_\mathcal{S}$ established via Eq.~\eqref{eq:global_K} will be quantum-random if at least one $X_i$ was.
+
+%\subsubsection{Quantum-random permutations}
+%
+%Established max-entropy global key must be mapped to node-permutations. Consider the space of bit-strings of length $n$,
+%\begin{align}
+%	X = \{0,1\}^n,\,\, |X| = 2^n,
+%\end{align}
+%and the space of permutations over $m$ elements, given by the symmetric group of degree $m$,
+%\begin{align}
+%	\pi \in S_m,\,\, |S_m| = m!.
+%\end{align}
+%Uniquely mapping bit-strings to permutations, $K \mapsto S_m$, requires the order of their domains scale in tandem following a pigeonhole argument,
+%\begin{align}
+%	|X| = |S_m|.
+%\end{align}
+%The required number of QRN bits therefore scales as,
+%\begin{align}
+%	n = \log_2(m!),
+%\end{align}
+%from which random node-permutations may be assigned via,
+%\begin{align}
+%	K_i = X_{\pi_i}.
+%\end{align}
+%The number of QRN bits required to implement a global node permutation is shown in Fig.~\ref{fig:bits_permutations}.
+%
+%\begin{figure}[!htb]
+%	\includegraphics[width=\columnwidth]{figures/bits_permutations.pdf}
+%	\caption{\textbf{Number of bits required to encode an arbitrary node permutation.} This upper-bounds the required $n$ for the consensus group.} \label{fig:bits_permutations}	
+%\end{figure}
+

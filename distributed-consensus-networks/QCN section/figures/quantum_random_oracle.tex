@@ -1,0 +1,92 @@
+\tikzset{
+	blueGlow/.style = {
+		draw=blue!70, fill=blue!40, circular glow={fill=blue!40, shadow scale=1.25, shadow blur steps=5
+		}
+	}
+}
+
+\tikzset{
+	myShadow/.style = {
+		blur shadow = {shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+	}
+}
+
+\tikzset{
+    blueShadow/.style = {
+        draw=blue!40, line width=2, drop shadow = {color=blue, shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+    }
+}
+
+\tikzset{
+    redShadow/.style = {
+        draw=red!40, line width=2.5, drop shadow = {color=blue, shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+    }
+}
+
+\tikzset{
+    blockchainCol/.pic={
+        \tikzset{blockchainCol/.cd,#1}
+        \def\pv##1{\pgfkeysvalueof{/tikz/blockchainCol/##1}}
+    
+        \fill[fill=topologyFillColor] (-\myWidth,0) rectangle (\myWidth,4*\discSep);
+
+        \node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight, myShadow] (node0) at (0,0) {};
+        \draw[darkgray] (-\myWidth,0) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+        \draw[gray, dashed] (-\myWidth,0) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+        \node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight] (node1) at (0,\discSep) {};
+        \draw[darkgray] (-\myWidth,\discSep) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+        \draw[gray, dashed] (-\myWidth,\discSep) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+        \node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight] (node2) at (0,2*\discSep) {};
+        \draw[darkgray] (-\myWidth,2*\discSep) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+        \draw[gray, dashed] (-\myWidth,2*\discSep) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+        \node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight] (node2) at (0,3*\discSep) {};
+        \draw[darkgray] (-\myWidth,3*\discSep) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+        \draw[gray, dashed] (-\myWidth,3*\discSep) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+        \node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight] (node2) at (0,4*\discSep) {};
+        \draw[darkgray] (-\myWidth,4*\discSep) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+        \draw[darkgray] (-\myWidth,4*\discSep) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+        \draw[blueShadow, line width=2] (0,0) -- (0,4*\discSep);
+
+        \draw[blueGlow] (0,0) circle (\ballRadius);
+        \draw[blueGlow] (0,\discSep) circle (\ballRadius);
+        \draw[blueGlow] (0,2*\discSep) circle (\ballRadius);
+        \draw[blueGlow] (0,3*\discSep) circle (\ballRadius);
+        \draw[blueGlow] (0,4*\discSep) circle (\ballRadius);
+
+        \draw[darkgray] (-\myWidth,0) -- (-\myWidth,4*\discSep);
+        \draw[darkgray] (\myWidth,0) -- (\myWidth,4*\discSep);
+    }
+}
+
+\begin{tikzpicture}[genericStyle, scale=0.5]
+    \def\myWidth{6em}
+    \def\myHeight{2.5em}
+    \def\discSep{2}
+    \def\ballRadius{0.15}
+    \def\xadj{0.1}
+    \def\yoff{0.75}
+    \def\xoff{6.5}
+
+    \colorlet{lineBaseCol}{red}
+    \pic[scale=0.5] at (0,0) {blockchainCol};
+    \colorlet{lineBaseCol}{blue}
+    \pic[scale=0.5] at (-\xoff,-\yoff) {blockchainCol};
+    \pic[scale=0.5] at (\xoff,-\yoff) {blockchainCol};
+
+    \draw[->, redShadow, line cap=round, opacity=0.7] (\xadj,4*\discSep) -> (\xoff-\xadj,3*\discSep-\yoff);
+    \draw[blueGlow] (0,3*\discSep) circle (\ballRadius);
+    \draw[blueGlow] (0,4*\discSep) circle (\ballRadius);
+
+    \def\labelY{4.8*\discSep}
+    \node[draw=none, text=black] at (0,\labelY) {$\mathcal{X}_\mathcal{O}$(t)};
+    \node[draw=none, text=black] at (-\xoff,\labelY-\yoff) {$\mathcal{X}_\mathcal{N}(t)$};
+    \node[draw=none, text=black] at (\xoff,\labelY-\yoff) {$\mathcal{X}_\mathcal{N}(t) \oplus \mathcal{X}_\mathcal{O}(t+\tau)$};
+
+    \draw[darkgray] (-\myWidth+\xadj,4*\discSep) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+    \draw[darkgray] (-\myWidth+\xadj,0) -- (-\myWidth,4*\discSep);
+\end{tikzpicture}

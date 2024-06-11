@@ -1,0 +1,59 @@
+\resizebox{0.31\columnwidth}{!}{
+\begin{tikzpicture}[genericStyle]
+    \def\N{6}
+    \def\nskip{8}
+    \def\conn{3}
+    \def\UVsep{2.8}
+    
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+          \node[draw=none] (a\i) at (0,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_m$
+            \else
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_{\i}$
+            \fi
+        \fi
+    }
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+            \node[draw=none] (b\i) at (\UVsep,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_n$
+            \else
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_{\i}$
+            \fi
+        \fi
+    }
+    
+    
+     \foreach \i in {1,...,\N} {
+     	\foreach \j in {1,...,\N} {
+               \ifnum\i=\nskip
+                \else
+                	\ifnum\j=\nskip
+                    \else
+                        \draw[graphNonEdgeStyle] ($(a\i.east)$) -- ($(b\j.west)$);
+                    \fi
+                \fi
+        }
+    }
+    
+    \foreach \i in {1,...,\N} {
+        \foreach \offset in {1,...,\conn} {
+            \pgfmathtruncatemacro{\target}{mod(\i+\offset-2,\N)+1}
+                \ifnum\i=\nskip
+                \else
+                \ifnum\target=\nskip
+                    \else
+                        \draw[graphEdgeStyle] ($(a\i.east)$) -- ($(b\target.west)$);
+                    \fi
+                \fi
+        }
+    }
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.5)$) {\large $\mathcal{G}_{6,3}$};
+\end{tikzpicture}
+}

@@ -1,0 +1,222 @@
+\begin{tikzpicture}[every node/.style={circle,draw,minimum size=1em}, >=latex,
+        myshadow/.style={
+                blur shadow={shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+            }]
+
+    \def\Km{4}
+    \def\Kn{4}
+    \def\Kmskip{3}
+    \def\Knskip{3}
+    \def\dotsoff{0.075}
+
+    % BLOCK 1
+    \def\voff{0}
+    \def\UVsep{2.8}
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightblue}{cyan!20}
+    \colorlet{verylightyellow}{yellow!20}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (a\i) at (0,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=none] (a\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (a\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (b\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=none] (b\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (b\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    % BLOCK 2
+    \def\voff{-2.25}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (c\i) at (0,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=none] (c\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (c\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (d\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=none] (d\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (d\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    % BLOCK 3
+    \def\voff{-5.25}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (e\i) at (0,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=none] (e\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (e\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (f\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=none] (f\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=none] (f\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    % BOXES
+    \node[draw=orange, rectangle, rounded corners=5pt, fit=(a1) (e4), inner sep=4pt, fill=verylightyellow] (rectU) {};
+    \node[draw=blue, rectangle, rounded corners=5pt, fit=(b1) (f4), inner sep=4pt, fill=verylightblue] (rectV) {};
+
+    % DRAW
+
+    % BLOCK 1
+    \def\voff{0}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (a\i) at (0,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=black,fill=verylightgray,myshadow] (a\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (a\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (b\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=black,fill=verylightgray,myshadow] (b\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (b\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    \foreach \i in {1,...,\Km} {
+            \foreach \j in {1,...,\Kn} {
+                    \ifnum\i=\Kmskip
+                    \else
+                        \ifnum\j=\Knskip
+                        \else
+                            \draw[-,draw=gray,line width=0.5,line cap=round] ($(rectU.east |- a\i)$) -- ($(rectV.west |- b\j)$);
+                        \fi
+                    \fi
+                }
+        }
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.25)$) {$K_{m_1,n_1}$};
+
+    % BLOCK 2
+    \def\voff{-2.25}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (c\i) at (0,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=black,fill=verylightgray,myshadow] (c\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (c\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (d\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=black,fill=verylightgray,myshadow] (d\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (d\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    \foreach \i in {1,...,\Km} {
+            \foreach \j in {1,...,\Kn} {
+                    \ifnum\i=\Kmskip
+                    \else
+                        \ifnum\j=\Knskip
+                        \else
+                            \draw[-,draw=gray,line width=0.5,line cap=round] ($(rectU.east |- c\i)$) -- ($(rectV.west |- d\j)$);
+                        \fi
+                    \fi
+                }
+        }
+
+    \node[draw=none] at ($(c1)!0.5!(d1) + (0,0.25)$) {$K_{m_2,n_2}$};
+
+    % BLOCK 3
+    \def\voff{-5.25}
+
+    \foreach \i in {1,...,\Km} {
+            \ifnum\i=\Kmskip
+                \node[draw=none] (e\i) at (0,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Km
+                    \node[draw=black,fill=verylightgray,myshadow] (e\i) at (0,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (e\i) at (0,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+    \foreach \i in {1,...,\Kn} {
+            \ifnum\i=\Knskip
+                \node[draw=none] (f\i) at (\UVsep,\voff+\dotsoff-0.5*\i) {\small $\vdots$};
+            \else
+                \ifnum\i=\Kn
+                    \node[draw=black,fill=verylightgray,myshadow] (f\i) at (\UVsep,\voff-0.5*\i) {};
+                \else
+                    \node[draw=black,fill=verylightgray,myshadow] (f\i) at (\UVsep,\voff-0.5*\i) {};
+                \fi
+            \fi
+        }
+
+    \foreach \i in {1,...,\Km} {
+            \foreach \j in {1,...,\Kn} {
+                    \ifnum\i=\Kmskip
+                    \else
+                        \ifnum\j=\Knskip
+                        \else
+                            \draw[-,draw=gray,line width=0.5,line cap=round] ($(rectU.east |- e\i.east)$) -- ($(rectV.west |- f\j)$);
+                        \fi
+                    \fi
+                }
+        }
+
+    \node[draw=none] at ($(e1)!0.5!(f1) + (0,0.25)$) {$K_{m_b,n_b}$};
+
+    \node[draw=none] at ($(e1)!0.5!(f1) + (0,1)$) {$\vdots$};
+
+\end{tikzpicture}

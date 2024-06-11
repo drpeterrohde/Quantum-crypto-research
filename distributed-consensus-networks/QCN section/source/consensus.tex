@@ -1,0 +1,62 @@
+The purpose of consensus is to provide a decentralised mechanism for sets of parties to collectively act as an independent arbiter in judging and signing off on the validity of statements. In the context of blockchains, this is employed to determine whether a newly submitted transaction block is legitimate and should be added to the blockchain.
+
+In an environment where a minority subset of parties are dishonest and conspiring to form false consensus, the purpose of consensus protocols is to uphold the will of the majority, independent of the behaviour of collusive, dishonest parties. As dishonest parties are assumed to be in the minority, this can always be achieved by ensuring that all parties are involved in consensus. However, this is highly resource-intensive and consensus needn't involve all parties. A subset of parties suffices to form consensus if their decision reflects the will of the majority, enabling them to act as delegates.
+
+Choosing a subset of parties to form consensus there is some probability of dishonest parties forming a false majority by chance. Consensus sets should therefore be chosen to upper-bound this probability, independent of the strategy employed by dishonest parties.
+
+Consensus is formed by majority vote on the validity of some statement (\texttt{id}) by members of a consensus set ($\mathcal{C}$) chosen from a set of network nodes ($\mathcal{N}$),
+\begin{align}
+	\mathcal{C}\subseteq\mathcal{N}.
+\end{align}
+The majority vote of the entire network is a deterministic decision function defining the \emph{source of truth},
+\begin{align} \label{eq:majority_vote_det}
+	\textsc{MajorityVote}(\mathcal{N},\mathtt{id})\to\{0,1\},
+\end{align}
+which consensus sets must uphold. Based on their statistical composition, the majority votes of consensus sets are in general probabilistic,
+\begin{widetext}
+	\begin{align*}
+		\textsc{MajorityVote}(\mathcal{C},\mathtt{id}) = \begin{cases}
+		\mathrm{Pr}(1-P_c), & \textsc{MajorityVote}(\mathcal{N}, \mathtt{id}) \\
+		\mathrm{Pr}(P_c),   & \neg \textsc{MajorityVote}(\mathcal{N}, \mathtt{id})
+		\end{cases},
+	\end{align*}
+\end{widetext}
+where $P_c$ is the probability of compromise, whereby $\mathcal{C}$ comprises a majority of dishonest parties attempting to subvert honest outcomes.
+
+For \mbox{$P_c=0$} where an honest majority is guaranteed, this reduces to the deterministic case as per Eq.~\eqref{eq:majority_vote_det}. The purpose of distributed consensus algorithms is to choose consensus sets $\mathcal{C}$ operating in this regime to a close approximation.
+
+%\begin{algorithm}[!htb]
+%\begin{algorithmic}
+%\Function{Consensus}{$\mathcal{C}$, \texttt{statement}} $\to \{0,1\}$
+%	\State \Return{\textsc{MajorityVote}($\mathcal{C}$, $\mathtt{statement})$}
+%\EndFunction
+%\State
+%\Function{ConsensusTime}{$\mathcal{C}$} $\to \mathbb{R}$
+%	\State \Return \textsc{Median}($\textsc{ReportedTimes}(\mathcal{C})$)
+%\EndFunction
+%\State
+%\Function{ConsensusParticipants}{$\mathcal{C}$, $\mathcal{S}$} $\to \mathcal{P}$
+%\State $\mathcal{P} = \{\}$ \Comment{Participant set}
+%\For{$i\in\mathcal{S}$}
+%	\If{\textsc{MajorityVote}($\mathcal{C}$, $\mathcal{S}_i\in\mathcal{P}$)}
+%	\State $\mathcal{P} \gets \mathcal{P} \cup \mathcal{S}_i$
+%	\EndIf
+%\EndFor
+%	\State \Return{$\mathcal{P}$}
+%\EndFunction
+%\end{algorithmic}	
+%\caption{Consensus methods.} \label{alg:compliance}
+%\end{algorithm}
+
+\subsection{Compliance}
+
+\begin{figure}[!htb]
+	\centering
+	\resizebox{0.5\columnwidth}{!}{\input{figures/compliance_voting.tex}} \\
+	\vspace{-2em}
+	\resizebox{0.32\columnwidth}{!}{\input{figures/compliance_voting_majority.tex}}
+%	\hspace{1em}
+	\resizebox{0.32\columnwidth}{!}{\input{figures/compliance_voting_minority.tex}}
+	\resizebox{0.32\columnwidth}{!}{\input{figures/compliance_voting_indet.tex}}
+	\caption{\textbf{Compliance voting.} ???} \label{fig:compliance_voting}
+\end{figure}

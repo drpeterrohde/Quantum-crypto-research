@@ -1,0 +1,490 @@
+\documentclass[twocolumn, aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, doublefloatfix, table-of-contents, eqsecnum, rmp]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{amsmath}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{amssymb}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{braket}
+\usepackage{url}
+\usepackage[breaklinks]{hyperref}
+    
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+    
+\begin{document}
+
+\title{Quantum cryptographic primitives using graph states}
+
+\author{Peter P. Rohde}
+\affiliation{BTQ Technologies}
+
+\maketitle
+
+\tableofcontents
+
+%\section{Background reading}
+%
+
+\section{Stabiliser states}
+
+%Stabiliser states are the class of states.
+
+The Pauli group on $n$ qubits, $\mathcal{P}_n$, comprises arbitrary kronecker products of $n$ Pauli operators,
+\begin{align}
+	\sigma_0 \equiv I,\, \sigma_1 \equiv X,\, \sigma_2 \equiv Y,\, \sigma_3 \equiv Z,
+\end{align}
+with phase $\{\pm 1,\pm i\}$,
+\begin{align}
+	\mathcal{P}_1 &= \{\pm 1,\pm i\} \times \{I,X,Y,Z\}, \nonumber\\
+	\mathcal{P}_n &= \mathcal{P}_1^{\otimes n}.
+\end{align}
+
+Stabilisers for an $n$-qubit stabiliser state form a commutative subgroup of $\mathcal{P}_n$, which we will express as,
+\begin{align}
+	S_i &= p_i \bigotimes_{j=1}^n X_j^{x_{i,j}}Z_j^{z_{i,j}},
+\end{align}
+for the $i$th stabiliser. Here $x_{i,j}, z_{i,j}\in\{0,1\}$ are binary coefficients indicating the presence (1) or absence (0) of $X$ or $Z$ operators respectively, and $p_i\in\{\pm 1,\pm i\}$ are phase factors. Note that $X$ and $Z$ form a generating set of operators for $\mathcal{P}$ where $XZ=-iY$. Hence the $x$ and $z$ binary coefficients capture all four Pauli matrices.
+
+An $n$-qubit stabiliser state $\ket\psi$ is fully characterised by $n$ independent stabilisers, where $\ket\psi$ is the simultaneous $+1$ eigenstate of all $S_i$,
+\begin{align}
+	S_i \ket\psi = \ket\psi \,\forall\,i.
+\end{align}
+
+Stabilisers are not unique. Since,
+\begin{align}
+	S_i S_j \ket\psi = S_i \ket\psi = S_j \ket\psi = \ket\psi,
+\end{align}
+any product of stabilisers is also a stabiliser, $S_k = S_i S_j$.
+
+Each stabiliser can be expressed as a binary vector,
+\begin{align}
+	S_i \cong [\mathbf{x}_i | \mathbf{z}_i | p_i],
+\end{align}
+where $\mathbf{x}_i$ ($\mathbf{z}_i$) is a row vector of $x_{i,j}$ ($z_{i,j}$).
+
+A stabiliser set can be represented as a $(2n+1)\times n$ binary matrix,
+\begin{align}
+	[\mathbf{X}|\mathbf{Z}|\mathbf{P}],
+\end{align}
+known as the \emph{tableau matrix}.
+
+The Clifford group is the set of unitary operations that commute with the Pauli group and hence map stabiliser states to stabiliser states. Equivalently, stabiliser states can be considered the class of states accessible via Clifford operations acting on computational basis states. Clifford operations acting on stabiliser states are efficiently classically simulatable, related by conjugation \cite{gottesman1998heisenberg}. Since,
+\begin{align}
+	S\ket\psi &= \ket\psi, \nonumber\\
+	USU^\dag U\ket\psi &= U\ket\psi,
+\end{align}
+this implies the stabiliser $S'$ of a stabiliser state $\ket\psi$ evolved by Clifford operation $U$ is,
+\begin{align}
+	S' &= USU^\dag,\nonumber\\
+	S' U\ket\psi &= U\ket\psi.
+\end{align}
+
+\subsection{Properties of stabilisers \& stabiliser states}
+
+\textcolor{red}{Add the tableau representation of the 3-qubit Bell state.}
+
+Since a stabiliser state $\ket\psi$ is the simultaneous eigenstate of its stabilisers, measuring a stabiliser $S_i$ as an observable necessarily and deterministically yields the $+1$ measurement outcome and leaves the state unchanged.
+
+Stabilisers define constraints on the collective measurement outcomes of qubits. Consider the 3-qubit Bell state,
+\begin{align}	
+	\ket\psi = (\ket{000}+\ket{111})/\sqrt{2}.
+\end{align}
+This has stabilisers,
+\begin{align}	
+	S_1 &= XXX,\nonumber\\
+	S_2 &= ZZI,\nonumber\\
+	S_3 &= IZZ.
+\end{align}
+The $S_1$ stabiliser implies that upon measuring all qubits individually on the $X$ basis the product of the measurement outcomes is $+1$. Similarly, the $S_2$ and $S_3$ stabilisers tell us that upon measuring the two qubits associated with $Z$ operators in the $Z$ basis the measurement outcomes multiply to $+1$.
+
+\subsection{Proofs-of-quantumness}
+
+Let Alice prepare an $n$-qubit stabiliser state $\ket\psi$ and give it to Bob. As the state description (stabiliser set) is only known to Alice, only Alice can prepare copies of $\ket\psi$. Hence the instance of $\ket\psi$ can be regarded as unique by Alice.
+
+If Alice subsequently challenges Bob to report measurement results on $\ket\psi$, where the challenges are chosen from the stabiliser set $\{S_i\}$ known only to Alice, correct responses by Bob act as a zero-knowledge proof that Bob possesses $\ket\psi$. In this context, `zero-knowledge' refers to `quantumness', i.e Bob proves possession of a quantum state without sharing any quantum information, requiring only classical communication.
+
+Since stabilisers form a compact representation of the respective stabiliser state, $n$ such challenges to Bob provides a complete proof of possession of state $\ket\psi$, requiring only $O(n)$ query complexity. However, as the challenge questions reveal stabilisers, a complete proof of $n$ correct stabiliser measurements implies Bob upon completion possesses a complete description of the state, implying a single-use property. Similarly, if Eve intercepts these queries she may subsequently reproduce $\ket\psi$ and spoof further queries.
+
+\subsection{Zero Knowledge Proof of Quantumness}
+
+\textcolor{red}{* A general construction of ZKPoQ: step-by-step performed by both parties Alice and Bob.}
+
+\section{R1CS constraint systems}
+
+\textcolor{red}{*This section will give a more detail explanations about the R1CS and why can we build a ZKPs from it!}
+
+\subsection{R1CS}
+An R1CS constraint is of the form,
+\begin{align} \label{eq:RICS_constraint}
+	(\mathbf{a}\cdot \mathbf{s}) \times (\mathbf{b}\cdot \mathbf{s}) = (\mathbf{c}\cdot \mathbf{s}),
+\end{align}
+where $\mathbf{a}$, $\mathbf{b}$, $\mathbf{c}$ and $\mathbf{s}$ are vectors over a field $\mathcal{F}$, $\cdot$ denotes the vector dot-product, and $s$ is a solution to the constraint system.
+
+For a system of such constraints, we have,
+\begin{align}
+	(\mathbf{A}\cdot \mathbf{s}) \times (\mathbf{B}\cdot \mathbf{s}) = (\mathbf{C}\cdot \mathbf{s}),
+\end{align}
+where $\mathbf{A}$, $\mathbf{B}$ and $\mathbf{C}$ are matrices whose rows are of the form Eq.~\eqref{eq:RICS_constraint}, one row for every constraint, which must all be simultaneously satisfied. Here $\mathbf{a}\times \mathbf{b}$ denotes element-wise vector multiplication.
+
+\subsection{Quadratic Arithmetic Programs}
+
+\textcolor{red}{* QAPs are the primary reason ZK-SNARKs are able to be succinct?}
+
+* Succinct?
+
+\subsection{Why can we build a ZKPs from R1CS?}
+\textcolor{red}{* ZK-SNARKs is built step-by-step from  R1CS to QAP to the formal ZKPs construction. Can we do the same with ZKPoQ, going from constraints on the stabilisers to .... to the general definition of ZKPoQ.}
+
+
+\section{Stabilisers states as R1CS}
+
+Defining an R1CS relative the binary field, $\mathcal{F}=\mathrm{GF}(2)$, a stabiliser is equivalent to a single R1CS constraint, and a stabiliser set to an R1CS constraint system.
+
+%Combining these together we obtain the mapping that each stabiliser $S_i$ is equivalent to a single R1CS constraint,
+%\begin{align}
+%	S_i \equiv [\mathbf{x}_i | \mathbf{z}_i | p_i]
+%\end{align}
+
+\section{Primitives}
+
+The following primitives afforded by stabiliser states apply both locally and non-locally as multi-qubit constraints are enforced by entanglement. This facilitates distributed constraints in a multi-party context.
+
+\subsection{Parity constraints on single-qubit measurement outcomes}
+
+Stabiliser,
+\begin{align}
+	S_i = p_i \bigotimes_{j=1}^n X_j^{x_{i,j}}Z_j^{z_{i,j}},
+\end{align}
+imposes a parity-conservation constraint on single-qubit measurement outcomes,
+\begin{align}
+	p_i \prod_{i=1}^n M(X_j^{x_{i,j}}Z_j^{z_{i,j}}) = 1,
+\end{align}
+where $M(O)=\pm 1$ is the measurement outcome of observable $O$. 
+
+That is, upon measuring the string of single-qubit Pauli operators in a stabiliser the product of their measurement outcomes is a constant enforced by the stabiliser. A stabiliser does not impose any constraints on the measurement outcomes from a distinct sequence of Pauli operators.
+
+\subsection{Proof of quantum state possession}
+
+Measuring any stabiliser, which in general requires entangling measurements, necessarily yields
+\begin{align}
+M(S_i)=1,\,\forall\,i,
+\end{align}
+outcomes while leaving $\ket\psi$ unchanged.
+
+If Alice knows $\ket\psi$ and challenges Bob to randomly measure $\pm S_i$, if Bob correctly reports all $M(\pm S_i)$ this proves to Alice his measurements reflect that of $\ket\psi$. The likelihood of guessing all measurement outcomes asymptotically vanishes,
+\begin{align}
+	P(n) = \frac{1}{2^n}.
+\end{align}
+
+\subsection{No-cloning}
+
+$\ket\psi$ cannot be copied unless its stabilisers are, but can be infinitely reproduced if all $S_i$ are known. Hence, if Alice privately prepares a state and transfers it to Bob she has confidence only a single copy of $\ket\psi$ exists.
+
+\section{Examples}
+
+\subsection{Quantum key distribution (QKD)}
+
+Consider the BB84 QKD protocol. Alice prepares $n$ separable qubits as randomly chosen basis states in the $X$ or $Z$ basis, also chosen randomly.
+
+Let,
+\begin{align}
+	m_i^{(A)} \in \{-1,+1\}
+\end{align} 
+denote Alice's chosen basis state for the $i$th qubit, similarly defined for Bob's measured basis state, $m_i^{(B)}$. And let,
+\begin{align}
+	b_i^{(A)} \in \{0\equiv X,1\equiv Z\},
+\end{align}
+denote Alice's encoding basis, likewise for Bob with $b_i^{(B)}$.
+
+Hence, the $i$th qubit prepared by Alice has a stabiliser form,
+\begin{align}
+	S_i \in \{Z_i, -Z_i, X_i, -X_i\},
+\end{align}
+chosen uniformly at random, with implied $I_j$ operators for all $j\neq i$.
+
+The tableau representation can therefore be considered as having diagonal \textbf{X} and \textbf{Z} blocks, where \textbf{P} denotes the respective basis state,
+\begin{align}
+	\mathbf{X} &= \mathrm{diag}(x_i),\nonumber\\	
+	\mathbf{Z} &= \mathrm{diag}(z_i),\nonumber\\
+	\mathbf{P} &= \mathrm{diag}(m_i^{(A)}).
+\end{align}
+The \textbf{X} and \textbf{Z} blocks now capture encoding basis, while the \textbf{P} encodes the basis state via the respective $\pm 1$ eigenvalue.
+
+Since all stabilisers have a non-trivial operator at location $i$ we have, $x_i=\bar{z}_i$,
+\begin{align}
+	\mathbf{X} + \mathbf{Z} = \mathbf{I}.
+\end{align}
+
+Stabiliser $S_i=\{\pm X,\pm Z\}$ imposes a measurement constraint on each qubit, where all constraints are independent.
+
+The tableau block matrices of the state prepared by Alice are now structured as,
+\begin{align}
+	x_{i,i} &= \bar{b}_i^{(A)} m_i^{(A)},\nonumber\\
+	z_{i,i} &= b_i^{(A)} m_i^{(A)},
+\end{align}
+where $\bar{b}=(1-b)$ is the binary complement.
+
+Upon completing the protocol and comparing measurement bases we have the constraint,
+\begin{align}
+	m_i^{(B)} = \begin{cases}
+		 m_i^{(A)}, &b_i^{(A)}=b_i^{(B)} \nonumber\\
+		\mathrm{Ber}(1/2), &b_i^{(A)}\neq b_i^{(B)}
+ 	\end{cases},
+\end{align}
+where $\mathrm{Ber}(1/2)\in\{-1,+1\}$ is a Bernoulli random variable with \mbox{$p=1/2$}.
+
+The binary vector,
+\begin{align}
+	\mathbf{c} = \mathbf{b}^{(A)} \times \mathbf{b}^{(B)},	
+\end{align}
+is a mask indicating which bases were consistent between Alice and Bob.
+
+Consider the subset of consistent measurement basis (\mbox{$c_i=1$}). Now \textbf{c} masks out a sub-matrix of the original tableau matrix,
+\begin{align} \label{eq:witness}
+	\mathbf{P} \cdot \mathbf{c} = \mathbf{m}^{(B)} \cdot \mathbf{c},
+\end{align}
+which defines the correctness constraint on the subset of qubits where Alice and Bob employ the same basis. Note that,
+\begin{align}
+	\mathbf{P} \cdot \mathbf{c} = \mathbf{m}^{(A)} \cdot \mathbf{c},
+\end{align}
+holds by definition.
+
+For inconsistent measurement basis we have,
+\begin{align}
+	\mathbb{P}(\mathbf{P} \cdot \bar{\mathbf{c}} = \mathbf{m}^{(B)} \cdot \bar{\mathbf{c}}) = \frac{1}{\sqrt{2^{|\bar{\mathbf{c}}|}}},
+\end{align}
+where $|\mathbf{c}|$ denotes Hamming weight.
+
+Any set,
+\begin{align}
+	W=(\mathbf{b}^{(A)},\mathbf{b}^{(B)},\mathbf{m}^{(A)},\mathbf{m}^{(B)})
+\end{align}
+satisfying Eq.~\eqref{eq:witness} acts as a witness for an instance of the QKD protocol. 
+
+\subsection{Quantum authentication}
+
+$HMP4$ states,
+\begin{align}
+	\ket{\alpha(x)} &= \frac{1}{2} \sum_{i=1}^4 (-1)^{x_i} \ket{(i-1)_2} \nonumber\\
+	&= \frac{1}{2}[\beta_1\ket{00} + \beta_2\ket{01} + \beta_3\ket{10} + \beta_4\ket{11}] \nonumber\\
+%	&= \frac{1}{2}[\ket{0}(\beta_1\ket{0} + \beta_2\ket{1}) + \beta_3\ket{10} + \beta_4\ket{11}]
+\end{align}
+where $x\in\{0,1\}^4$, $(\cdot)_2$ denotes base-2 representation, and $\beta_i=(-1)^{x_i}$.
+
+$HMP4$ condition for verification,
+\begin{align}
+	b = \begin{cases}
+		x_1 \oplus x_{2+m}, &a=0 \nonumber\\
+		x_{3-m} \oplus x_4, &a=1
+ 	\end{cases},
+\end{align}
+where we say $(x,m,a,b)\in HMP_4$ if this condition is satisfied, the verification constraint. Here Alice holds $x$ and $m$, while Bob provides $a$ and $b$.
+
+\subsection{Interactive proofs of quantumness (IPQ)}
+
+The interactive IPQ protocol based on TCFs generates bit-string superpositions from an underlying lattice construction, whose measurement by a prover provide a proof for the verifier. 
+
+Consider a superposition of two bit-strings,
+\begin{align}
+	\ket\psi = \frac{1}{\sqrt{2}}(\ket{x}+\ket{y}),
+\end{align}
+where $x,y\in\{0,1\}^n$ and $x\neq y$.
+
+Define the subsets of bits,
+\begin{align}
+	s_{a,b} = \{i\,|\,(x_i,y_i)=(a,b)\}_{i\in\{1,\dots,n\}}.
+\end{align}
+
+We introduce stabilisers:
+\begin{align}
+	S &= Z_i, \,\,\forall\, i\in s_{0,0}, \nonumber\\
+	S &= -Z_i, \,\,\forall\, i\in s_{1,1}, \nonumber\\
+	S &= \bigotimes_{i\in s_{0,1}\cup s_{1,0}} X_i, \nonumber\\
+	S &= \bigotimes_{i\in s_{0,1}\cup s_{1,0}} Z_{(s_{0,1}\cup s_{1,0})_1} Z_i, \nonumber\\
+\end{align}
+
+%For each bit  we have the associated,
+%\begin{align}
+%	(x_i=0,y_i=0): &
+%\end{align}
+%
+%Consider bit $i\in\{1,\dots,n\}$.
+%
+%When $x_i=y_i=0$ we introduce stabiliser $S=Z_i$.
+%
+%When $x_i=y_i=1$ we use $S=-Z_i$.
+%
+%For all bits where $x_i\neq y_i$ we introduce $S=\otimes_i X_i$. And introduce $S=Z_i \otimes_{j}Z_j \otimes_{\neq j}Z_j
+
+\subsection{Quantum anonymous broadcasting}
+
+GHZ state,
+\begin{align}
+	\ket\psi = \frac{1}{\sqrt{2}}(\ket{0}^{\otimes n} + \ket{1}^{\otimes n}).	
+\end{align}
+
+Stabilisers,
+\begin{align}
+	S_1 &= X^{\otimes n}, \nonumber\\
+	S_i &= Z_{i-1}\otimes Z_{i}, \quad 2\leq i\leq n.
+\end{align}
+
+$S_1$ enforces a parity constraint upon measuring all qubits in the $X$ basis,
+\begin{align}
+	\prod_{i=1}^n M(X_i) = 1,
+\end{align}
+where $M(X_i)=\pm 1$ is the measurement outcome of the $X_i$ observable.
+
+If a $Z_i$ gate is applied to any qubit this flips the sign of the collective constraint, independent of which qubit $Z_i$ was applied to, enforcing anonymity.
+
+\section{Graph states}
+
+For a graph \mbox{$G=(E,V)$} let $\rho(G)$ be the respective graph state.
+
+We have the one-way property that given $G$ one can prepare and infinitely reproduce $\rho(G)$,
+\begin{align}
+	G \to \rho(G),	
+\end{align}
+but given $\rho(G)$ one cannot obtain $G$,
+\begin{align}
+	\rho(G) \not\to G,	
+\end{align}
+
+If $G$ is revealed $\rho(G)$ can be verified by measuring all its stabilisers with $+1$ outcome. The likelihood of obtaining all $+1$ outcomes for a graph $G'\neq G$ scales as $1/2^n$ for $n=|V|$, the statistical security of the commitment $\rho(G)$.
+
+\subsection{Digital signatures}
+
+Let $\mathcal{X}_n$ denote the uniform distribution of random graphs with $n$ vertices where all edges exist with probability $p=1/2$. Hence the edge-sets $E(\mathcal{X}_n)$ have maximum entropy.
+
+Using a graph with $2m+n$ qubits let the secret key be $G\in\mathcal{X}_{2m+n}$ and $\rho(G)$ be the public key. Hence,
+\begin{align}
+	&\texttt{KeyGen}: \{G\in\mathcal{X}_{2m+n},\rho(G)\},\nonumber\\
+	&\texttt{SecKey}: G,\nonumber\\
+	&\texttt{PubKey}: \rho(G).
+\end{align}
+
+Alice can infinitely reproduce $\rho(G)$ to provide to any number of parties.
+
+We pair the first $2m$ qubits to encode $m$ message bits, 2 qubits per message bit.
+
+Taking $\rho(G)$, to verify Alice's message he measures each qubit pair in the bases $(Z,Y)$ for $m=0$ or $(Y,Z)$ for $m=1$.
+
+Qubits measured in $Z$ are eliminated while $Y$ measurements perform an edge complement on the subgraph induced by the random subset of vertices that qubit is connected to.
+
+Thus the measurements for each message bit implement one of two possible random edge complementations.
+
+Upon performing all message bit measurements Bob has a reduced $n$-qubit random graph as a function of the message, $\rho(G'(m))$ (where $|V(G')|=n$), also with maximum edge set entropy.
+
+Alice knows the reduced graph $G'(m)$ itself, which can be efficiently computed given knowledge of $G$, whereas Bob knows neither $G$ nor $G'$, always perceiving maximum entropy graphs.
+
+Alice's signature is the disclosure of $G'(m)$, which Bob can verify by measuring the respective stabilisers with $+1$ outcome. He has statistical security scaling as \mbox{$\varepsilon = 1/2^n$}.
+
+Bob's knowledge of $G'$ does not allow him to know $G$ (the private key), since they are both maximum entropy and related by random edge complementations.
+
+We have both a binding and hiding property for the signature. Non-repudiation here arises from all random signature graphs $G'$ being distinct. Collisions (i.e multiple messages reducing to the same random graph) provide opportunity for repudiation. The collision rate scales inverse exponentially with $n$.
+
+Thus by pre-sharing an $2m+n$ qubit random graph with Bob, Alice can sign an $m$ bit classical message with $n$ bit statistical security.
+
+There are no hardness assumptions, only information-theoretic ones.
+
+Message information is not block-encoded, rather all message bits are collectively encoded into the reduced state $G'$ under a random, maximum-entropy code.
+
+This is a general signature scheme affording arbitrary parameterisation of $m$ and $n$ with information-theoretic security given by $n$.
+
+\subsection{ZKPs for NP-complete graph problems}
+
+Consider a graph-theoretic problem in NP whose solution can be expressed in the form of a partitioning of $G$ into $k$ edge-disjoint spanning (i.e same vertex set) subgraphs,
+\begin{align} \label{eq:G_sum}
+	G = \sum_{i=1}^k G_i,
+\end{align}
+whose solution can be verified from the properties of the partitions $\{G_i\}_i$.
+
+Since the partitions $G_i$ are edge-disjoint the degree of every vertex $v\in G$ is given by the sum of the respective vertex degrees in each partition,
+\begin{align}
+	d(v\in G) = \sum_{i=1}^k d(v\in G_i),\forall\, v, 
+\end{align}
+affording verification of Eq.~\eqref{eq:G_sum}.
+
+\subsubsection{Interactive proof protocol}
+
+For given graph $G$ known to both prover ($P$) and verifier ($V$) with witness $\{G_i\}_i$ known only to $P$ we perform the following $N$ times,
+\begin{itemize}
+	\item $P$ prepares and commits the witness (i.e solution) state,
+	\begin{align}
+		\rho_\mathtt{sol} = \bigotimes_{i=1}^k \rho(G_{\pi_i}),\,\,\pi\in S_k
+	\end{align}
+	with random ordering of the elements $G_i$.
+	\item $V$ challenges $P$ by choosing a random vertex $v\in G$.
+	\item $P$ reveals the local neighbourhood of $v\in G_i$ for all partitions $i$.
+\end{itemize}
+
+\subsubsection{Verification}
+
+Verification by $V$ succeeds if for every iteration over $N$ with independently chosen random challenge vertex $v$,
+\begin{itemize}
+	\item $d(v\in G) = \sum_{i=1}^k d(v\in G_i)$.
+	\item $\texttt{ngh}(v\in G) = \bigcup_{i=1}^k \texttt{ngh}(v\in G_i)$.
+	\item The set of local neighbourhoods,
+	\begin{align}
+		W = \{\texttt{ngh}(v\in G_i)\}_i,
+	\end{align}
+	satisfy the necessary and sufficient conditions for satisfying solutions of the respective NP graph problem,
+	\begin{align}
+		\texttt{Sat}_G(W) \to \{0,1\}.
+	\end{align}
+\end{itemize}
+These properties can all be verified by measuring the respective stabilisers implied by the revealed local neighbourhoods of challenge vertex $v$ in each partition $G_i$,
+\begin{align}
+	S_{v\in G_i} = X_{v\in G_i} \prod_{j\in\texttt{ngh}(v\in G_i)} Z_j,
+\end{align}
+with all $+1$ measurement outcomes,
+\begin{align}
+	M(S_{v\in G_i}) = 1,\,\,\forall\,i.	
+\end{align}
+
+For each iteration over $N$ the likelihood of measuring all $+1$ outcomes for incorrect solutions is $1/2^k$, and the overall statistical security is,
+\begin{align}
+	\varepsilon = 1/2^{kN}.	
+\end{align}
+
+\subsubsection{Compatible NP-complete graph problems}
+
+\paragraph{Edge colouring}
+
+For a $k$-colouring of graph $G$ the solution can be expressed as $k$ edge-disjoint subgraphs $G_i\subseteq G$ where each $G_i$ contains the edges for colour $i$.
+
+A valid edge-colouring implies all vertices in every graph partition have degree 0 or 1 (necessary and sufficient),
+\begin{align}
+	\texttt{Sat}_G(W) = \begin{cases}
+		1, &d(v\in G_i)\in \{0,1\},\,\,\forall\,G_i \\
+		0, &\mathrm{otherwise}
+ 	\end{cases}.
+\end{align}
+
+\paragraph{Perfect matchings}
+
+In a perfect matching, $M$, every vertex is connected by exactly one edge (necessary and sufficient),
+\begin{align}
+	d(v\in M) = 1,\,\,\forall\,v\in G.
+\end{align}
+
+A perfect matching can be decomposed into \mbox{$k=|V(G)|/2$} subgraphs each containing a single edge from the matching.
+
+For vertex $v$ exactly one subgraph $G_i$ will exhibit \mbox{$d(v\in G_i)=1$} with all others having \mbox{$d(v\in G_{j\neq i})=0$} and collectively sum to 1 (necessary and sufficient),
+\begin{align}
+	\texttt{Sat}_G(W) = \begin{cases}
+		1, &\sum_{i=1}^k d(v\in G_i)=1,\\
+		0, &\mathrm{otherwise}
+ 	\end{cases}.
+\end{align}
+
+\bibliography{bibliography}
+
+\end{document}

@@ -1,0 +1,41 @@
+\begin{tikzpicture}[genericStyle]
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw red lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[graphNonEdgeStyle, line width=1] (node\x) -- (node\y);
+        \fi
+    }
+  }
+  
+ \node[draw, circle, minimum size=2*\radius, graphNonEdgeStyle, line width=1] at (0,0) {};
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[nodeGrayStyleC] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+\draw[-{Latex[scale=0.5]}, graphBlueEdgeStyle, line width=2] (node1) -- (node2);
+\draw[-{Latex[scale=0.5]}, graphBlueEdgeStyle, line width=2] (node1) -- (node3);
+\draw[-{Latex[scale=0.5]}, graphBlueEdgeStyle, line width=2] (node1) -- (node4);
+\draw[-{Latex[scale=0.5]}, graphBlueEdgeStyle, line width=2] (node1) -- (node5);
+\draw[-{Latex[scale=0.5]}, graphRedEdgeStyle, line width=2] (node1) -- (node6);
+\draw[-{Latex[scale=0.5]}, graphBlueEdgeStyle, line width=2] (node1) -- (node7);
+\draw[-{Latex[scale=0.5]}, graphRedEdgeStyle, line width=2] (node1) -- (node8);
+
+\node[draw=none] at (node1) {$i$};
+\node[draw=none] at (node2) {$j$};
+\node[draw=none] at ($(node1)!0.5!(node2) + (0,-0.7)$) {$v_{i,j}=\{0,1\}$};
+  
+\end{tikzpicture}

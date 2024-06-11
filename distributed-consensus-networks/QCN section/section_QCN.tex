@@ -1,0 +1,51 @@
+\documentclass[twocolumn, aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, floatfix, eqsecnum, rmp]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
+\usepackage[strict]{changepage}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{positioning, fit, calc, shadows, shadows.blur, arrows.meta, shapes.geometric, fillbetween, fadings}
+
+%\let\oldalgorithmic\algorithmic
+%\let\endoldalgorithmic\endalgorithmic
+%\renewenvironment{algorithmic}
+%{\begin{adjustwidth}{-1em}{}\oldalgorithmic}
+%{\endoldalgorithmic\end{adjustwidth}}
+
+\input{source/styles.tex}
+
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+    
+\begin{document}
+
+\title{Quantum consensus networks}
+
+\author{Peter P. Rohde}
+\affiliation{BTQ Technologies}
+
+\maketitle
+
+%\section{Quantum consensus networks} \label{sec:QCN}
+\input{source/quantum_consensus_networks.tex}
+
+\bibliography{bibliography}
+
+\end{document}

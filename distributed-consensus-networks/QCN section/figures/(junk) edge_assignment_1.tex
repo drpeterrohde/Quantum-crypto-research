@@ -1,0 +1,68 @@
+\resizebox{0.31\columnwidth}{!}{
+\begin{tikzpicture}[every node/.style={circle,draw,minimum size=2em}, >=latex,
+    myshadow/.style={
+        blur shadow={shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+    }]
+
+    \def\N{6}
+    \def\nskip{8}
+    \def\conn{1}
+    
+    \def\UVsep{2.8}
+    \definecolor{verylightgray}{rgb}{0.9, 0.9, 0.9}
+    \colorlet{verylightblue}{cyan!20}
+    \colorlet{verylightyellow}{yellow!20}
+    
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+          \node[draw=none] (a\i) at (0,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[draw=orange,fill=verylightyellow,myshadow] (a\i) at (0,-\i) {}; % $u_m$
+            \else
+                \node[draw=orange,fill=verylightyellow,myshadow] (a\i) at (0,-\i) {}; % $u_{\i}$
+            \fi
+        \fi
+    }
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+            \node[draw=none] (b\i) at (\UVsep,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[draw=blue,fill=verylightblue,myshadow] (b\i) at (\UVsep,-\i) {}; % $v_n$
+            \else
+                \node[draw=blue,fill=verylightblue,myshadow] (b\i) at (\UVsep,-\i) {}; % $v_{\i}$
+            \fi
+        \fi
+    }
+    
+    
+     \foreach \i in {1,...,\N} {
+     	\foreach \j in {1,...,\N} {
+               \ifnum\i=\nskip
+                \else
+                	\ifnum\j=\nskip
+                    \else
+                        \draw[-,lightgray,opacity=0.25,line width=1,line cap=round] ($(a\i.east)$) -- ($(b\j.west)$);
+                    \fi
+                \fi
+        }
+    }
+    
+    \foreach \i in {1,...,\N} {
+        \foreach \offset in {1,...,\conn} {
+            \pgfmathtruncatemacro{\target}{mod(\i+\offset-2,\N)+1}
+                \ifnum\i=\nskip
+                \else
+                \ifnum\target=\nskip
+                    \else
+                        \draw[-,gray,line width=1,line cap=round] ($(a\i.east)$) -- ($(b\target.west)$);
+                    \fi
+                \fi
+        }
+    }
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.3)$) {$\mathcal{G}_{6,1}$};
+
+\end{tikzpicture}
+}

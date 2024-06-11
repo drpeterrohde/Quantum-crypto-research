@@ -1,0 +1,52 @@
+\begin{tikzpicture}[genericStyle, scale=0.5]
+  \def\myWidth{6em}
+  \def\myHeight{2.5em}
+
+\fill[fill=topologyFillColor] (-\myWidth,0) rectangle (\myWidth,10.5);
+
+\node[draw=none, fill=cyan!20, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainDiscColor, myShadow] (node0) at (0,0) {$\varepsilon^n$};
+\node[draw=none, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainDiscColor] (node1) at (0,3.5) {$\varepsilon^n$};
+\draw[darkgray] (-\myWidth,3.5) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,3.5) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\node[draw=none, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainPendingDiscColor] (node2) at (0,5) {$\varepsilon^n$};
+\draw[darkgray] (-\myWidth,5) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,5) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\node[draw=none, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainPendingDiscColor] (node3) at (0,7) {$\varepsilon^{n-1}$};
+\draw[darkgray] (-\myWidth,7) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,7) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\draw[darkgray] (-\myWidth,0) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,0) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\node[draw=none] (node4) at (0,2) {$\vdots$};
+\node[draw=none] (node4) at (0,9) {$\vdots$};
+\node[darkgray, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainPendingDiscColor] (node5) at (0,10.5) {$\varepsilon$};
+
+\draw (-\myWidth,0) -- (-\myWidth,10.5);
+\draw (\myWidth,0) -- (\myWidth,10.5);
+
+\coordinate (ltop) at ($(node5.west) + (-2em,0)$);
+\coordinate (lbot) at ($(node2.west) + (-2em,0)$);
+\coordinate (backC) at ($(ltop.west)!0.5!(lbot.west) + (-1.2em,0)$);
+
+\coordinate (pendtop) at ($(node5.east) + (2em,\myHeight)$);
+\coordinate (pendbot) at ($(node2.east) + (2em,0)$);
+\coordinate (pendtopin) at ($(pendtop) + (-0.5em,0)$);
+\coordinate (pendbotin) at ($(pendbot) + (-0.5em,0)$);
+\coordinate (pendC) at ($(pendbot)!0.5!(pendtop) + (1.5em,0)$);
+
+\coordinate (comptop) at ($(node1.east) + (2em,\myHeight)$);
+\coordinate (compbot) at ($(node0.east) + (2em,-\myHeight)$);
+\coordinate (comptopin) at ($(comptop) + (-0.5em,0)$);
+\coordinate (compC) at ($(compbot)!0.5!(comptop) + (1.5em,0)$);
+
+\draw[darkgray, <->, thick] (ltop) -- (lbot);
+\draw[redHighlightColor, thick] (pendtopin) -- (pendtop) -- (pendbot) -- (pendbotin);
+\draw[->, blueHighlightColor, thick] (comptopin) -- (comptop) -- (compbot);
+
+\node[draw=none, rotate=90, text=red] at (pendC) {pending};
+\node[draw=none, rotate=90, text=blue] at (compC) {complete};
+\node[draw=none, text=black] at (backC) {$n$};
+\end{tikzpicture}

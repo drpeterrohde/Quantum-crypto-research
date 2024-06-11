@@ -1,0 +1,86 @@
+\pgfkeys{%
+/piechartthreed/.cd,
+scale/.code                =  {\def\piechartthreedscale{#1}},
+mix color/.code            =  {\def\piechartthreedmixcolor{#1}},
+background color/.code     =  {\def\piechartthreedbackcolor{#1}},
+name/.code                 =  {\def\piechartthreedname{#1}}}
+
+ \newcommand\piechartthreed[2][]{% 
+   \pgfkeys{/piechartthreed/.cd,
+     scale            = 1,
+     mix color        = gray,
+     background color = white,
+     name             = pc} 
+  \pgfqkeys{/piechartthreed}{#1}
+  \begin{scope}[scale=\piechartthreedscale] 
+  \begin{scope}[xscale=5,yscale=5] 
+     \path[preaction={fill=black,opacity=.8,
+         path fading=circle with fuzzy edge 20 percent,
+         transform canvas={xshift=2mm, yshift=-5mm*\piechartthreedscale}}] (0,0) circle (1cm);
+   \fill[gray](0,0) circle (0.5cm);  
+     \path[preaction={fill=white,opacity=.8,
+          path fading=circle with fuzzy edge 20 percent,
+          transform canvas={xshift=1mm, yshift=-2.5mm*\piechartthreedscale}}] (0,0) circle (0.5cm);
+     \pgfmathsetmacro\totan{5} 
+     \global\let\totan\totan 
+     \pgfmathsetmacro\bottoman{180} \global\let\bottoman\bottoman 
+     \pgfmathsetmacro\toptoman{0}   \global\let\toptoman\toptoman 
+     \begin{scope}[draw=black,thin]
+     \foreach \an/\col [count=\xi] in {#2}{%
+     \def\space{ } 
+        \coordinate (\piechartthreedname\space\xi) at (\totan+\an/2:0.75cm); 
+        \ifdim 180pt>\totan pt 
+         \ifdim 0pt=\toptoman pt
+            \shadedraw[left color=\col!20!\piechartthreedmixcolor, right color=\col!5!\piechartthreedmixcolor, draw=black,very thin] (0:.5cm) -- ++(0,-0.5mm) arc (0:\totan+\an:.5cm) -- ++(0,0.5mm)  arc (\totan+\an:0:.5cm);
+            \pgfmathsetmacro\toptoman{180} 
+            \global\let\toptoman\toptoman         
+            \else
+            \shadedraw[left color=\col!20!\piechartthreedmixcolor, right color=\col!5!\piechartthreedmixcolor, draw=black,very thin](\totan:.5cm)-- ++(0,-0.5mm) arc(\totan:\totan+\an:.5cm) -- ++(0,0.5mm)  arc(\totan+\an:\totan:.5cm); 
+          \fi
+        \fi   
+        \fill[\col!20!gray,draw=black] (\totan:0.5cm)--(\totan:1cm)  arc(\totan:\totan+\an:1cm) --(\totan+\an:0.5cm) arc(\totan+\an:\totan :0.5cm);     
+       \pgfmathsetmacro\finan{\totan+\an}
+       \ifdim 180pt<\finan pt 
+         \ifdim 180pt=\bottoman pt
+            \shadedraw[left color=\col!20!\piechartthreedmixcolor, right color=\col!5!\piechartthreedmixcolor, draw=black,very thin] (180:1cm) -- ++(0,-0.5mm) arc (180:\totan+\an:1cm) -- ++(0,0.5mm)  arc (\totan+\an:180:1cm);
+            \pgfmathsetmacro\bottoman{0}
+            \global\let\bottoman\bottoman
+            \else
+            \shadedraw[left color=\col!20!\piechartthreedmixcolor, right color=\col!5!\piechartthreedmixcolor, draw=black,very thin](\totan:1cm)-- ++(0,-0.5mm) arc(\totan:\totan+\an:1cm) -- ++(0,0.5mm)  arc(\totan+\an:\totan:1cm); 
+          \fi
+        \fi
+        \pgfmathsetmacro\totan{\totan+\an}  \global\let\totan\totan 
+       } 
+    \end{scope}
+    \draw[thin,black](0,0) circle (0.5cm);
+   \end{scope}  
+\end{scope}
+}
+
+\resizebox{!}{0.65\columnwidth}{
+ \begin{tikzpicture}
+   \piechartthreed[scale=0.5,
+      background color=white,
+      mix color=darkgray]
+      {40/green,40/red,95/white,185/green}
+   \foreach \i in {1,2,4} { \fill (pc \i) circle (.5mm);}
+   \draw[darkgray] (pc 1)  -- ++(3.6,0) coordinate (s1) node[anchor=south east] {Honest} node[anchor=north east] {$N_V=N_\mathrm{maj}+N_D$};
+   \draw[darkgray] (pc 2)  -- ++(0.5,0.5) coordinate (s2) -- (s2 -| s1) node[anchor=south east] {Dishonest} node[anchor=north east] {$N_D$}; 
+   \draw[darkgray] (pc 4) coordinate (s3) -- (s3 -| s1) node[anchor=south east] {Majority} node[anchor=north east] {$N_\mathrm{maj}$};
+   \node[darkgray] at (0,2.9cm) {\emph{Voters}};
+ \end{tikzpicture}
+ }
+ \hspace{10pt}
+\resizebox{!}{0.66\columnwidth}{
+ \begin{tikzpicture}
+   \piechartthreed[scale=0.5,
+      background color=white,
+      mix color=darkgray]
+      {80/pink,95/white,145/cyan,40/yellow}
+   \foreach \i in {1,3,4} { \fill (pc \i) circle (.5mm);}
+   \draw[darkgray] (pc 1)  -- ++(3.1,0) coordinate (s1) node[anchor=south east] {Reject} node[anchor=north east] {$0$};
+   \draw[darkgray] (pc 4) coordinate (s2) -- (s2 -| s1) node[anchor=south east] {Unknown} node[anchor=north east] {$\bot$}; 
+   \draw[darkgray] (pc 3) coordinate (s3) -- (s3 -| s1) node[anchor=south east] {Accept} node[anchor=north east] {$1$};
+     \node[darkgray] at (0,2.9cm) {\emph{Ambiguous vote}};
+ \end{tikzpicture}
+ }

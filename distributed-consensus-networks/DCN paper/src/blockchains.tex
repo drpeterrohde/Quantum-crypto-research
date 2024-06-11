@@ -1,0 +1,49 @@
+Consensus is formed on state register transformations.
+
+Ledgers are defined by policies stipulating the consensus networks they recognise. Inter-ledger operations require only mutual recognition of consensus networks.
+
+Ledgers as oracles.
+
+Finite state machine oracles.
+
+The combined public broadcasts across all networks acts as a global oracle for ledger states, facilitating a high arbitrage environment in an algorithmic context, an equilibrating force across the ledgers of parallel markets or interconnected markets.
+
+Inter-ledger transactions require only mutual recognition of consensus, defined by the networks from which they are drawn.
+
+* Sec: ledger transaction queues.
+
+* Hierarchical bidding to maximise resource utilisation.
+
+* Subsection: blockchains.
+%\subsection{Blockchains}
+
+Blockchains are protocol-level applications for consensus, following their own rules on what consensus is formed on. A blockchain's transaction history is immutable and may be retrospectively evaluated. Blockchain implementations typically consider asynchronous operating environments. In this setting simultaneous block additions manifest themselves as forks, requiring error correction mechanisms to maintain the integrity of the chain. Formally, a pool of valid block additions defines a directed tree graph which the blockchain implementation must correct to a directed linear graph.
+
+In a synchronous setting where a ledger is associated with consensus derived from a given network these considerations change. Rather than performing consensus assignment on the basis of unique transaction identifiers we assign on the basis of transaction queue identifiers associated with individual ledgers. From the pool of accepted bids nodes assigned to a given transaction queue consensus set process all bids associated with that queue, batch processed in accordance with the ledger's transaction amalgamation rules. Employing queue assignment rather than transaction assignment mitigates the possibility of fork formation. In a proof-of-work setting this issue may be addressed by introducing friction. However, while this hinders double-mining it also undermines transaction processing rates, an undesirable tradeoff.
+
+If $n$ consensus sets of size $N$ independently form honest majority their union of size $nN$ necessarily forms honest majority. Hence,
+\begin{align}
+	P(nN,r)\leq\varepsilon \,\Rightarrow\, P(N,r)^n\leq\varepsilon.
+\end{align}
+For $n=1$ this reduces to consensus by majority vote amongst $N$ parties, while the opposing limiting case of $n=N$ reduces to consensus by unanimity amongst $N$ parties. A blockchain with unanimous $n$-level retrospective verification affords $\varepsilon^n$-security, and the associated tradeoff in required consensus set size scales as,
+\begin{align}
+	N_\mathrm{min}(r,\varepsilon) = N_\mathrm{min}^{(n)}(r,\varepsilon^n),
+\end{align}
+which implies,
+\begin{align}
+	P_c(N,r) = P_c(N^{(n)},r)^n.
+\end{align}
+
+Now $\varepsilon$ represents the effective error rate in new block additions while \mbox{$\varepsilon'=\varepsilon^n$} is the effective security parameter which applies only to blocks at least $n$ steps back, which have been subject to $n$ independent verifications. These blocks are considered \emph{complete} whereas more recent blocks are considered \emph{pending}, potentially still subject to being invalidated (Fig.~\ref{fig:backward_integrity}). Only the most recent \emph{complete} block must persist to maintain the blockchain, the point to which the blockchain is reverted if \emph{pending} blocks are invalidated.
+
+\begin{figure}[!htb]
+	\input{figs/backward_integrity.tex}
+	\caption{\textbf{Blockchain with $n$-level reverse integrity checking.} Upon addition of the top-level block consensus requires verifying integrity going back $n$ blocks. If consensus has $\varepsilon$-security, for $i\leq n$ the $i$th past block will have been verified $i$ times, exhibiting cumulative $\varepsilon^i$-security. Blocks $i\geq n$ all exhibit $\varepsilon'=\varepsilon^n$ integrity, the security parameter of the blockchain. The $\varepsilon$-security of the top block may be interpreted as the effective error rate in block addition, where error correction is implemented at the blockchain's protocol level.} \label{fig:backward_integrity}
+\end{figure}
+
+\begin{figure}[!htb]
+	\centering
+	\input{figs/blockchain_security_tradeoff.tex}
+%	\includegraphics[width=\columnwidth]{figs/blockchain_security_tradeoff.pdf}
+	\caption{\textbf{Tradeoffs in blockchain integrity with retrospective consensus verification. ??? TODO}}\label{fig:blockchain_security_tradeoff}
+\end{figure}

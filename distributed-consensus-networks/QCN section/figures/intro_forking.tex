@@ -1,0 +1,60 @@
+\begin{tikzpicture}[genericStyle]
+  % Define the lengths for horizontal and vertical skips
+  \def\vSkip{1}
+  \def\hSkip{1}
+  \def\vExtra{0.25}
+  \def\myRad{0.75}
+  \def\myRadH{0.3}
+  \def\myCornerIn{5}
+  \def\myCornerOut{5}
+  \def\vClip{2}
+  \def\vLead{0.3}
+
+% Cylinder 1
+\begin{scope}
+  \draw[draw=none, name path=Hleft] (-\myRad,0) {[rounded corners=\myCornerIn] -- ++(0,\vExtra+\vSkip)} {[rounded corners=\myCornerOut]-- ++(\hSkip,\vSkip) -- ++(0,\vSkip+\vLead)};
+
+   \draw[draw=none, name path=Hright] (\myRad,0) {[rounded corners=\myCornerOut] -- ++(0,\vSkip)} {[rounded corners=\myCornerIn]-- ++(\hSkip,\vSkip) -- ++(0,\vExtra+\vSkip+\vLead)};
+
+   \tikzfillbetween[of=Hleft and Hright]{topologyFillColor};
+\end{scope}
+
+\begin{scope}
+  \draw[darkgray, name path=Hleft] (-\myRad,0) {[rounded corners=\myCornerIn] -- ++(0,\vExtra+\vSkip)} {[rounded corners=\myCornerOut]-- ++(\hSkip,\vSkip) -- ++(0,\vSkip+\vLead)};
+
+   \draw[darkgray, name path=Hright] (\myRad,0) {[rounded corners=\myCornerOut] -- ++(0,\vSkip)} {[rounded corners=\myCornerIn]-- ++(\hSkip,\vSkip) -- ++(0,\vExtra+\vSkip+\vLead)};
+\end{scope}
+
+% Cylinder 2
+  
+\begin{scope}
+  \draw[draw=none, name path=Dleft] (\myRad,0) {[rounded corners=\myCornerIn] -- ++(0,\vExtra+\vSkip)} {[rounded corners=\myCornerOut]-- ++(-\hSkip,\vSkip) -- ++(0,\vSkip)};
+
+  \draw[draw=none, name path=Dright] (-\myRad,0) {[rounded corners=\myCornerOut] -- ++(0,\vSkip)} {[rounded corners=\myCornerIn]-- ++(-\hSkip,\vSkip) -- ++(0,\vSkip+\vExtra)};
+
+    \tikzfillbetween[of=Dleft and Dright]{topologyFillColor};
+\end{scope}
+
+\begin{scope}
+  \clip (-\hSkip,1.75) rectangle (\hSkip,3.5);
+
+  \draw[darkgray] (\myRad,0) {[rounded corners=\myCornerIn] -- ++(0,\vExtra+\vSkip)} {[rounded corners=\myCornerOut]-- ++(-\hSkip,\vSkip) -- ++(0,\vSkip)};
+\end{scope}
+
+\draw[darkgray] (-\myRad,0) {[rounded corners=\myCornerOut] -- ++(0,\vSkip)} {[rounded corners=\myCornerIn]-- ++(-\hSkip,\vSkip) -- ++(0,\vSkip+\vExtra)};
+
+\begin{scope}
+   \draw[darkgray, name path=Hright] (\myRad,0) {[rounded corners=\myCornerOut] -- ++(0,\vSkip)} {[rounded corners=\myCornerIn]-- ++(\hSkip,\vSkip) -- ++(0,\vExtra+\vSkip)};
+\end{scope}
+
+% Ellipses
+\draw[gray, dashed, fill=setHDFillColor, myShadow] (-\myRad,0) arc [start angle=0, end angle=180, x radius=-\myRad, y radius =\myRadH];
+\draw[darkgray, fill=setHDFillColor, myShadow] (-\myRad,0) arc [start angle=0, end angle=-180, x radius=-\myRad, y radius =\myRadH];
+
+\draw[darkgray, fill=setDFillColor] (\hSkip-\myRad,3*\vSkip+\vExtra+\vLead) arc [start angle=0, end angle=180, x radius=-\myRad, y radius =\myRadH];
+\draw[darkgray, fill=setDFillColor] (\hSkip-\myRad,3*\vSkip+\vExtra+\vLead) arc [start angle=0, end angle=-180, x radius=-\myRad, y radius =\myRadH];
+
+\draw[darkgray, fill=setHFillColor] (-\hSkip-\myRad,3*\vSkip+\vExtra) arc [start angle=0, end angle=180, x radius=-\myRad, y radius =\myRadH];
+\draw[darkgray, fill=setHFillColor] (-\hSkip-\myRad,3*\vSkip+\vExtra) arc [start angle=0, end angle=-180, x radius=-\myRad, y radius =\myRadH];
+
+\end{tikzpicture}

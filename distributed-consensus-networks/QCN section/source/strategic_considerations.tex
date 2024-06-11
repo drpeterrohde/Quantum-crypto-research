@@ -1,0 +1,35 @@
+
+
+??? TO DO
+
+\begin{figure}[!htb]
+	\centering
+	\resizebox{0.5\columnwidth}{!}{
+	\input{figures/forking.tex}
+	}
+	\caption{\textbf{Bifurcation in network trust.} When the network \mbox{$\mathcal{N}=\mathcal{N}_H\cup\mathcal{N}_D$} supporting a blockchain segregates into two non-interacting networks, $\mathcal{N}_H$ and $\mathcal{N}_D$, a fork is created, forming two unique, legitimate blockchains, one associated with each network.} \label{fig:forking}
+\end{figure}
+
+\begin{figure}[!htb]
+	\begin{tikzpicture}
+		[level distance=15mm,level/.style={sibling distance=20mm/#1}]
+		\node {$S_A$}
+		child {node {$S_B$}
+				child {node {}}
+				child {node {}}
+				edge from parent node[left,draw=none] {$S_B\subset S_A$}
+			}
+		child {node {$S_C$}
+				child {node {}}
+				child {node {}}
+				edge from parent node[right,draw=none] {$S_C\subset S_A$}
+			};
+	\end{tikzpicture}
+	\caption{Trust hierarchies represented as subset-trees define retreat strategies.} \label{fig:subset_tree}
+\end{figure}
+
+Fig.~\ref{fig:subset_tree}
+
+`Rebasing' network upon strategic retreat.
+
+Retreat strategy in trust hierarchy where root is level $i=0$. Levels represent set containment, $s_{i+1}\subset s_i$. Retreat to smallest i (i.e largest trusted subset). Assume that $r_{i+1}<r_i$. Inequality could work in either direction??

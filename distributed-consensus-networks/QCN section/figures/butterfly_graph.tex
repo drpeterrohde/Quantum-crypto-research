@@ -1,0 +1,69 @@
+\begin{tikzpicture}[genericStyle]
+    \def\N{10}
+    \def\nskip{7}
+    \def\conn{5}
+    \def\UVsep{5}
+    
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+          \node[draw=none] (a\i) at (0,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_m$
+            \else
+                \node[nodeUStyle] (a\i) at (0,-\i) {}; % $u_{\i}$
+            \fi
+        \fi
+    }
+    \foreach \i in {1,...,\N} {
+        \ifnum\i=\nskip
+            \node[draw=none] (b\i) at (\UVsep,-\i) {\LARGE $\vdots$};
+        \else
+            \ifnum\i=\N
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_n$
+            \else
+                \node[nodeVStyle] (b\i) at (\UVsep,-\i) {}; % $v_{\i}$
+            \fi
+        \fi
+    }
+    
+     \foreach \i in {1,...,\N} {
+     	\foreach \j in {1,...,\N} {
+               \ifnum\i=\nskip
+                \else
+                	\ifnum\j=\nskip
+                    \else
+                        \draw[graphNonEdgeStyle] ($(a\i.east)$) -- ($(b\j.west)$);
+                    \fi
+                \fi
+        }
+    }
+
+    
+    \foreach \i in {1,...,\N} {
+        \foreach \offset in {1,...,\conn} {
+            \pgfmathtruncatemacro{\target}{mod(\i+\offset-2,\N)+1}
+                \ifnum\i=\nskip
+                \else
+                \ifnum\target=\nskip
+                    \else
+                        \draw[graphEdgeStyle] ($(a\i.east)$) -- ($(b\target.west)$);
+                    \fi
+                \fi
+        }
+    }
+    
+  	\foreach \j in {1,...,\conn} {
+                        \draw[-,redHighlightColor,line width=2,line cap=round] ($(a1.east)$) -- ($(b\j.west)$);
+        }
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.3)$) {$\mathcal{G}_{n,d}$};
+
+    \coordinate (bracetop) at ($(b1.east) + (1em,0)$);
+    \coordinate (bracetopin) at ($(bracetop) + (-0.1,0)$);
+    \coordinate (bracebott) at ($(b\conn.east) + (1em,0)$);
+    \coordinate (bracebottin) at ($(bracebott) + (-0.1,0)$);
+    \draw[redHighlightColor, line width=1.5] (bracetopin) -- (bracetop) -- (bracebott) -- (bracebottin);
+
+        \node[draw=none] at ($(bracetop)!0.5!(bracebott) + (3.5em,0)$) {$d=N(r/p,\varepsilon)$};
+\end{tikzpicture}

@@ -1,0 +1,26 @@
+\begin{tikzpicture}[genericStyle, scale=0.5]
+  \def\myWidth{6em}
+  \def\myHeight{2.5em}
+
+\fill[fill=topologyFillColor] (-\myWidth,0) rectangle (\myWidth,7);
+
+\node[draw=none, fill=blockchainDiscColor, ellipse, minimum width=\myWidth, minimum height=\myHeight, myShadow] (node0) at (0,0) {};
+\node[draw=none, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainDiscColor] (node1) at (0,3.5) {};
+\draw[darkgray] (-\myWidth,3.5) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,3.5) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\node[draw=none, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainDiscColor] (node2) at (0,5) {};
+\draw[darkgray] (-\myWidth,5) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,5) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\draw[darkgray] (-\myWidth,0) arc [start angle=0, end angle=-180, x radius=-\myWidth, y radius =\myHeight];
+\draw[gray, dashed] (-\myWidth,0) arc [start angle=0, end angle=180, x radius=-\myWidth, y radius =\myHeight];
+
+\node[darkgray, ellipse, minimum width=\myWidth, minimum height=\myHeight, fill=blockchainDiscColor] (node5) at (0,7) {};
+
+\draw[darkgray] (-\myWidth,0) -- (-\myWidth,7);
+\draw[darkgray] (\myWidth,0) -- (\myWidth,7);
+
+\node[draw=none, text=darkgray] (node4) at (0,2) {$\vdots$};
+
+\end{tikzpicture}

@@ -1,0 +1,42 @@
+\tdplotsetmaincoords{70}{110}
+\begin{tikzpicture}[genericStyle, tdplot_main_coords]
+	\def\radiusN{0.3}
+	\def\radiusC{0.4}
+    \draw[draw=red, fill=red!25, myLightShadow] (1, 1, 0) circle (\radiusN);
+    \draw[draw=red] (1,1,0) -- (3,3,2.5);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (1, 2, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (1, 3, 0) circle (\radiusN);
+    \draw[draw=red, fill=red!25, myLightShadow] (1, 4, 0) circle (\radiusN);
+    \draw[draw=red] (1,4,0) -- (3,3,2.5);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (1, 5, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (2, 1, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (2, 2, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (2, 3, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (2, 4, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (2, 5, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (3, 1, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (3, 2, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (3, 3, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (3, 4, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (3, 5, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (4, 1, 0) circle (\radiusN);
+    \draw[draw=red, fill=red!25, myLightShadow] (4, 2, 0) circle (\radiusN);
+    \draw[draw=red] (4,2,0) -- (3,3,2.5);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (4, 3, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (4, 4, 0) circle (\radiusN);
+    \draw[draw=red, fill=red!25, myLightShadow] (4, 5, 0) circle (\radiusN);
+    \draw[draw=red] (4,5,0) -- (3,3,2.5);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (5, 1, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (5, 2, 0) circle (\radiusN);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (5, 3, 0) circle (\radiusN);
+    \draw[draw=red, fill=red!25, myLightShadow] (5, 4, 0) circle (\radiusN);
+    \draw[draw=red] (5,4,0) -- (3,3,2.5);
+    \draw[draw=gray, fill=gray!25, myLightShadow] (5, 5, 0) circle (\radiusN);
+    \draw[draw=red, fill=red!25, myLightShadow] (3, 3, 2.5) circle (\radiusC);
+    
+    \coordinate (originN) at (3,3,0);
+    \coordinate (originC) at (3,3,2.5);
+    
+    \node[draw=none, text=black] at ([shift={(2.25em,0)}]originC) {\large $\mathcal{C}$};
+    \node[draw=none, text=black] at ([shift={(7.5em,-1.5em)}]originN) {\large $\mathcal{N}$};
+\end{tikzpicture}

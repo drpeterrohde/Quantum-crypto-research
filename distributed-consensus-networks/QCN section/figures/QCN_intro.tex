@@ -1,0 +1,33 @@
+\begin{tikzpicture}[genericStyle]
+    \def\UVsep{2.5em}
+    \def\colSep{3em}
+    \def\rowSep{1.2em}
+    \def\hStep{0.7em}
+
+ % Radius of the circle
+  \def\radius{5em}
+  \def\numnodes{8}
+  \def\degree{360/\numnodes}
+
+  % Draw dummy nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[draw=none] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+
+  % Draw red lines
+  \foreach \x in {1,...,\numnodes} {
+    \foreach \y in {\x,...,\numnodes} {
+      \pgfmathparse{(\y>\x+1) && (1-(\x==1 && \y==\numnodes)) ? 1 : 0}
+        \ifnum \pgfmathresult=1
+            \draw[graphRedEdgeStyle] (node\x) -- (node\y);
+        \fi
+    }
+  }
+  
+ \node[draw, circle, minimum size=2*\radius, graphRedEdgeStyle] at (0,0) {};
+
+  % Visible nodes
+  \foreach \x in {1,...,\numnodes} {
+        \node[nodeVStyle] (node\x) at (\x*\degree+0.5*\degree+180:\radius) {};
+  }
+\end{tikzpicture}

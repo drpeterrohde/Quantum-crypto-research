@@ -1,0 +1,34 @@
+\begin{tikzpicture}[genericStyle]
+    \def\UVsep{2.5}
+    \def\vMult{1.8}
+
+    \colorlet{color1}{blue}
+    \colorlet{color2}{cyan}
+    \colorlet{color3}{green}
+    \colorlet{colorA}{red}
+    \colorlet{colorB}{orange}
+    \colorlet{colorC}{yellow}
+
+    \node[draw=color1, fill=color1!20, myShadow] (a1) at (0,-1*\vMult) {$u_1$};
+    \node[draw=color2, fill=color2!20, myShadow] (a2) at (0,-2*\vMult) {$u_2$};
+    \node[draw=color3, fill=color3!20, myShadow] (a3) at (0,-3*\vMult) {$u_3$};
+
+    \node[draw=colorA, fill=colorA!20, myShadow] (b1) at (\UVsep,-1*\vMult) {$v_1$};
+    \node[draw=colorB, fill=colorB!20, myShadow] (b2) at (\UVsep,-2*\vMult) {$v_2$};
+    \node[draw=colorC, fill=colorC!20, myShadow] (b3) at (\UVsep,-3*\vMult) {$v_3$};
+
+    \foreach \i in {1,...,3} {
+            \foreach \j in {1,...,3} {
+                    \draw[graphNonEdgeStyle] ($(a\i.east)$) -- ($(b\j.west)$);
+                }
+        }
+
+    \draw[graphEdgeStyle] ($(a1.east)$) -- ($(b1.west)$);
+    \draw[graphEdgeStyle] ($(a1.east)$) -- ($(b2.west)$);
+    \draw[graphEdgeStyle] ($(a2.east)$) -- ($(b2.west)$);
+    \draw[graphEdgeStyle] ($(a2.east)$) -- ($(b3.west)$);
+    \draw[graphEdgeStyle] ($(a3.east)$) -- ($(b3.west)$);
+    \draw[graphEdgeStyle] ($(a3.east)$) -- ($(b1.west)$);
+
+    \node[draw=none] at ($(a1)!0.5!(b1) + (0,0.75)$) {$\mathcal{G}_{3,2}$};
+\end{tikzpicture}

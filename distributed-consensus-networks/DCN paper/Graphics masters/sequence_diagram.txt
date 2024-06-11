@@ -1,0 +1,26 @@
+participantgroup #pink ++Market++
+participant "++Consumer++" as Consumer
+end
+participantgroup #lightblue ++DCN++
+participant "++Node++" as Node
+participant "++Broadcast++" as Broadcast
+end
+
+participantspacing 2
+entryspacing 0.0
+
+Consumer->(1)Node:++bid++
+activate Consumer
+Node->(1)Broadcast:++bid++
+activate Node
+Node(1)<--Broadcast:++listen++
+Node->(1)Broadcast:++accept++
+Node(1)<--Broadcast:++listen++
+Node->(1)Broadcast:++vote++
+Node(1)<--Broadcast:++listen++
+Node->(1)Broadcast:++compliance++
+Node(1)<--Broadcast:++listen++
+Consumer(1)<--Node:++  proof++
+deactivate Node
+deactivate Consumer
+space -2

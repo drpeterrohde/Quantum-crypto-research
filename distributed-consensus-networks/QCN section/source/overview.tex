@@ -1,0 +1,134 @@
+\begin{center}\emph{Introduction}\end{center}
+
+Decentralised finance (DeFi) is the longstanding vision of a truly global and borderless financial system, the promise of universal, low-cost access to banking services and international financial markets, eliminating geographic and socio-political barriers of entry and reliance upon centralised financial institutions, subverting the power-base of monopolistic and hegemonic access to capital, facilitating a highly competitive global economic landscape.
+
+Smart-contracts enabling arbitrary, self-executing algorithmic exchange facilitate the synthesis of sophisticated financial instruments in the absence of conventional centralised exchanges. The algorithmic versatility of smart-contracts affords their use as a primitive in the construction of sophisticated distributed protocols such as Decentralised Autonomous Organisations (DAOs).
+
+%The key characteristics of DeFi are \cite{???,EthereumDevs}:
+%\begin{itemize}
+%	\item Non-custodial: users assert full control over their own assets.
+%	\item Open: protocols are borderless and globally accessible.
+%	\item Transparency: protocols and algorithms are open-source.
+%	\item Composable: code may be modularised and layered, enabling thriving development and innovation of the ecosystem.
+%	\item Decentralised: the absence of top-down control and centralisation of power.
+%\end{itemize}
+
+\begin{center}\emph{Consensus}\end{center}
+
+In a decentralised environment transactions are approved via \emph{consensus} (Sec.~\ref{sec:consensus}) whereby a small number of randomly chosen network nodes form \emph{consensus sets}, collectively acting as delegates for the network to authorise transactions by majority vote. Consensus outcomes should with high probability reflect the network majority, a function of consensus set size and the ratio of dishonest nodes.
+
+\begin{center}
+	\vspace{2pt}
+	\resizebox{0.6\columnwidth}{!}{\input{figures/single_random_subset.tex}}
+\end{center}
+
+The randomisation of nodes forming consensus is vital to ensure the integrity of consensus outcomes (Sec.~\ref{sec:random_subset_problem}). If the choice of consensus nodes were known in advance this would provide avenues for malicious parties to compromise security by targeting the known allocation. Randomisation effectively erases assignment information, eliminating all avenues for strategic alignment.
+
+\begin{center}
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_S_p03.pdf}
+	\includegraphics[width=0.4\columnwidth]{figures/strategy_entropy_R_p03.pdf}
+\end{center}
+
+Distributed algorithms for assigning consensus sets must be secure in the sense that their randomisation cannot be compromised by malicious parties.
+
+\begin{center}\emph{Proof-of-work}\end{center}
+
+The Bitcoin protocol \cite{Nakamoto08} first introduced proof-of-work (PoW) as mechanism for securely randomly selecting a small number of network nodes at random to form consensus (Sec.~\ref{sec:PoW}). This protocol operates in the context of a network of unknown and unidentifiable nodes in which anyone may freely participate. The algorithm requires nodes to compete to solve inverse-hashing problems, a randomised algorithm that effectively chooses winners by lottery.
+
+While the proof-of-work mining algorithm provides an ingenious solution to the random subset problem it is highly inefficient, resulting in enormous net energy consumption to maintain the network. Currently, annualised energy consumption of the Bitcoin network is $\sim$155TWh \cite{CBECI}\footnote{Estimate as of January 19, 2024.}, comparable to the total electricity consumption of medium sized countries\footnote{Estimated annual electricity consumption of Sweden (2022): $\sim$164TWh.}.
+
+The inefficiency of proof-of-work presents a significant obstacle for scalability, motivating the development of more efficient alternate consensus algorithms. Proof-of-stake (PoS) \cite{KingNadal, Bentov} is a leading alternative, recently adopted by the Ethereum network to improve scalability and reduce transaction costs. Ethereum's transition to proof-of-stake, famously known as \emph{The Merge}, reduced its annualised energy consumption from $\sim$21TWh (PoW) to $\sim$2GWh (PoS) \cite{CBECI}\footnote{Estimates immediately prior and subsequent to \emph{The Merge} on September 15, 2022.}, a spontaneous reduction in energy consumption of 99.99\%. However, despite its radically improved energy efficiency, proof-of-stake has been criticised for affording reduced security owing to its increased vulnerability to manipulation and reduced level of randomisation. Proof-of-work based on quantum sampling problems has also been investigated as a means for enhanced energy efficiency \cite{QPoW}.
+
+%\begin{center}
+%	\includegraphics[width=0.9\columnwidth]{figures/bitcoin_energy_consumption.pdf}
+%\end{center}
+
+\begin{center}\emph{Network structure}\end{center}
+
+* Anonymous vs identifiable nodes
+
+* Open vs closed
+
+* Random subset problem
+
+* Key establishment
+
+\begin{center}\emph{Consensus assignment problem}\end{center}
+
+Networks comprising known nodes afford more efficient distributed algorithms for solving the random subset problem. By utilising secure shared randomness (Sec.~\ref{sec:secure_shared_randomness}) all network nodes may be simultaneously allocated to random subsets (Sec.~\ref{sec:hash_based_random_subsets}), ensuring full resource utilisation.
+
+The generalisation of the random subset problem is the \emph{consensus assignment problem} (Sec.~\ref{sec:consensus_assignment_problem}), enabling the simultaneous allocation of network nodes to arbitrary sets of consensus sets under asymmetric load.
+
+\begin{center}
+	\resizebox{0.3\columnwidth}{!}{\input{figures/intro_bipartite.tex}}
+\end{center}
+
+\begin{center}
+	\resizebox{0.3\columnwidth}{!}{\input{figures/intro_bipartite_rand.tex}}
+\end{center}
+
+\begin{center}\emph{Distributed consensus networks}\end{center}
+
+Distributed consensus networks (DCNs) combine the consensus assignment problem with an economic model that self-incentivises the honest participation of nodes (Sec.~\ref{sec:DCN}). The product of DCNs is proofs-of-consensus (PoC) --- timestamped, cryptographic proofs that a sets of nodes form secure random subsets of a network established via distributed execution of the consensus assignment problem (Sec.~\ref{sec:PoC}).
+
+DCNs treat consensus as an abstract market commodity, an enabler of generic digital trade. The internal operation of DCNs is inherently non-monetary, a barter economy in which nodes contribute to consensus load in equal exchange for the consensus load they request. Nodes act as gateways to the DCNs to which they belong, and may independently utilise and monetise consensus load, collectively facilitating an externally-facing competitive bidding market for consensus (Sec.~\ref{sec:economics}).
+
+\begin{center}
+	\resizebox{0.8\columnwidth}{!}{\input{figures/network_accept.tex}}
+\end{center}
+
+\begin{center}\emph{Consensus-time}\end{center}
+
+Synchronicity in the DCN protocol is enforced using \emph{consensus time}.
+
+\begin{center}\emph{Proof-of-consensus}\end{center}
+
+\begin{center}
+	\resizebox{0.5\columnwidth}{!}{\input{figures/proof_wedges.tex}}
+\end{center}
+
+\begin{center}\emph{Quantum consensus networks}\end{center}
+
+Quantum consensus networks (QCNs) (Sec.~\ref{sec:QCN}) have quantum-enabled nodes, possessing quantum computational or communications resources, acting as secure, certifiable quantum random number generators (QRNGs) upon forming consensus, a commodity with market value. Other (classical) DCNs may observe QCNs as oracles, utilising their random bitstreams to add entropy (Sec.~\ref{sec:entropy_add}) to their own global keys, enabling quantum-random consensus assignment.
+
+\begin{center}
+	\resizebox{0.4\columnwidth}{!}{\input{figures/QCN_intro.tex}}
+\end{center}
+
+\begin{center}
+	\resizebox{0.9\columnwidth}{!}{\input{figures/quantum_random_oracle_intro.tex}}
+\end{center}
+
+\begin{center}\emph{Economics}\end{center}
+
+Existing blockchain design philosophy couples cryptocurrencies with the technological implementation of their mechanism for exchange, a vertically integrated paradigm which frustrates inter-ledger operations (Sec.~\ref{sec:conclusion}). The hard-wiring of currencies with specific consensus algorithms couples their cost of execution with monetary dynamics. The abstract separation between currencies and their mechanism for trade enables horizontal competition between currencies, likewise between competitors offering consensus as a commodity.
+
+\begin{center}
+	\resizebox{0.75\columnwidth}{!}{\input{figures/bidding_market.tex}}
+\end{center}
+
+\begin{center}\emph{Blockchains}\end{center}
+
+\begin{center}
+	\resizebox{0.25\columnwidth}{!}{\input{figures/simple_blockchain.tex}}
+\end{center}
+
+\begin{center}\emph{Strategic trust dynamics}\end{center}
+
+\begin{center}
+	\resizebox{0.4\columnwidth}{!}{\input{figures/intro_forking.tex}}
+\end{center}
+
+%??? TO DO
+%
+%Sec.~\ref{sec:applications}
+%
+%* Detached from specific 
+%
+%Sec.~\ref{sec:strategic_cons}
+
+%Bitcoin is distributed but makes no assurances on decentralisation.
+%https://www.bis.org/publ/qtrpdf/r_qt2112b.htm
+%https://www.nber.org/system/files/working_papers/w29396/w29396.pdf#page47
+
+%\cite{Schneier96}

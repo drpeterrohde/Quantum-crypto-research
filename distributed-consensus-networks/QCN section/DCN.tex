@@ -1,0 +1,103 @@
+% !TeX root = DCN.tex
+\documentclass[twocolumn, aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, floatfix, eqsecnum, rmp]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{url}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
+\usepackage[strict]{changepage}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{positioning, fit, calc, shadows, shadows.blur, arrows.meta, shapes.geometric, fillbetween, fadings}
+
+\let\oldalgorithmic\algorithmic
+\let\endoldalgorithmic\endalgorithmic
+\renewenvironment{algorithmic}
+{\begin{adjustwidth}{-1em}{}\oldalgorithmic}
+{\endoldalgorithmic\end{adjustwidth}}
+
+\input{source/styles.tex}
+
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+    
+\begin{document}
+
+\title{Distributed consensus networks}
+
+\author{Peter P. Rohde}
+\email[]{peter@peterrohde.org}
+\homepage{https://www.peterrohde.org}
+\affiliation{\mbox{BTQ Technologies, 16-104 555 Burrard Street, Vancouver BC, V7X 1M8 Canada}}
+\affiliation{\mbox{Center for Engineered Quantum Systems, School of Mathematical \& Physical Sciences}, \mbox{Macquarie University, NSW 2109, Australia}}
+\affiliation{Centre of Excellence in Engineered Quantum Systems, Brisbane, Australia}
+\affiliation{\mbox{Hearne Institute for Theoretical Physics, Department of Physics \& Astronomy}, \mbox{Louisiana State University, Baton Rouge LA, United States}}
+
+\begin{abstract}
+	\input{source/abstract.tex}
+\end{abstract}
+
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Overview}
+\input{source/overview.tex}
+
+\section{Consensus} \label{sec:consensus}
+\input{source/consensus.tex}
+
+\section{Random subset problem} \label{sec:random_subset_problem}
+\input{source/random_subset_problem.tex}
+
+\section{Consensus assignment problem} \label{sec:consensus_assignment_problem}
+\input{source/consensus_assignment_problem.tex}
+
+\section{Distributed consensus networks} \label{sec:DCN}
+\input{source/distributed_consensus_networks.tex}
+
+\section{Quantum consensus networks} \label{sec:QCN}
+\input{source/quantum_consensus_networks.tex}
+
+\section{Economics} \label{sec:economics}
+\input{source/economics.tex}
+
+\section{Applications} \label{sec:applications}
+\input{source/applications.tex}
+
+\section{Strategic considerations} \label{sec:strategic_cons}
+\input{source/strategic_considerations.tex}
+
+\section{Conclusion} \label{sec:conclusion}
+\input{source/conclusion.tex}
+
+\begin{acknowledgments}
+%	\input{source/acknowledgments.tex}
+\end{acknowledgments}
+
+\bibliography{bibliography}
+
+\appendix
+
+\end{document}
+
+\section{Ideas that went nowhere} \label{sec:ideas_nowhere.tex}
+\input{source/ideas_that_went_nowhere.tex}
+
+\end{document}

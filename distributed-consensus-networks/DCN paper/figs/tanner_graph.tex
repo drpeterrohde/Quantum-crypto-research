@@ -1,0 +1,66 @@
+\begin{tikzpicture}[]
+    \def\UVsep{2.8}
+
+    \tikzset{oplus node/.style={inner sep=0pt, minimum size=1em, label=center:{\scalebox{1.5}[1.5]{$\oplus$}}}}
+    \tikzset{circ node/.style={inner sep=0pt, minimum size=1em, label=center:{\scalebox{1.5}[1.5]{$\Circle$}}}}
+
+    \node[circ node] (a1) at (0,-1) {};
+    \node[circ node] (a2) at (0,-2) {};
+    \node[circ node] (a3) at (0,-3) {};
+    \node[circ node] (a4) at (0,-4) {};
+    \node[draw=none] (a5) at (0,-5) {$\vdots$};
+    \node[circ node] (a6) at (0,-6) {};
+    
+    \node[oplus node] (b1) at (\UVsep,-1) {};
+    \node[oplus node] (b2) at (\UVsep,-2) {};
+    \node[oplus node] (b3) at (\UVsep,-3) {};
+    \node[oplus node] (b4) at (\UVsep,-4) {};
+    \node[oplus node] (b5) at (\UVsep,-5) {};
+    \node[draw=none] (b6) at (\UVsep,-6) {$\vdots$};
+    \node[oplus node] (b7) at (\UVsep,-7) {};
+
+    \node[draw=none, left=0em of a1] (labela1) {$x_1$};
+    \node[draw=none, left=0em of a2] (labela2) {$x_2$};
+    \node[draw=none, left=0em of a3] (labela3) {$x_3$};
+    \node[draw=none, left=0em of a4] (labela4) {$x_4$};
+    \node[draw=none, left=0em of a6] (labelak) {$x_k$};
+
+    \node[draw=none, right=0em of b1] (labelb1) {$c_1$};
+    \node[draw=none, right=0em of b2] (labelb2) {$c_2$};
+    \node[draw=none, right=0em of b3] (labelb3) {$c_3$};
+    \node[draw=none, right=0em of b4] (labelb4) {$c_4$};
+    \node[draw=none, right=0em of b5] (labelb4) {$c_5$};
+    \node[draw=none, right=0em of b7] (labelbn) {$c_n$};
+
+    \foreach \i in {1,...,6} {
+            \ifnum\i=5
+            \else
+                \foreach \j in {1,...,7} {
+                    \ifnum\j=6
+                        \else
+                        \draw[graphNonEdgeStyle, line width=0.5] ($(a\i.east) + (0.01,0)$) -- ($(b\j.west) + (-0.01,0)$);
+                    \fi
+                }
+            \fi
+        }
+
+    \draw[graphEdgeStyle, line width=0.5] ($(a1.east) + (0.01,0)$) -- ($(b1.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a1.east) + (0.01,0)$) -- ($(b3.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a1.east) + (0.01,0)$) -- ($(b7.west) + (-0.01,0)$);
+
+    \draw[graphEdgeStyle, line width=0.5] ($(a2.east) + (0.01,0)$) -- ($(b2.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a2.east) + (0.01,0)$) -- ($(b3.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a2.east) + (0.01,0)$) -- ($(b5.west) + (-0.01,0)$);
+
+    \draw[graphEdgeStyle, line width=0.5] ($(a3.east) + (0.01,0)$) -- ($(b3.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a3.east) + (0.01,0)$) -- ($(b5.west) + (-0.01,0)$);
+
+    \draw[graphEdgeStyle, line width=0.5] ($(a4.east) + (0.01,0)$) -- ($(b2.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a4.east) + (0.01,0)$) -- ($(b4.west) + (-0.01,0)$);
+    
+    \draw[graphEdgeStyle, line width=0.5] ($(a6.east) + (0.01,0)$) -- ($(b4.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a6.east) + (0.01,0)$) -- ($(b5.west) + (-0.01,0)$);
+    \draw[graphEdgeStyle, line width=0.5] ($(a6.east) + (0.01,0)$) -- ($(b7.west) + (-0.01,0)$);
+    
+    \node[draw=none] at ($(a1.east)!0.5!(b1.west) + (0,0.25)$) {$P_D(x)$};
+\end{tikzpicture}
