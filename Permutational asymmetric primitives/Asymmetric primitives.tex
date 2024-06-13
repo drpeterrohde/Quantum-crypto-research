@@ -31,6 +31,7 @@
 \def\asymd#1#2#3#4{\langle #1_{#3} \cdot #2_{#4}\rangle}
 \def\braid#1#2#3#4{\langle#1,#2\rangle_{#3}^{#4}}
 \def\selfbraid#1#2#3{\langle#1\rangle_{#2}^{#3}}
+\def\comm#1#2#3#4{[#1,#2]_{#3}^{#4}}
 
 \begin{document}
 
@@ -221,12 +222,52 @@ For secret $x$ we define the public object,
 \end{align}
 This defines a one-way function enabling verification given $x$ and $\pi$ but does not allow reverse evaluation of $x$ even if $\pi$ is known via pre-image resistance.
 
+\subsection{Pre-image resistance}
+
+Let,
+\begin{align}
+	\mathcal{X}: x\in\{0,1\}^n,\quad \mathrm{s.t.}\,\,w(x)=n/2,
+\end{align}
+be a random bit-string with Hamming weight \mbox{$w(x)=n/2$}. The automorphisms of $x$ are equivalent to all permutations over the subsets of elements with the same bit-value,
+\begin{align}
+	\mathrm{Aut}(x) &= \mathrm{Sym}(x^{(0)}) \times \mathrm{Sym}(x^{(1)}) \nonumber\\
+	&= S_{n/2}\times S_{n/2}.
+\end{align}
+where,
+\begin{align}
+	x^{(k)}=\{i\,|\, x_i=k\}_{i\in x}.
+\end{align}
+The space of $x$ where $w(x)=n/2$ has order,
+\begin{align}
+	\frac{|\mathrm{Sym}(x)|}{|\mathrm{Aut}(x)|} = \frac{n!}{(\frac{n}{2})!(\frac{n}{2})!} = \binom{n}{n/2,n/2}.
+\end{align}
+
+All $x$ where $w(x)=n/2$ are related by permutations. Hence, for given $x$ and random $\pi\in S_n$, $x_\pi$ is an independent random bit-string with $w(x_\pi)=w(x)=n/2$.
+
+\begin{align}
+	x_\pi x = y_\pi y.	
+\end{align}
+
+
 \subsection{Provable one-way functions}
 
 The one-way function from Eq.~\eqref{eq:one_way_sum} acts distributively over $\oplus$,
 \begin{align}
 	x\oplus y \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus \selfbraid{y}{\pi}{\pi^{-1}}.
 \end{align}
+
+%The one-way function from Eq.~\eqref{eq:one_way_sum} does not act distributively over $\oplus$,
+%\begin{align}
+%	(x\oplus y) &\xrightarrow{\pi} (x\oplus y)_\pi(x\oplus y)_{\pi^{-1}} \nonumber\\
+%	&= x_\pi x_{\pi^{-1}} \oplus y_\pi y_{\pi^{-1}} \oplus x_\pi y_{\pi^{-1}} \oplus y_\pi x_{\pi^{-1}} \nonumber\\
+%	&= \selfbraid{x}{\pi}{\pi^{-1}} \oplus  \selfbraid{y}{\pi}{\pi^{-1}} \oplus \braid{x}{y}{\pi}{\pi^{-1}} \oplus  \braid{y}{x}{\pi}{\pi^{-1}},
+%\end{align}
+%where,
+%\begin{align}
+%	\comm{x}{y}{\pi}{\pi^{-1}} \equiv \braid{x}{y}{\pi}{\pi^{-1}} \oplus \braid{y}{x}{\pi}{\pi^{-1}},
+%\end{align}
+%is the additive commutator of the $\xrightarrow{\pi}$ operator.
+
 For known $x$ and unknown $y$ the object $y_\pi y$ acts as a one-time zero-knowledge proof of $y$. The proof is one-time as it is the same for all $x$.
 
 \subsection{Hash function model}

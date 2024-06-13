@@ -11,6 +11,7 @@
 \usepackage{caption}
 \usepackage{url}
 \usepackage[breaklinks]{hyperref}
+\usepackage{braket}
     
 \frenchspacing
     
@@ -30,9 +31,31 @@
 
 \section{Graph states}
 
-* Definition via stabilisers.
+* Definition via stabilisers:
+\begin{align}
+	S_j &= X_j \bigotimes_{k\in n(j)} Z_k,\quad \forall\, j\in V(G).
+\end{align}
 
-* Transformation and measurement rules.
+* Transformation and measurement rules. \cite{hein2006entanglement, PhysRevA.69.062311}
+
+* Graph transformation rules for $Z$ and $Y$ measurements:
+\begin{align}
+	P_{j,\pm}^{(Z)} \ket{G} &= U_{j,\pm}^{(Z)} \ket{G-j},\nonumber\\
+	P_{j,\pm}^{(Y)} \ket{G} &= U_{j,\pm}^{(Y)} \ket{\tau_j(G)-j},
+\end{align}
+where $\tau_j(G)$ denotes local complementation of the neighbourhood of vertex $j$ in $G$,
+\begin{align}
+	\tau_j(G) = G \oplus [j+n(j)],
+\end{align}
+using XOR arithmetic on the edge set of $G$.
+
+* Respective local corrections for $Z$ and $Y$ measurements: 
+\begin{align}
+	U_{j,+}^{(Z)} &= I,\nonumber\\
+	U_{j,-}^{(Z)} &= \bigotimes_{k\in n(j)} Z_k,\nonumber\\
+	U_{j,+}^{(Y)} &= \bigotimes_{k\in n(j)} \sqrt{-i Z_k},\nonumber\\
+	U_{j,-}^{(Y)} &= \bigotimes_{k\in n(j)} \sqrt{i Z_k},
+\end{align}
 
 \section{Graph states signature scheme}
 
@@ -46,12 +69,16 @@
 
 * How encoding via pairwise measurements works.
 
-* Local correction rules.
+* Local correction rules:
 
+The local correction rules for Pauli measurements are neighbourhood dependent. We would like local corrections to reveal to information about the random partitions associated with measurement qubits. This requires that all local corrections be uniform.
+ 
 \section{Security proof}
 
 * Proof that adjacency matrix exponentially converges to uniform and separable random edge set.
 
 * Argue that this affords information theoretic security, parameterised by statistical security $\varepsilon=1/2^n$.
+
+\bibliography{bibliography}
 
 \end{document}
