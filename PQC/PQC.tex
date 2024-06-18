@@ -221,6 +221,28 @@ Defining the braid operators,
 \end{align}
 the braid objects exhibit trapdoor locking effects. Knowing $\pi$ does not reveal $x$ from the braid $\symbraid{x}$. Given $\symbraid{x,y}$ and $\pi$, knowing either input $x$ or $y$ reveals the other input. Hence, for known $\pi$ both inputs $x$ and $y$ act as trapdoors.
 
+Braids preserve distributivity over $\oplus$,
+\begin{align}
+	\symbraid{x,x'} \oplus \symbraid{y,y'} &= \symbraid{x\soplus y, x'\soplus y'},\nonumber\\
+	\symbraid{x} \oplus \symbraid{y} &= \symbraid{x\oplus y}.
+\end{align}
+
+A braided differential hash operator takes the form,
+\begin{align}
+	\Delta(x) = \symbraid{x,h(x)} = x_\pi \cdot h_{\pi^{-1}}(x).
+\end{align}
+
+Preparing,
+\begin{align}
+	\Delta(s\oplus m_{\pi^{-2}}) = \symbraid{s\oplus m, h(s\oplus m)},
+\end{align}
+if $s$ is a shared secret and $\pi$ and $\Delta(s\oplus m)$ are public, sharing $h(s\oplus m)$ allows $\Delta(s\oplus m)$ to be unlocked,
+\begin{align}
+	&\Delta(s\oplus m) \oplus [\pi^{-1}\circ h(s\oplus m)]\nonumber\\
+	&\to \symbraid{s,m} \to m,
+\end{align}
+where $s$ is known.
+
 \section{Codewords}
 
 Codewords are the space of balanced bit-strings, defining the code-space,
