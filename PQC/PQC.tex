@@ -3,10 +3,8 @@
 \usepackage[pdftex]{graphicx}
 \usepackage{mathrsfs}
 \usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
-\usepackage{amsmath}
 \usepackage[english]{babel}
 \usepackage{booktabs}
-\usepackage{amssymb}
 \usepackage{type1cm}
 \usepackage{caption}
 \usepackage{url}
@@ -32,6 +30,17 @@
 \def\braid#1#2#3#4{\langle#1,#2\rangle_{#3}^{#4}}
 \def\selfbraid#1#2#3{\langle#1\rangle_{#2}^{#3}}
 \def\comm#1#2#3#4{[#1,#2]_{#3}^{#4}}
+% \def\soplus{{\mathbin{\scriptstyle{\mathbin\oplus}}}}
+
+\makeatletter
+\newcommand{\soplus}{{{\hspace{1pt}}{\mathbin{\mathpalette\make@small\oplus}}}{\hspace{1pt}}}
+
+\newcommand{\make@small}[2]{%
+  \vcenter{\hbox{%
+    \scalebox{0.6}{$\m@th#1#2$}%
+  }}%
+}
+\makeatother
 
 \begin{document}
 
@@ -54,7 +63,7 @@
 	\item One way functions and P vs NP: \url{https://en.wikipedia.org/wiki/One-way_function}: "The existence of such one-way functions is still an open conjecture. Their existence would prove that the complexity classes P and NP are not equal,"
 	\item GapP, NP, binary optimisation problems: \url{https://chatgpt.com/share/2e9f8c0f-fa1d-4d97-9af0-c195ad3cd22c}
 	\item Homomorphism between $B_n$ and $S_n$: \url{https://chatgpt.com/share/c0390897-77f1-403e-bce9-ca2bf5c9fccc}
-	\item Even Hamming weight for $H(x\oplus y)\in 2\mathbb{Z}$ if $H(x)=H(y)$. Hence also for $y=\pi\circ x$ where $\pi\in S_n$.
+	\item Even Hamming weight for $H(x\soplus y)\in 2\mathbb{Z}$ if $H(x)=H(y)$. Hence also for $y=\pi\circ x$ where $\pi\in S_n$.
 	\item Word problem for the braid group $B_n$ is poly-time solvable: \url{https://chatgpt.com/c/f8827503-7af9-4b81-b3dd-a79f1891746e}
 	\item Wreath product \url{https://en.wikipedia.org/wiki/Wreath_product}
 	\item Braid permutations \mbox{$\pi: B_n \to S_n$}, for $\beta\in B_n$ we have $\pi(\beta)$: \url{https://chatgpt.com/share/6c61f5ef-a33d-4c76-8f1f-0d8bdf1bb4aa}
@@ -80,18 +89,18 @@ The schemes resulting from this are compositional under binary XOR algebra.
 
 A pair of bit-strings $\{x,y\}\in\{0,1\}^n$ may be expressed differentially using the tuple,
 \begin{align}
-	\diff{x}{y} &\equiv [x,x\oplus y] \nonumber\\
-	&\equiv [x\oplus y,x].
+	\diff{x}{y} &\equiv [x,x\soplus y] \nonumber\\
+	&\equiv [x\soplus y,x].
 \end{align}
-Here the differential term $x\oplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
+Here the differential term $x\soplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
 
-Differential encodings are composable under $\oplus$,
+Differential encodings are composable under $\soplus$,
 \begin{align}
-	\diff{x_1}{y_1} \oplus \diff{x_2}{y_2} \Rightarrow \diff{x_1\oplus x_2}{y_1 \oplus y_2},
+	\diff{x_1}{y_1} \soplus \diff{x_2}{y_2} \Rightarrow \diff{x_1\soplus x_2}{y_1 \soplus y_2},
 \end{align}
 with the properties,
 \begin{align}
-	\diff{\zerovec}{x\oplus y} &= \diff{x}{y}, \nonumber\\
+	\diff{\zerovec}{x\soplus y} &= \diff{x}{y}, \nonumber\\
 	\diff{x}{y} &\Rightarrow x=y.
 \end{align}
 
@@ -111,15 +120,15 @@ Under maximum entropy $H(\mathcal{X})=1$ conditions all codewords are sampled wi
 \end{align}
 and are orthogonal,
 \begin{align}
-	x_i \oplus x_j \neq \mathbf{0}.
+	x_i \soplus x_j \neq \mathbf{0}.
 \end{align}
 Under differential encoding,
 \begin{align}
-	[x,x\oplus y],
+	[x,x\soplus y],
 \end{align}
-entropy addition implies the differential term $x\oplus y$ exhibits entropy at least,
+entropy addition implies the differential term $x\soplus y$ exhibits entropy at least,
 \begin{align}
-	H(x\oplus y) \geq \min(H(x),H(y)).
+	H(x\soplus y) \geq \min(H(x),H(y)).
 \end{align}
 Hence parity terms form unique random codewords.
 
@@ -165,9 +174,9 @@ the satisfiability problem of finding bit-strings which under a random braid hav
 
 We define the algebra,
 \begin{align}
-	(\mathbb{Z}_2^n \times S_n, \oplus,\pi),
+	(\mathbb{Z}_2^n \times S_n, \soplus,\pi),
 \end{align}
-comprising the bitwise binary $(\mathbb{Z}_2^n,\oplus)$ operator and the unary $(S_n,\pi)$ operator. Defining permutations over bit-string elements,
+comprising the bitwise binary $(\mathbb{Z}_2^n,\soplus)$ operator and the unary $(S_n,\pi)$ operator. Defining permutations over bit-string elements,
 \begin{align}
 	\pi &\in S_n,\nonumber\\
 	\pi\circ x &\equiv x_\pi,
@@ -175,18 +184,18 @@ comprising the bitwise binary $(\mathbb{Z}_2^n,\oplus)$ operator and the unary $
 as unary operators we inherit algebraic properties from the symmetric group.
 \begin{itemize}
 	\item \emph{Composition}: $[\pi_i \circ \pi_j]\circ x \equiv x_{\pi_i\circ \pi_j}$.
-	\item \emph{Distributivity}: $\pi\circ(x\oplus y) \equiv [x\oplus y]_\pi \equiv x_\pi \oplus y_\pi$.
+	\item \emph{Distributivity}: $\pi\circ(x\soplus y) \equiv [x\soplus y]_\pi \equiv x_\pi \soplus y_\pi$.
 \end{itemize}
 For unknown $x$, the permuted bit-string $x_\pi$ can be decoded to $x$ given $\pi$.
 
 Structures of the form,
 \begin{align}
-	x_\pi x \equiv x_\pi \oplus x,
+	x_\pi x \equiv x_\pi \soplus x,
 \end{align}
 cannot be decoded from $\pi$ alone. However, the action of $x$ or $x_\pi$ on $x_\pi x$ reveals the other,
 \begin{align}
-	x \oplus (x_\pi \oplus x) & = x_\pi,\nonumber\\
-	x_\pi \oplus (x_\pi \oplus x) &= x.
+	x \soplus (x_\pi \soplus x) & = x_\pi,\nonumber\\
+	x_\pi \soplus (x_\pi \soplus x) &= x.
 \end{align}
 Via distributivity we have the additional symmetric property,
 \begin{align}
@@ -218,7 +227,7 @@ If a $\pi$ index is not written it's implied the identity permutation $\pi_0$.
 
 This encoding under pairs of permutations implies a braid representation.
 
-Sloppily we'll also use $x\oplus y \equiv x \cdot y \equiv xy$ as shorthand.
+Sloppily we'll also use $x\soplus y \equiv x \cdot y \equiv xy$ as shorthand.
 
 \subsection{One-way functions}
 
@@ -258,7 +267,7 @@ be an asymmetric permutational primitive where $c$ is known and we want to find 
 
 Consider the table,
 \begin{align}
-	[x_\pi,\tilde{x},\tilde{x}\oplus \tilde{c}]_i,
+	[x_\pi,\tilde{x},\tilde{x}\soplus \tilde{c}]_i,
 \end{align}
 with rows over $i$, row-ordered such that the first block of $n/2$ rows have $x_i=0$ and the second block have $x_i=1$ (tilde denotes this ordering). The second and third columns are mutually order and under multiplication provide $\tilde{c}$. This is preserved under any permutation within blocks but not between blocks.
 
@@ -266,20 +275,20 @@ The pre-image solution corresponds to choosing $x_\pi$ such that multiplying the
 
 \subsection{One-way functions}
 
-The one-way function from Eq.~\eqref{eq:one_way_sum} acts distributively over $\oplus$,
+The one-way function from Eq.~\eqref{eq:one_way_sum} acts distributively over $\soplus$,
 \begin{align}
-	x\oplus y \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus \selfbraid{y}{\pi}{\pi^{-1}}.
+	x\soplus y \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \soplus \selfbraid{y}{\pi}{\pi^{-1}}.
 \end{align}
 
-%The one-way function from Eq.~\eqref{eq:one_way_sum} does not act distributively over $\oplus$,
+%The one-way function from Eq.~\eqref{eq:one_way_sum} does not act distributively over $\soplus$,
 %\begin{align}
-%	(x\oplus y) &\xrightarrow{\pi} (x\oplus y)_\pi(x\oplus y)_{\pi^{-1}} \nonumber\\
-%	&= x_\pi x_{\pi^{-1}} \oplus y_\pi y_{\pi^{-1}} \oplus x_\pi y_{\pi^{-1}} \oplus y_\pi x_{\pi^{-1}} \nonumber\\
-%	&= \selfbraid{x}{\pi}{\pi^{-1}} \oplus  \selfbraid{y}{\pi}{\pi^{-1}} \oplus \braid{x}{y}{\pi}{\pi^{-1}} \oplus  \braid{y}{x}{\pi}{\pi^{-1}},
+%	(x\soplus y) &\xrightarrow{\pi} (x\soplus y)_\pi(x\soplus y)_{\pi^{-1}} \nonumber\\
+%	&= x_\pi x_{\pi^{-1}} \soplus y_\pi y_{\pi^{-1}} \soplus x_\pi y_{\pi^{-1}} \soplus y_\pi x_{\pi^{-1}} \nonumber\\
+%	&= \selfbraid{x}{\pi}{\pi^{-1}} \soplus  \selfbraid{y}{\pi}{\pi^{-1}} \soplus \braid{x}{y}{\pi}{\pi^{-1}} \soplus  \braid{y}{x}{\pi}{\pi^{-1}},
 %\end{align}
 %where,
 %\begin{align}
-%	\comm{x}{y}{\pi}{\pi^{-1}} \equiv \braid{x}{y}{\pi}{\pi^{-1}} \oplus \braid{y}{x}{\pi}{\pi^{-1}},
+%	\comm{x}{y}{\pi}{\pi^{-1}} \equiv \braid{x}{y}{\pi}{\pi^{-1}} \soplus \braid{y}{x}{\pi}{\pi^{-1}},
 %\end{align}
 %is the additive commutator of the $\xrightarrow{\pi}$ operator.
 
@@ -289,7 +298,7 @@ For known $x$ and unknown $y$ the object $y_\pi y$ acts as a one-time zero-knowl
 
 Using the asymmetric model,
 \begin{align}
-	h: x\oplus \selfbraid{y}{\pi}{\pi^{-1}} \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus y,
+	h: x\soplus \selfbraid{y}{\pi}{\pi^{-1}} \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \soplus y,
 \end{align}
 the $\braid{y}{y}{\pi}{\pi^{-1}}$ term acts a known pre-image modulation based on the hidden underlying action of unknown $\{y,\pi\}$, reproducing the property of hash pre-image salting. This provides a model for a deterministic pseudo-random hash function with hidden evaluation, while remaining verifiable.
 
@@ -303,7 +312,7 @@ There may be an inherent underlying connection here via complexity arguments. Un
 
 Using the asymmetric model,
 \begin{align}
-	f: x\oplus \selfbraid{x_0 x_1}{\pi}{\pi^{-1}} \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \oplus \braid{x_0}{x_1}{\pi}{\pi^{-1}}.
+	f: x\soplus \selfbraid{x_0 x_1}{\pi}{\pi^{-1}} \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}} \soplus \braid{x_0}{x_1}{\pi}{\pi^{-1}}.
 \end{align}
 
 \begin{align}
@@ -341,22 +350,22 @@ Provision of,
 \end{align}
 affords,
 \begin{align}
-	\mathtt{sig} \oplus \pi \circ \selfbraid{x\oplus m}{\pi^{-1}}{\pi} = m.
+	\mathtt{sig} \soplus \pi \circ \selfbraid{x\soplus m}{\pi^{-1}}{\pi} = m.
 \end{align}
 
 $\braid{x}{y}{\pi}{\pi^{-1}}$
 
 %From the object,
 %\begin{align}
-%	x_\pi \oplus y,
+%	x_\pi \soplus y,
 %\end{align}
 %* $y$ is released if $x$ and $\pi$ are known.\\
 %* $x_\pi$ is released if $y$ is known.\\
 %* $x$ is released if $\pi$ and $y$ are known.
 
-An asymmetric trapdoor function on the differential $x\oplus y$ defined as,
+An asymmetric trapdoor function on the differential $x\soplus y$ defined as,
 \begin{align}
-	[x,x\oplus y] \xrightarrow{\pi} [x, x \oplus y_\pi].
+	[x,x\soplus y] \xrightarrow{\pi} [x, x \soplus y_\pi].
 \end{align}
 For known $\pi$, knowing $x$
 
@@ -367,28 +376,28 @@ Via composition, differential codes for $\pi$-symmeterised objects preserve diff
 	\diff{x}{y} \Rightarrow \diff{x_\pi x}{y_\pi y}.
 \end{align}
 
-Defining a secret key $s$ and public key $s\oplus p$ differentially we obtain,
+Defining a secret key $s$ and public key $s\soplus p$ differentially we obtain,
 \begin{align}
-	\diff{s}{p} &= [s, s\oplus p],\nonumber\\
-	[s, s\oplus p] &= [p\oplus s, p],\nonumber\\
-	\diff{s_\pi s}{p_\pi p} &= [s\oplus p, s_\pi\oplus p_\pi],\nonumber\\
+	\diff{s}{p} &= [s, s\soplus p],\nonumber\\
+	[s, s\soplus p] &= [p\soplus s, p],\nonumber\\
+	\diff{s_\pi s}{p_\pi p} &= [s\soplus p, s_\pi\soplus p_\pi],\nonumber\\
 \end{align}
 
 Similarly defining a message $m$ differentially encoded against the same secret key $s$ we have,
 \begin{align}
-	\diff{s}{m} = [s,s\oplus m].
+	\diff{s}{m} = [s,s\soplus m].
 \end{align}
 
 Under composition this implies,
 \begin{align}
-	[s,s\oplus p] \oplus [s,s\oplus m] = [\mathbf{0},p\oplus m].	
+	[s,s\soplus p] \soplus [s,s\soplus m] = [\mathbf{0},p\soplus m].	
 \end{align}
 
-Hence treating differential terms as shared information affords evaluation of $p\oplus m$ independent of $s$.
+Hence treating differential terms as shared information affords evaluation of $p\soplus m$ independent of $s$.
 
 Introduce the term asymmetric term $m_\pi h(m)$ encoding a permuted message against its hash.
 
-%$m_\pi h(m) \oplus $
+%$m_\pi h(m) \soplus $
 
 Let us introduce symmetrised public terms,
 \begin{align}
@@ -398,16 +407,16 @@ Let us introduce symmetrised public terms,
 
 Using the permuted differential codes we have the identity,
 \begin{align}
-	[s,s \oplus p] \oplus [s, s_\pi \oplus m_\pi] = [\mathbf{0}, s_\pi s \oplus m_\pi p].
+	[s,s \soplus p] \soplus [s, s_\pi \soplus m_\pi] = [\mathbf{0}, s_\pi s \soplus m_\pi p].
 \end{align}
 
 \begin{align}
-	[s,s \oplus p] \oplus [p,p_\pi \oplus m_\pi] = [\mathtt{pk}, p_\pi s \oplus m_\pi p].
+	[s,s \soplus p] \soplus [p,p_\pi \soplus m_\pi] = [\mathtt{pk}, p_\pi s \soplus m_\pi p].
 \end{align}
 
 If the differential term is publicly shared this affords decoding under,
 %\begin{align}
-%	(m_\pi p) \oplus (m) = m
+%	(m_\pi p) \soplus (m) = m
 %\end{align}
 
 \section{Old}
@@ -419,21 +428,21 @@ We define asymmetric key-pairs via their differential encoding,
 
 \begin{align}
 	\kp &= \diff{\sk}{\pk} \nonumber\\
-	&= [\sk,\sk \oplus \pk],
+	&= [\sk,\sk \soplus \pk],
 \end{align}
 
 \section{Digital signatures}
 
 Generate signature,
 \begin{align}
-	\sig(m,\sk) &= \diff{\sk}{\pk} \oplus \diff{\sk}{m} \nonumber\\
-	&= \diff{\mathbf{0}}{\pk\oplus m} \nonumber\\
-	&= \pk \oplus m.
+	\sig(m,\sk) &= \diff{\sk}{\pk} \soplus \diff{\sk}{m} \nonumber\\
+	&= \diff{\mathbf{0}}{\pk\soplus m} \nonumber\\
+	&= \pk \soplus m.
 \end{align}
 
 Verify signature,
 \begin{align}
-	\ver(\sig,\pk) &= \Delta(m,\pk) \oplus \Delta() \nonumber\\
+	\ver(\sig,\pk) &= \Delta(m,\pk) \soplus \Delta() \nonumber\\
 	&= \pk.
 \end{align}
 
@@ -443,14 +452,14 @@ Encode,
 \begin{align}
 	\tilde{m} &= \enc(m,\pk) \nonumber\\
 	&= \diff{m}{\sk} \nonumber\\
-	&= \sk \oplus m.
+	&= \sk \soplus m.
 \end{align}
 
 Decode,
 \begin{align}
-	\dec(\tilde{m},\sk) &= \tilde{m} \oplus \bar\kp \nonumber\\
-	&= \enc(\sk,m) \oplus \diff{\pk}{\sk} \nonumber\\
-	&= \sk \oplus m.
+	\dec(\tilde{m},\sk) &= \tilde{m} \soplus \bar\kp \nonumber\\
+	&= \enc(\sk,m) \soplus \diff{\pk}{\sk} \nonumber\\
+	&= \sk \soplus m.
 \end{align}
 
 \section{Authentication}
@@ -461,12 +470,12 @@ Decode,
 
 Consider multiple messages $m_i$ signed by the same public key,
 \begin{align}
-	\enc(m_i,\pk) &= \pk \oplus m_i, \nonumber\\
+	\enc(m_i,\pk) &= \pk \soplus m_i, \nonumber\\
 \end{align}
 
 Verify signature,
 \begin{align}
-	\ver(\sig,\pk) &= \Delta(m,\pk) \oplus \Delta() \nonumber\\
+	\ver(\sig,\pk) &= \Delta(m,\pk) \soplus \Delta() \nonumber\\
 	&= \pk.
 \end{align}
 
@@ -478,38 +487,38 @@ Verify signature,
 
 A pair of bit-strings $\{x,y\}$ may be expressed differentially using the tuple,
 \begin{align}
-	[x,x\oplus y]_\oplus,
+	[x,x\soplus y]_\soplus,
 \end{align}
-where the differential term $x\oplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
+where the differential term $x\soplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
 
 We define the differential hash operators,
 \begin{align}
-	\Delta(x) &= h(x)\oplus x,\nonumber\\
-	\Delta_\pi(x) &= h(x_\pi)\oplus x,
+	\Delta(x) &= h(x)\soplus x,\nonumber\\
+	\Delta_\pi(x) &= h(x_\pi)\soplus x,
 \end{align}
 where $\pi\in S_n$ for $x\in\{0,1\}^n$ is a permutation over the elements of $x$. These encode a hash's image and pre-image together while revealing neither assuming hash pre-image resistance. We have the properties,
 \begin{align}
-	h(x) &= \Delta(x) \oplus x,\nonumber\\
-	x &= \Delta(x) \oplus h(x).
+	h(x) &= \Delta(x) \soplus x,\nonumber\\
+	x &= \Delta(x) \soplus h(x).
 \end{align}
 The $\Delta$ operator inherits pre-image resistance from $h(\cdot)$. Knowing $\Delta(x)$ alone reveals neither $x$ nor $h(x)$, however additionally knowing $x$ or $h(x)$ enables verification of $\Delta(x)$. Finding $x$ for given $\Delta(x)$ reduces to the pre-image resistance of the hash function $h(\cdot)$.
 
 The non-differentially encoded tuple $\{x,h(x)\}$ allows $x$ to unlock $h(x)$, while $h(x)$ cannot unlock $x$. The second element reveals $h(x)$ alone, but not $x$ via pre-image resistance. Under the differential encoding,
 \begin{align}
-	[x,\Delta(x)]_\oplus =[x,h(x)\oplus x]_\oplus,
+	[x,\Delta(x)]_\soplus =[x,h(x)\soplus x]_\soplus,
 \end{align}
 the second element reveals neither $x$ nor $h(x)$, while the first element reveals both, given that $h(x)$ can be efficiently forward-evaluated. Alternately, under the differential encoding,
 \begin{align}
-	[h(x),\Delta(x)] = [h(x),h(x)\oplus x],
+	[h(x),\Delta(x)] = [h(x),h(x)\soplus x],
 \end{align}
 the non-differential term $h(x)$ affords unlocking the code but does not on its own reveal $x$ via hash pre-image resistance. Under both encodings knowing either $x$ or $h(x)$ alone enables verification.
 
 The differential operator is distributive only over its unhashed components,
 \begin{align}
-	\Delta(x\oplus y) &= h(x\oplus y)\oplus x\oplus y \nonumber\\
-	\Delta(x)\oplus\Delta(y) &= h(x)\oplus h(y)\oplus x\oplus y.
+	\Delta(x\soplus y) &= h(x\soplus y)\soplus x\soplus y \nonumber\\
+	\Delta(x)\soplus\Delta(y) &= h(x)\soplus h(y)\soplus x\soplus y.
 \end{align}
-%Thus knowing $h(x\oplus y)$ does not unlock the object, whereas knowing both $x$ and $y$ does.
+%Thus knowing $h(x\soplus y)$ does not unlock the object, whereas knowing both $x$ and $y$ does.
 
 %Tuples of the form,
 %\begin{align}
@@ -524,43 +533,43 @@ The differential operator is distributive only over its unhashed components,
 
 %\subsection{Algebraic properties}
 
-The symmetric difference between $\Delta(x\oplus y)$ and $\Delta(x)\oplus\Delta(y)$ gives the `distributor' (equivalent of commutator for distributivity),
+The symmetric difference between $\Delta(x\soplus y)$ and $\Delta(x)\soplus\Delta(y)$ gives the `distributor' (equivalent of commutator for distributivity),
 \begin{align}
-	\Delta(x\oplus y)\oplus \Delta(x)\oplus \Delta(y) = h(x\oplus y) \oplus h(x)\oplus h(y),
+	\Delta(x\soplus y)\soplus \Delta(x)\soplus \Delta(y) = h(x\soplus y) \soplus h(x)\soplus h(y),
 \end{align}
-defining the distributivity of $\Delta$ operator over the action of $\oplus$.
+defining the distributivity of $\Delta$ operator over the action of $\soplus$.
 
 Standard differential codes are composable,
 \begin{align}
-	[x,x\oplus y)]_\oplus \oplus [x',x'\oplus y']_\oplus\nonumber\\
-	\sim [x\oplus x', x\oplus y \oplus x' \oplus y']_\oplus.
+	[x,x\soplus y)]_\soplus \soplus [x',x'\soplus y']_\soplus\nonumber\\
+	\sim [x\soplus x', x\soplus y \soplus x' \soplus y']_\soplus.
 \end{align}
 For differential hash codes,
 \begin{align}
-	[x,\Delta(x)]_\oplus,\nonumber\\
-	[y,\Delta(y)]_\oplus,
+	[x,\Delta(x)]_\soplus,\nonumber\\
+	[y,\Delta(y)]_\soplus,
 \end{align}
 we have distinct composition rules,
 \begin{align}
-	[x\oplus y,\Delta(x\oplus y)]_H,\nonumber\\
-	[x\oplus y,\Delta(x) \oplus \Delta(y))]_\oplus.
+	[x\soplus y,\Delta(x\soplus y)]_H,\nonumber\\
+	[x\soplus y,\Delta(x) \soplus \Delta(y))]_\soplus.
 \end{align}
-The $[\cdot,\cdot]_H$ composition is verifiable by hashing the left hand term. The $[\cdot,\cdot]_\oplus$ composition is not hash-verifiable but preserves all differential encoding constraints.
+The $[\cdot,\cdot]_H$ composition is verifiable by hashing the left hand term. The $[\cdot,\cdot]_\soplus$ composition is not hash-verifiable but preserves all differential encoding constraints.
 
-Permutations $\pi$ are distributive over $\oplus$ but not commutative,
+Permutations $\pi$ are distributive over $\soplus$ but not commutative,
 \begin{align}
-	\pi(x\oplus y) &= \pi(x) \oplus \pi(y),\nonumber\\
-	\pi(x) \oplus y &\neq x \oplus \pi(y),
+	\pi(x\soplus y) &= \pi(x) \soplus \pi(y),\nonumber\\
+	\pi(x) \soplus y &\neq x \soplus \pi(y),
 \end{align}
-whereas $\oplus$ is commutative but not distributive (in general, depending on parity of number of terms under distribution),
+whereas $\soplus$ is commutative but not distributive (in general, depending on parity of number of terms under distribution),
 \begin{align}
-	x\oplus y &= y \oplus x.
+	x\soplus y &= y \soplus x.
 \end{align}
 
 \begin{itemize}
-	\item $h(m\oplus s)$ will reveal the private $h(s)$ for chosen $m=\mathbf{0}$.
-	\item $h(m\oplus s \oplus x)$ will reveal the private $h(x)$ for chosen $m=x$ if $x$ is public.
-	\item $h(\pi(m\oplus s)) = h(m_\pi \oplus s_\pi)$ can only reveal $h(s_\pi)$ (not secret) for public $\pi$ and chosen $m$, but cannot reveal secret $h(s)$.
+	\item $h(m\soplus s)$ will reveal the private $h(s)$ for chosen $m=\mathbf{0}$.
+	\item $h(m\soplus s \soplus x)$ will reveal the private $h(x)$ for chosen $m=x$ if $x$ is public.
+	\item $h(\pi(m\soplus s)) = h(m_\pi \soplus s_\pi)$ can only reveal $h(s_\pi)$ (not secret) for public $\pi$ and chosen $m$, but cannot reveal secret $h(s)$.
 \end{itemize}
 
 \section{Asymmetric codes}
@@ -580,7 +589,7 @@ where $\mathtt{sk}$ be a secret bit-string, $h(\{0,1\}^n)\to\{0,1\}^n$ an $n$-bi
 %\end{align}
 %is a non-unlocking public identifier, where,
 %\begin{align}
-%	x_\pi \equiv x\oplus h(\pi).
+%	x_\pi \equiv x\soplus h(\pi).
 %\end{align}
 Since $\mathtt{pk} = \Delta(\mathtt{sk})$ is public both $\mathtt{sk}$ and $h(\mathtt{sk})$ must be private to prevent unlocking the public key, both acting as trapdoors for the differential encoding.
 
@@ -588,115 +597,115 @@ Since $\mathtt{pk} = \Delta(\mathtt{sk})$ is public both $\mathtt{sk}$ and $h(\m
 %The signature confirms consistency between private and public information while revealing only $h(\mathtt{sk}_pi)$ about the private key. To use Alice's private key as $s$ we inhibit the disclosure of $\mathtt{sk}$ by applying a publicly known pre-image manipulation prevents the signature from revealing the secret key, instead using,
 
 \begin{align}
-	[m_\pi \oplus s_\pi, \Delta_\pi(m_\pi\oplus s_\pi)],
+	[m_\pi \soplus s_\pi, \Delta_\pi(m_\pi\soplus s_\pi)],
 \end{align}
 
 \begin{align}
-	\Delta_\pi(m_\pi\oplus s_\pi) &= \Delta_\pi(m_\pi) \Delta_\pi(s_\pi) \nonumber\\
-	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi)
+	\Delta_\pi(m_\pi\soplus s_\pi) &= \Delta_\pi(m_\pi) \Delta_\pi(s_\pi) \nonumber\\
+	&\soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi \soplus s_\pi)
 \end{align}
 
 %Hence for,
 %\begin{align}
-%	[\mathtt{sig}, \Delta_\pi(m_\pi) \oplus \Delta(s_\pi)],
+%	[\mathtt{sig}, \Delta_\pi(m_\pi) \soplus \Delta(s_\pi)],
 %\end{align}
 %we require,
 %\begin{align}
-%	h(\mathtt{sig}) = \Delta_\pi(m_\pi) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi).
+%	h(\mathtt{sig}) = \Delta_\pi(m_\pi) \soplus \Delta(s_\pi) \soplus h(m_\pi) \soplus h(s_\pi).
 %\end{align}
 
 
 %--
 %We will employ the two alternate differential encodings as asymmetric primitives,
 %\begin{align}
-%	&[m\oplus s, \Delta(h(m)\oplus s)],\nonumber\\
-%	&[h(m)\oplus s, \Delta(m\oplus s)],
+%	&[m\soplus s, \Delta(h(m)\soplus s)],\nonumber\\
+%	&[h(m)\soplus s, \Delta(m\soplus s)],
 %\end{align}
 %with the identities,
 %\begin{align}
-%	\Delta(m\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(m\oplus s) \oplus h(m)\oplus h(s),\nonumber\\
-%	\Delta(h(m)\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(h(m)\oplus s) \oplus m\oplus h(s).
+%	\Delta(m\soplus s) &= \Delta(m)\soplus \Delta(s) \soplus h(m\soplus s) \soplus h(m)\soplus h(s),\nonumber\\
+%	\Delta(h(m)\soplus s) &= \Delta(m)\soplus \Delta(s) \soplus h(h(m)\soplus s) \soplus m\soplus h(s).
 %\end{align}
 %
 %\begin{align} 
-%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%	\Delta(m)\soplus \Delta(s) &= \Delta(m\soplus s) \soplus h(m\soplus s) \soplus h(s) \soplus h(m),\nonumber\\
 %\end{align}
 %
 %\begin{align} 
-%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%	\Delta(m)\soplus \Delta(s) &= \Delta(m\soplus s) \soplus h(m\soplus s) \soplus h(s) \soplus h(m),\nonumber\\
 %\end{align}
 %
 %---
 %
 %
 %\begin{align}
-%	\Delta(m_\pi \oplus s) &= h(m_\pi \oplus s) \oplus m_\pi \oplus s,\nonumber\\
-%	\Delta(m_\pi) \oplus \Delta(s) &= h(m_\pi) \oplus h(s) \oplus m_\pi \oplus s,
+%	\Delta(m_\pi \soplus s) &= h(m_\pi \soplus s) \soplus m_\pi \soplus s,\nonumber\\
+%	\Delta(m_\pi) \soplus \Delta(s) &= h(m_\pi) \soplus h(s) \soplus m_\pi \soplus s,
 %\end{align}
 %
 %Assume the message is known,
 %\begin{align}
-%	\Delta(m_\pi \oplus s_\pi) &= h(m_\pi \oplus s_\pi) \oplus m_\pi \oplus s_\pi \nonumber\\
-%	&= \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s_\pi.
+%	\Delta(m_\pi \soplus s_\pi) &= h(m_\pi \soplus s_\pi) \soplus m_\pi \soplus s_\pi \nonumber\\
+%	&= \Delta(m_\pi) \soplus \Delta(s) \soplus h(m_\pi \soplus s) \soplus m_\pi \soplus s_\pi.
 %\end{align}
 %
 %\begin{align}
-%	\Delta(m_\pi \oplus s_\pi) = \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s.
+%	\Delta(m_\pi \soplus s_\pi) = \Delta(m_\pi) \soplus \Delta(s) \soplus h(m_\pi \soplus s) \soplus m_\pi \soplus s.
 %\end{align}
 %
 %%\begin{align}
-%%	\Delta(s_\pi) &= h(s_\pi) \oplus s_\pi, \nonumber\\
-%%	\Delta(s) &= \Delta(s_\pi) \oplus h(s_\pi) \oplus s_\pi.
+%%	\Delta(s_\pi) &= h(s_\pi) \soplus s_\pi, \nonumber\\
+%%	\Delta(s) &= \Delta(s_\pi) \soplus h(s_\pi) \soplus s_\pi.
 %%\end{align}
 %
 %
 %Hence (2): given $\Delta(m_\pi)$ Alice can extract the message via,
 %\begin{align}
-%		m = \Delta(\pi \oplus m) \oplus \Delta(s) \oplus h(\pi \oplus m) \oplus \pi,
+%		m = \Delta(\pi \soplus m) \soplus \Delta(s) \soplus h(\pi \soplus m) \soplus \pi,
 %\end{align}
 %
 %--
 %
 %\begin{align}
-%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi \oplus s_\pi)],\nonumber\\
-%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi ) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi  \oplus s_\pi))],\nonumber\\
+%	&[h(m_\pi \soplus s_\pi), \Delta(m_\pi \soplus s_\pi)],\nonumber\\
+%	&[h(m_\pi \soplus s_\pi), \Delta(m_\pi ) \soplus \Delta(s_\pi) \soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi  \soplus s_\pi))],\nonumber\\
 %\end{align}
 %
 %\begin{align}
-%	h(m_\pi \oplus s_\pi) &= \Delta(m_\pi) \oplus \Delta(s_\pi) \nonumber\\
-%	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi),\nonumber\\
+%	h(m_\pi \soplus s_\pi) &= \Delta(m_\pi) \soplus \Delta(s_\pi) \nonumber\\
+%	&\soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi \soplus s_\pi),\nonumber\\
 %\end{align}
 
 \section{Digital signatures}
 
 To sign message \mbox{$m\in\{0,1\}^n$} Alice makes public the differentially encoded, signed message $\Delta(m_\pi)$ and signature,
 \begin{align}
-	 \mathtt{sig}_\pi(m) = h(m_\pi \oplus \mathtt{sk}_\pi).
+	 \mathtt{sig}_\pi(m) = h(m_\pi \soplus \mathtt{sk}_\pi).
 \end{align}
 The signature has the property that when combined with public information it reveals the hash of the message being signed,
 \begin{align}
-	 \mathtt{sig}_\pi(m) \oplus \Delta(m) \oplus \Delta(\mathtt{sk}_\pi) = h(m).
+	 \mathtt{sig}_\pi(m) \soplus \Delta(m) \soplus \Delta(\mathtt{sk}_\pi) = h(m).
 \end{align}
 Employing the modulated public key $\Delta(\mathtt{sk}_\pi)$,
 \begin{align}
-	\mathtt{sk}_\pi \equiv \mathtt{sk} \oplus h(\mathtt{pk}),
+	\mathtt{sk}_\pi \equiv \mathtt{sk} \soplus h(\mathtt{pk}),
 \end{align}
 prevents the signature from revealing the trapdoor $h(\mathtt{sk})$ which unlocks the public key,
 \begin{align}
-	h(\mathtt{sk}) \oplus \Delta(\mathtt{sk}) &= \mathtt{sk},\nonumber\\
-	h(\mathtt{sk}_\pi) \oplus \Delta(\mathtt{sk}) &\neq \mathtt{sk}.
+	h(\mathtt{sk}) \soplus \Delta(\mathtt{sk}) &= \mathtt{sk},\nonumber\\
+	h(\mathtt{sk}_\pi) \soplus \Delta(\mathtt{sk}) &\neq \mathtt{sk}.
 \end{align}
 
 %To verify Alice's signature Bob evaluates,
 %\begin{align}
-%	\mathtt{sig}_\pi(m) \oplus \Delta(s_\pi) \oplus \Delta(m) = m,
+%	\mathtt{sig}_\pi(m) \soplus \Delta(s_\pi) \soplus \Delta(m) = m,
 %\end{align}
 %revealing $m$, which can be compared against its hash to verify the signature's validity.
 
 %Taking Eq.~\eqref{eq:diff_sol} and grouping public information on the right we obtain,
 %\begin{align}
-%	h(m\oplus s) &= \Delta(m)\oplus \Delta(s),\nonumber\\
-%	\mathtt{sig} &= h(m\oplus s).
+%	h(m\soplus s) &= \Delta(m)\soplus \Delta(s),\nonumber\\
+%	\mathtt{sig} &= h(m\soplus s).
 %\end{align}
 
 \section{Encryption}
@@ -707,21 +716,21 @@ For asymmetric encryption we reverse the roles of $m$ and $h(m)$. Bob wishes to 
 \end{align}
 Alice now decrypts using the message hash $h(m)$ to reveal the original message,
 \begin{align}
-	\Delta(s_\pi) \oplus \Delta(m) \oplus h(m) = m.
+	\Delta(s_\pi) \soplus \Delta(m) \soplus h(m) = m.
 \end{align}
 
 \subsection{Multi-sigs}
 
 Signatures are commutative, additive and composable.
 \begin{align}
-	\mathtt{sig}_\pi(m) = \Delta(s_\pi) \oplus h(m),
+	\mathtt{sig}_\pi(m) = \Delta(s_\pi) \soplus h(m),
 \end{align}
 
 \subsection{Key-establishment \& secret sharing}
 
 Using the asymmetric encryption protocol, Alice finally communicates the verification hash,
 \begin{align}
-	\mathtt{key} = h(\mathtt{sk}\oplus m),
+	\mathtt{key} = h(\mathtt{sk}\soplus m),
 \end{align}
 back to Bob, who also able to verify its validity. The verification hash now provides confirmation of a jointly prepared hash-based random number given by  the XOR-salted hash of Alice's secret key and Bob's chosen salt, which cannot be spoofed by either.
 
@@ -731,28 +740,28 @@ back to Bob, who also able to verify its validity. The verification hash now pro
 
 Differentially encoded tuples are composable under bitwise XOR,
 \begin{align}
-	[x,\Delta(x)] \oplus [y,\Delta(y)] = [x\oplus y, \Delta(x)\oplus \Delta(y)],
+	[x,\Delta(x)] \soplus [y,\Delta(y)] = [x\soplus y, \Delta(x)\soplus \Delta(y)],
 \end{align}
-via the commutativity of $\oplus$.
+via the commutativity of $\soplus$.
 
 Compare above rhs,
 \begin{align}
-	h(x\oplus y) \oplus x \oplus y = h(x \oplus y) \oplus h(x) \oplus h(y).
+	h(x\soplus y) \soplus x \soplus y = h(x \soplus y) \soplus h(x) \soplus h(y).
 \end{align}
 
 $\pi$ known by inverting $\pi$ and multiplying the tuple elements to confirm consistency. For unknown or incorrect $\pi$ hash verification fails.
 
-The bit permutation operator, $\pi(\cdot)$, is distribute over the bit-wise XOR operator, $\oplus$,
+The bit permutation operator, $\pi(\cdot)$, is distribute over the bit-wise XOR operator, $\soplus$,
 \begin{align}
-	\pi(x)\oplus \pi(y) = \pi(x\oplus y).
+	\pi(x)\soplus \pi(y) = \pi(x\soplus y).
 \end{align}
 Hence differential encoding relationships are preserved under the uniform action of $\pi$,
 \begin{align}
-	[x,x\oplus y] &\sim [\pi(x), \pi(x\oplus y)],
+	[x,x\soplus y] &\sim [\pi(x), \pi(x\soplus y)],
 \end{align}
 but are in general not preserved under non-uniform action of $\pi$,
 \begin{align}
-	[x,x\oplus y] \not\sim [\pi(x), x\oplus y].
+	[x,x\soplus y] \not\sim [\pi(x), x\soplus y].
 \end{align}
 We'll employ the shorthand,
 \begin{align}
@@ -760,36 +769,70 @@ We'll employ the shorthand,
 \end{align}
 to denote the uniform action of $\pi$ over a differential code.
 
-While permutations are distributive over $\oplus$ they do not commute through hashes,
+While permutations are distributive over $\soplus$ they do not commute through hashes,
 \begin{align}
 	\pi(h(x)) \neq h(\pi(x)).	
 \end{align}
 
 \begin{align}
-	\Delta(\pi(x\oplus y)) = h(\pi(x\oplus y)) \oplus \pi(x) \oplus \pi(y).
+	\Delta(\pi(x\soplus y)) = h(\pi(x\soplus y)) \soplus \pi(x) \soplus \pi(y).
 \end{align}
 
 \subsection{Symmetric encryption}
 
 Consider a single shared secret random bit-string differentially encoded against unique, single-use random bit-strings, also secret,
 \begin{align}
-	&\mathcal{X}: s,x_i \in \{0,1\}^n,\nonumber\\
-	&[s,s\oplus x_i].
+	s &\in \{0,1\}^n,,\nonumber\\
+	\mathcal{X}_i &\in \{0,1\}^n,\nonumber\\
+	&[s,s\soplus \mathcal{X}_i].
 \end{align}
-Upon publicly communicating only the differential terms other parties in possession of $s$ can decode all $x_i$. Upon repeating using independent samples of $x_i$ but with the same secret Eve is in possession of $s\oplus x_i$ for each sample. Combining multiple interceptions Eve can produce,
+
+Two parties $\{i,j\}$ publicly share their differential terms yielding the respective private and public terms,
 \begin{align}
-	s\oplus x_i \oplus s \oplus x_j &= x_i \oplus x_j,
+	\mathtt{Priv}:\, &\{s,\mathcal{X}_i,\mathcal{X}_j\},\nonumber\\
+	\mathtt{Pub}:\, &\{s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, \mathcal{X}_i\soplus\mathcal{X}_j \},
+\end{align}
+where,
+\begin{align}
+	\mathcal{X}_{i,j} = \mathcal{X}_i\soplus\mathcal{X}_j,
+\end{align}
+is a jointly established publicly-known random variable obtained under addition of both parties' communicated differential terms.
+
+If $i$ wishes to send a message to $j$ they prepare,
+\begin{align}
+	[s, s\soplus m \soplus \mathcal{X}_i],
+\end{align}
+which can be differentially decoded from $s$ given $\mathcal{X}_i$.
+
+Publicly communicating the differential term, the publicly and privately known objects are, 
+\begin{align}
+	\mathtt{Priv}:\, &\{s,m,\mathcal{X}_i,\mathcal{X}_j\},\nonumber\\
+	\mathtt{Pub}:\, &\{s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, \mathcal{X}_{i,j},\nonumber\\
+	 &s\soplus m\soplus \mathcal{X}_i, s\soplus m\soplus \mathcal{X}_j,\nonumber\\
+	 &m\soplus \mathcal{X}_j, m\soplus\mathcal{X}_i \}.
+\end{align}
+Now public information is unable to reveal $m$ or $s$ while the additional private information can.
+
+The spaces of private and public information form groups with group generators given by privately held and publicly shared objects,
+\begin{align}
+	G_\mathrm{priv} &\sim \mathrm{GF}(11) \sim \langle s,m,\mathcal{X}_i,\mathcal{X}_j \rangle, \nonumber\\
+	G_\mathrm{pub} &\sim \mathrm{GF}(7) \sim \langle s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, m\soplus\mathcal{X}_i \rangle.
+\end{align}
+
+Upon publicly communicating only the differential terms other parties in possession of $s$ can decode all $x_i$. Upon repeating using independent samples of $x_i$ but with the same secret Eve is in possession of $s\soplus x_i$ for each sample. Combining multiple interceptions Eve can produce,
+\begin{align}
+	s\soplus x_i \soplus s \soplus x_j &= x_i \soplus x_j,
 \end{align}
 which is independent of $s$ and reveals no information about $s$ in the absence of knowing any $x_i$. Thus over $n$ iterations the parties securely share $\{x\}$ where all $x_i$ are statistically independent, maximum entropy random variables. Concatenation enables a finite length shared secret to facilitate the secure sharing of arbitrarily long random bit-strings which can subsequently be employed in a one-time pad cipher, affording statistical security bounded by the entropy rate.
 
-The security of $s\oplus x$ can be information-theoretically interpreted in terms of the mutual information between the secret $s$ and public information in $s\oplus x$. For random variables $X$ and $Y$ their mutual information is given by,
+The security of $s\soplus x$ can be information-theoretically interpreted in terms of the mutual information between the secret $s$ and public information in $s\soplus x$. For random variables $X$ and $Y$ their mutual information is given by,
 \begin{align}
 	I(X;Y) = H(X) + H(Y) - H(X,Y).	
 \end{align}
 Let,
 \begin{align}
  	&X\equiv \{s,x\},\nonumber\\
- 	&Y\equiv s\oplus x,
+ 	&Y\equiv s\soplus x,
 \end{align} 
 where $X$ denotes private information and $Y$ public information. We have the identities,
 \begin{align}
@@ -813,7 +856,7 @@ QKD can be equivalently conceptualised. Consider the entanglement-based E91 QKD 
 \end{align}
 Post-selecting on outcomes where the measurement bases chosen by Alice and Bob are consistent, their respective measurement outcomes are dictated by parity constraints,
 \begin{align}
-	m_A\oplus m_B = p_b,\quad (b_A=b_B,\, p_b\in\{0,1\}).
+	m_A\soplus m_B = p_b,\quad (b_A=b_B,\, p_b\in\{0,1\}).
 \end{align}
 where $p_b$ is imposed by the choice of Bell pair and measurement basis. Under this model for QKD security is statistical and associated with the entropy of $b$ and $m$, mediated by entanglement enforcing their parity constraints.
 
@@ -821,38 +864,38 @@ where $p_b$ is imposed by the choice of Bell pair and measurement basis. Under t
 
 A pair of bit-strings $\{x,y\}$ may be expressed differentially using the tuple,
 \begin{align}
-	[x,x\oplus y]_\oplus,
+	[x,x\soplus y]_\soplus,
 \end{align}
-where the differential term $x\oplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
+where the differential term $x\soplus y$ alone reveals no information about $x$ or $y$ while the non-differential term unlocks the code to reveal both. The validity of differentially encoded tuples may be trivially confirmed given knowledge of both terms.
 
 We define the differential hash operators,
 \begin{align}
-	\Delta(x) &= h(x)\oplus x,\nonumber\\
-	\Delta_\pi(x) &= h(x_\pi)\oplus x,
+	\Delta(x) &= h(x)\soplus x,\nonumber\\
+	\Delta_\pi(x) &= h(x_\pi)\soplus x,
 \end{align}
 where $\pi\in S_n$ for $x\in\{0,1\}^n$ is a permutation over the elements of $x$. These encode a hash's image and pre-image together while revealing neither assuming hash pre-image resistance. We have the properties,
 \begin{align}
-	h(x) &= \Delta(x) \oplus x,\nonumber\\
-	x &= \Delta(x) \oplus h(x).
+	h(x) &= \Delta(x) \soplus x,\nonumber\\
+	x &= \Delta(x) \soplus h(x).
 \end{align}
 The $\Delta$ operator inherits pre-image resistance from $h(\cdot)$. Knowing $\Delta(x)$ alone reveals neither $x$ nor $h(x)$, however additionally knowing $x$ or $h(x)$ enables verification of $\Delta(x)$. Finding $x$ for given $\Delta(x)$ reduces to the pre-image resistance of the hash function $h(\cdot)$.
 
 The non-differentially encoded tuple $\{x,h(x)\}$ allows $x$ to unlock $h(x)$, while $h(x)$ cannot unlock $x$. The second element reveals $h(x)$ alone, but not $x$ via pre-image resistance. Under the differential encoding,
 \begin{align}
-	[x,\Delta(x)]_\oplus =[x,h(x)\oplus x]_\oplus,
+	[x,\Delta(x)]_\soplus =[x,h(x)\soplus x]_\soplus,
 \end{align}
 the second element reveals neither $x$ nor $h(x)$, while the first element reveals both, given that $h(x)$ can be efficiently forward-evaluated. Alternately, under the differential encoding,
 \begin{align}
-	[h(x),\Delta(x)] = [h(x),h(x)\oplus x],
+	[h(x),\Delta(x)] = [h(x),h(x)\soplus x],
 \end{align}
 the non-differential term $h(x)$ affords unlocking the code but does not on its own reveal $x$ via hash pre-image resistance. Under both encodings knowing either $x$ or $h(x)$ alone enables verification.
 
 The differential operator is distributive only over its unhashed components,
 \begin{align}
-	\Delta(x\oplus y) &= h(x\oplus y)\oplus x\oplus y \nonumber\\
-	\Delta(x)\oplus\Delta(y) &= h(x)\oplus h(y)\oplus x\oplus y.
+	\Delta(x\soplus y) &= h(x\soplus y)\soplus x\soplus y \nonumber\\
+	\Delta(x)\soplus\Delta(y) &= h(x)\soplus h(y)\soplus x\soplus y.
 \end{align}
-%Thus knowing $h(x\oplus y)$ does not unlock the object, whereas knowing both $x$ and $y$ does.
+%Thus knowing $h(x\soplus y)$ does not unlock the object, whereas knowing both $x$ and $y$ does.
 
 %Tuples of the form,
 %\begin{align}
@@ -867,43 +910,43 @@ The differential operator is distributive only over its unhashed components,
 
 %\subsection{Algebraic properties}
 
-The symmetric difference between $\Delta(x\oplus y)$ and $\Delta(x)\oplus\Delta(y)$ gives the `distributor' (equivalent of commutator for distributivity),
+The symmetric difference between $\Delta(x\soplus y)$ and $\Delta(x)\soplus\Delta(y)$ gives the `distributor' (equivalent of commutator for distributivity),
 \begin{align}
-	\Delta(x\oplus y)\oplus \Delta(x)\oplus \Delta(y) = h(x\oplus y) \oplus h(x)\oplus h(y),
+	\Delta(x\soplus y)\soplus \Delta(x)\soplus \Delta(y) = h(x\soplus y) \soplus h(x)\soplus h(y),
 \end{align}
-defining the distributivity of $\Delta$ operator over the action of $\oplus$.
+defining the distributivity of $\Delta$ operator over the action of $\soplus$.
 
 Standard differential codes are composable,
 \begin{align}
-	[x,x\oplus y)]_\oplus \oplus [x',x'\oplus y']_\oplus\nonumber\\
-	\sim [x\oplus x', x\oplus y \oplus x' \oplus y']_\oplus.
+	[x,x\soplus y)]_\soplus \soplus [x',x'\soplus y']_\soplus\nonumber\\
+	\sim [x\soplus x', x\soplus y \soplus x' \soplus y']_\soplus.
 \end{align}
 For differential hash codes,
 \begin{align}
-	[x,\Delta(x)]_\oplus,\nonumber\\
-	[y,\Delta(y)]_\oplus,
+	[x,\Delta(x)]_\soplus,\nonumber\\
+	[y,\Delta(y)]_\soplus,
 \end{align}
 we have distinct composition rules,
 \begin{align}
-	[x\oplus y,\Delta(x\oplus y)]_H,\nonumber\\
-	[x\oplus y,\Delta(x) \oplus \Delta(y))]_\oplus.
+	[x\soplus y,\Delta(x\soplus y)]_H,\nonumber\\
+	[x\soplus y,\Delta(x) \soplus \Delta(y))]_\soplus.
 \end{align}
-The $[\cdot,\cdot]_H$ composition is verifiable by hashing the left hand term. The $[\cdot,\cdot]_\oplus$ composition is not hash-verifiable but preserves all differential encoding constraints.
+The $[\cdot,\cdot]_H$ composition is verifiable by hashing the left hand term. The $[\cdot,\cdot]_\soplus$ composition is not hash-verifiable but preserves all differential encoding constraints.
 
-Permutations $\pi$ are distributive over $\oplus$ but not commutative,
+Permutations $\pi$ are distributive over $\soplus$ but not commutative,
 \begin{align}
-	\pi(x\oplus y) &= \pi(x) \oplus \pi(y),\nonumber\\
-	\pi(x) \oplus y &\neq x \oplus \pi(y),
+	\pi(x\soplus y) &= \pi(x) \soplus \pi(y),\nonumber\\
+	\pi(x) \soplus y &\neq x \soplus \pi(y),
 \end{align}
-whereas $\oplus$ is commutative but not distributive (in general, depending on parity of number of terms under distribution),
+whereas $\soplus$ is commutative but not distributive (in general, depending on parity of number of terms under distribution),
 \begin{align}
-	x\oplus y &= y \oplus x.
+	x\soplus y &= y \soplus x.
 \end{align}
 
 \begin{itemize}
-	\item $h(m\oplus s)$ will reveal the private $h(s)$ for chosen $m=\mathbf{0}$.
-	\item $h(m\oplus s \oplus x)$ will reveal the private $h(x)$ for chosen $m=x$ if $x$ is public.
-	\item $h(\pi(m\oplus s)) = h(m_\pi \oplus s_\pi)$ can only reveal $h(s_\pi)$ (not secret) for public $\pi$ and chosen $m$, but cannot reveal secret $h(s)$.
+	\item $h(m\soplus s)$ will reveal the private $h(s)$ for chosen $m=\mathbf{0}$.
+	\item $h(m\soplus s \soplus x)$ will reveal the private $h(x)$ for chosen $m=x$ if $x$ is public.
+	\item $h(\pi(m\soplus s)) = h(m_\pi \soplus s_\pi)$ can only reveal $h(s_\pi)$ (not secret) for public $\pi$ and chosen $m$, but cannot reveal secret $h(s)$.
 \end{itemize}
 
 \section{Asymmetric codes}
@@ -923,7 +966,7 @@ where $\mathtt{sk}$ be a secret bit-string, $h(\{0,1\}^n)\to\{0,1\}^n$ an $n$-bi
 %\end{align}
 %is a non-unlocking public identifier, where,
 %\begin{align}
-%	x_\pi \equiv x\oplus h(\pi).
+%	x_\pi \equiv x\soplus h(\pi).
 %\end{align}
 Since $\mathtt{pk} = \Delta(\mathtt{sk})$ is public both $\mathtt{sk}$ and $h(\mathtt{sk})$ must be private to prevent unlocking the public key, both acting as trapdoors for the differential encoding.
 
@@ -931,115 +974,115 @@ Since $\mathtt{pk} = \Delta(\mathtt{sk})$ is public both $\mathtt{sk}$ and $h(\m
 %The signature confirms consistency between private and public information while revealing only $h(\mathtt{sk}_pi)$ about the private key. To use Alice's private key as $s$ we inhibit the disclosure of $\mathtt{sk}$ by applying a publicly known pre-image manipulation prevents the signature from revealing the secret key, instead using,
 
 \begin{align}
-	[m_\pi \oplus s_\pi, \Delta_\pi(m_\pi\oplus s_\pi)],
+	[m_\pi \soplus s_\pi, \Delta_\pi(m_\pi\soplus s_\pi)],
 \end{align}
 
 \begin{align}
-	\Delta_\pi(m_\pi\oplus s_\pi) &= \Delta_\pi(m_\pi) \Delta_\pi(s_\pi) \nonumber\\
-	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi)
+	\Delta_\pi(m_\pi\soplus s_\pi) &= \Delta_\pi(m_\pi) \Delta_\pi(s_\pi) \nonumber\\
+	&\soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi \soplus s_\pi)
 \end{align}
 
 %Hence for,
 %\begin{align}
-%	[\mathtt{sig}, \Delta_\pi(m_\pi) \oplus \Delta(s_\pi)],
+%	[\mathtt{sig}, \Delta_\pi(m_\pi) \soplus \Delta(s_\pi)],
 %\end{align}
 %we require,
 %\begin{align}
-%	h(\mathtt{sig}) = \Delta_\pi(m_\pi) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi).
+%	h(\mathtt{sig}) = \Delta_\pi(m_\pi) \soplus \Delta(s_\pi) \soplus h(m_\pi) \soplus h(s_\pi).
 %\end{align}
 
 
 %--
 %We will employ the two alternate differential encodings as asymmetric primitives,
 %\begin{align}
-%	&[m\oplus s, \Delta(h(m)\oplus s)],\nonumber\\
-%	&[h(m)\oplus s, \Delta(m\oplus s)],
+%	&[m\soplus s, \Delta(h(m)\soplus s)],\nonumber\\
+%	&[h(m)\soplus s, \Delta(m\soplus s)],
 %\end{align}
 %with the identities,
 %\begin{align}
-%	\Delta(m\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(m\oplus s) \oplus h(m)\oplus h(s),\nonumber\\
-%	\Delta(h(m)\oplus s) &= \Delta(m)\oplus \Delta(s) \oplus h(h(m)\oplus s) \oplus m\oplus h(s).
+%	\Delta(m\soplus s) &= \Delta(m)\soplus \Delta(s) \soplus h(m\soplus s) \soplus h(m)\soplus h(s),\nonumber\\
+%	\Delta(h(m)\soplus s) &= \Delta(m)\soplus \Delta(s) \soplus h(h(m)\soplus s) \soplus m\soplus h(s).
 %\end{align}
 %
 %\begin{align} 
-%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%	\Delta(m)\soplus \Delta(s) &= \Delta(m\soplus s) \soplus h(m\soplus s) \soplus h(s) \soplus h(m),\nonumber\\
 %\end{align}
 %
 %\begin{align} 
-%	\Delta(m)\oplus \Delta(s) &= \Delta(m\oplus s) \oplus h(m\oplus s) \oplus h(s) \oplus h(m),\nonumber\\
+%	\Delta(m)\soplus \Delta(s) &= \Delta(m\soplus s) \soplus h(m\soplus s) \soplus h(s) \soplus h(m),\nonumber\\
 %\end{align}
 %
 %---
 %
 %
 %\begin{align}
-%	\Delta(m_\pi \oplus s) &= h(m_\pi \oplus s) \oplus m_\pi \oplus s,\nonumber\\
-%	\Delta(m_\pi) \oplus \Delta(s) &= h(m_\pi) \oplus h(s) \oplus m_\pi \oplus s,
+%	\Delta(m_\pi \soplus s) &= h(m_\pi \soplus s) \soplus m_\pi \soplus s,\nonumber\\
+%	\Delta(m_\pi) \soplus \Delta(s) &= h(m_\pi) \soplus h(s) \soplus m_\pi \soplus s,
 %\end{align}
 %
 %Assume the message is known,
 %\begin{align}
-%	\Delta(m_\pi \oplus s_\pi) &= h(m_\pi \oplus s_\pi) \oplus m_\pi \oplus s_\pi \nonumber\\
-%	&= \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s_\pi.
+%	\Delta(m_\pi \soplus s_\pi) &= h(m_\pi \soplus s_\pi) \soplus m_\pi \soplus s_\pi \nonumber\\
+%	&= \Delta(m_\pi) \soplus \Delta(s) \soplus h(m_\pi \soplus s) \soplus m_\pi \soplus s_\pi.
 %\end{align}
 %
 %\begin{align}
-%	\Delta(m_\pi \oplus s_\pi) = \Delta(m_\pi) \oplus \Delta(s) \oplus h(m_\pi \oplus s) \oplus m_\pi \oplus s.
+%	\Delta(m_\pi \soplus s_\pi) = \Delta(m_\pi) \soplus \Delta(s) \soplus h(m_\pi \soplus s) \soplus m_\pi \soplus s.
 %\end{align}
 %
 %%\begin{align}
-%%	\Delta(s_\pi) &= h(s_\pi) \oplus s_\pi, \nonumber\\
-%%	\Delta(s) &= \Delta(s_\pi) \oplus h(s_\pi) \oplus s_\pi.
+%%	\Delta(s_\pi) &= h(s_\pi) \soplus s_\pi, \nonumber\\
+%%	\Delta(s) &= \Delta(s_\pi) \soplus h(s_\pi) \soplus s_\pi.
 %%\end{align}
 %
 %
 %Hence (2): given $\Delta(m_\pi)$ Alice can extract the message via,
 %\begin{align}
-%		m = \Delta(\pi \oplus m) \oplus \Delta(s) \oplus h(\pi \oplus m) \oplus \pi,
+%		m = \Delta(\pi \soplus m) \soplus \Delta(s) \soplus h(\pi \soplus m) \soplus \pi,
 %\end{align}
 %
 %--
 %
 %\begin{align}
-%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi \oplus s_\pi)],\nonumber\\
-%	&[h(m_\pi \oplus s_\pi), \Delta(m_\pi ) \oplus \Delta(s_\pi) \oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi  \oplus s_\pi))],\nonumber\\
+%	&[h(m_\pi \soplus s_\pi), \Delta(m_\pi \soplus s_\pi)],\nonumber\\
+%	&[h(m_\pi \soplus s_\pi), \Delta(m_\pi ) \soplus \Delta(s_\pi) \soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi  \soplus s_\pi))],\nonumber\\
 %\end{align}
 %
 %\begin{align}
-%	h(m_\pi \oplus s_\pi) &= \Delta(m_\pi) \oplus \Delta(s_\pi) \nonumber\\
-%	&\oplus h(m_\pi) \oplus h(s_\pi) \oplus h(m_\pi \oplus s_\pi),\nonumber\\
+%	h(m_\pi \soplus s_\pi) &= \Delta(m_\pi) \soplus \Delta(s_\pi) \nonumber\\
+%	&\soplus h(m_\pi) \soplus h(s_\pi) \soplus h(m_\pi \soplus s_\pi),\nonumber\\
 %\end{align}
 
 \section{Digital signatures}
 
 To sign message \mbox{$m\in\{0,1\}^n$} Alice makes public the differentially encoded, signed message $\Delta(m_\pi)$ and signature,
 \begin{align}
-	 \mathtt{sig}_\pi(m) = h(m_\pi \oplus \mathtt{sk}_\pi).
+	 \mathtt{sig}_\pi(m) = h(m_\pi \soplus \mathtt{sk}_\pi).
 \end{align}
 The signature has the property that when combined with public information it reveals the hash of the message being signed,
 \begin{align}
-	 \mathtt{sig}_\pi(m) \oplus \Delta(m) \oplus \Delta(\mathtt{sk}_\pi) = h(m).
+	 \mathtt{sig}_\pi(m) \soplus \Delta(m) \soplus \Delta(\mathtt{sk}_\pi) = h(m).
 \end{align}
 Employing the modulated public key $\Delta(\mathtt{sk}_\pi)$,
 \begin{align}
-	\mathtt{sk}_\pi \equiv \mathtt{sk} \oplus h(\mathtt{pk}),
+	\mathtt{sk}_\pi \equiv \mathtt{sk} \soplus h(\mathtt{pk}),
 \end{align}
 prevents the signature from revealing the trapdoor $h(\mathtt{sk})$ which unlocks the public key,
 \begin{align}
-	h(\mathtt{sk}) \oplus \Delta(\mathtt{sk}) &= \mathtt{sk},\nonumber\\
-	h(\mathtt{sk}_\pi) \oplus \Delta(\mathtt{sk}) &\neq \mathtt{sk}.
+	h(\mathtt{sk}) \soplus \Delta(\mathtt{sk}) &= \mathtt{sk},\nonumber\\
+	h(\mathtt{sk}_\pi) \soplus \Delta(\mathtt{sk}) &\neq \mathtt{sk}.
 \end{align}
 
 %To verify Alice's signature Bob evaluates,
 %\begin{align}
-%	\mathtt{sig}_\pi(m) \oplus \Delta(s_\pi) \oplus \Delta(m) = m,
+%	\mathtt{sig}_\pi(m) \soplus \Delta(s_\pi) \soplus \Delta(m) = m,
 %\end{align}
 %revealing $m$, which can be compared against its hash to verify the signature's validity.
 
 %Taking Eq.~\eqref{eq:diff_sol} and grouping public information on the right we obtain,
 %\begin{align}
-%	h(m\oplus s) &= \Delta(m)\oplus \Delta(s),\nonumber\\
-%	\mathtt{sig} &= h(m\oplus s).
+%	h(m\soplus s) &= \Delta(m)\soplus \Delta(s),\nonumber\\
+%	\mathtt{sig} &= h(m\soplus s).
 %\end{align}
 
 \section{Encryption}
@@ -1050,21 +1093,21 @@ For asymmetric encryption we reverse the roles of $m$ and $h(m)$. Bob wishes to 
 \end{align}
 Alice now decrypts using the message hash $h(m)$ to reveal the original message,
 \begin{align}
-	\Delta(s_\pi) \oplus \Delta(m) \oplus h(m) = m.
+	\Delta(s_\pi) \soplus \Delta(m) \soplus h(m) = m.
 \end{align}
 
 \subsection{Multi-sigs}
 
 Signatures are commutative, additive and composable.
 \begin{align}
-	\mathtt{sig}_\pi(m) = \Delta(s_\pi) \oplus h(m),
+	\mathtt{sig}_\pi(m) = \Delta(s_\pi) \soplus h(m),
 \end{align}
 
 \subsection{Key-establishment \& secret sharing}
 
 Using the asymmetric encryption protocol, Alice finally communicates the verification hash,
 \begin{align}
-	\mathtt{key} = h(\mathtt{sk}\oplus m),
+	\mathtt{key} = h(\mathtt{sk}\soplus m),
 \end{align}
 back to Bob, who also able to verify its validity. The verification hash now provides confirmation of a jointly prepared hash-based random number given by  the XOR-salted hash of Alice's secret key and Bob's chosen salt, which cannot be spoofed by either.
 
@@ -1074,28 +1117,28 @@ back to Bob, who also able to verify its validity. The verification hash now pro
 
 Differentially encoded tuples are composable under bitwise XOR,
 \begin{align}
-	[x,\Delta(x)] \oplus [y,\Delta(y)] = [x\oplus y, \Delta(x)\oplus \Delta(y)],
+	[x,\Delta(x)] \soplus [y,\Delta(y)] = [x\soplus y, \Delta(x)\soplus \Delta(y)],
 \end{align}
-via the commutativity of $\oplus$.
+via the commutativity of $\soplus$.
 
 Compare above rhs,
 \begin{align}
-	h(x\oplus y) \oplus x \oplus y = h(x \oplus y) \oplus h(x) \oplus h(y).
+	h(x\soplus y) \soplus x \soplus y = h(x \soplus y) \soplus h(x) \soplus h(y).
 \end{align}
 
 $\pi$ known by inverting $\pi$ and multiplying the tuple elements to confirm consistency. For unknown or incorrect $\pi$ hash verification fails.
 
-The bit permutation operator, $\pi(\cdot)$, is distribute over the bit-wise XOR operator, $\oplus$,
+The bit permutation operator, $\pi(\cdot)$, is distribute over the bit-wise XOR operator, $\soplus$,
 \begin{align}
-	\pi(x)\oplus \pi(y) = \pi(x\oplus y).
+	\pi(x)\soplus \pi(y) = \pi(x\soplus y).
 \end{align}
 Hence differential encoding relationships are preserved under the uniform action of $\pi$,
 \begin{align}
-	[x,x\oplus y] &\sim [\pi(x), \pi(x\oplus y)],
+	[x,x\soplus y] &\sim [\pi(x), \pi(x\soplus y)],
 \end{align}
 but are in general not preserved under non-uniform action of $\pi$,
 \begin{align}
-	[x,x\oplus y] \not\sim [\pi(x), x\oplus y].
+	[x,x\soplus y] \not\sim [\pi(x), x\soplus y].
 \end{align}
 We'll employ the shorthand,
 \begin{align}
@@ -1103,145 +1146,145 @@ We'll employ the shorthand,
 \end{align}
 to denote the uniform action of $\pi$ over a differential code.
 
-While permutations are distributive over $\oplus$ they do not commute through hashes,
+While permutations are distributive over $\soplus$ they do not commute through hashes,
 \begin{align}
 	\pi(h(x)) \neq h(\pi(x)).	
 \end{align}
 
 \begin{align}
-	\Delta(\pi(x\oplus y)) = h(\pi(x\oplus y)) \oplus \pi(x) \oplus \pi(y).
+	\Delta(\pi(x\soplus y)) = h(\pi(x\soplus y)) \soplus \pi(x) \soplus \pi(y).
 \end{align}
 
 \section{From other document}
 
 \subsubsection{Notes}
 
-If $\Delta(x)=h(x)\oplus x$ is public information both $x$ and $h(x)$ must be private.
+If $\Delta(x)=h(x)\soplus x$ is public information both $x$ and $h(x)$ must be private.
 
 Decrypt $m$ with $h(m)$ requires the locking construction,
 \begin{align}
-	&[h(m), m\oplus h(m)]_\oplus	= [h(m), \Delta(m)]_\oplus,\nonumber\\
-	&[s\oplus h(m), \Delta(s) \oplus \Delta(m)]_\oplus,\nonumber\\
-	&[s\oplus h(m), \Delta(s\oplus h(m))]_\oplus \nonumber\\
-	&[s\oplus h(m), \Delta(s) \oplus \Delta(m) \oplus h(s\oplus h(m)) \oplus h(m) \oplus h(s)]_\oplus,\nonumber\\
-%	&[s\oplus h(m), \Delta(s) \oplus \Delta(m) \oplus  \oplus h(m) \oplus h(s)]_\oplus
+	&[h(m), m\soplus h(m)]_\soplus	= [h(m), \Delta(m)]_\soplus,\nonumber\\
+	&[s\soplus h(m), \Delta(s) \soplus \Delta(m)]_\soplus,\nonumber\\
+	&[s\soplus h(m), \Delta(s\soplus h(m))]_\soplus \nonumber\\
+	&[s\soplus h(m), \Delta(s) \soplus \Delta(m) \soplus h(s\soplus h(m)) \soplus h(m) \soplus h(s)]_\soplus,\nonumber\\
+%	&[s\soplus h(m), \Delta(s) \soplus \Delta(m) \soplus  \soplus h(m) \soplus h(s)]_\soplus
 \end{align}
 if $\Delta(m)$ is public.
 
 
 This does not unlock from known $\pi$,
 \begin{align}
-	[h(\pi(m)), \pi(m) \oplus h(m)]_\oplus
+	[h(\pi(m)), \pi(m) \soplus h(m)]_\soplus
 \end{align}
 
 This unlocks,
 \begin{align}
-	[h(\pi(s \oplus m)), \Delta(s \oplus m)]_\oplus
+	[h(\pi(s \soplus m)), \Delta(s \soplus m)]_\soplus
 \end{align}
 
 %Equivalently,
 %\begin{align}
-%	&[h(s\oplus h(m)), \Delta(s\oplus h(m))]_\oplus \nonumber\\
-%	&[s \oplus h(m), \Delta(s) \oplus \Delta(m)]_\oplus \nonumber\\
-%	&[\pi(s) \oplus h(m), \Delta(s) \oplus \Delta(m)]_\oplus \to m \nonumber\\
-%	&[\pi(s) \oplus \pi(h(m)), \Delta(s) \oplus \pi(\Delta(m))]_\oplus \to m \nonumber\\
+%	&[h(s\soplus h(m)), \Delta(s\soplus h(m))]_\soplus \nonumber\\
+%	&[s \soplus h(m), \Delta(s) \soplus \Delta(m)]_\soplus \nonumber\\
+%	&[\pi(s) \soplus h(m), \Delta(s) \soplus \Delta(m)]_\soplus \to m \nonumber\\
+%	&[\pi(s) \soplus \pi(h(m)), \Delta(s) \soplus \pi(\Delta(m))]_\soplus \to m \nonumber\\
 %\end{align}
 %unlocks for known $\Delta(\pi(s))$ (private).
 
 Want to decrypt with,
 \begin{align}
-	h(\pi(s\oplus h(m)) &= \Delta(\pi(s\oplus h(m))) \nonumber\\
-	&\oplus \pi(s) \oplus \pi(h(m)).
+	h(\pi(s\soplus h(m)) &= \Delta(\pi(s\soplus h(m))) \nonumber\\
+	&\soplus \pi(s) \soplus \pi(h(m)).
 \end{align}
 
 \begin{align}
-	[h(m), \Delta(\pi(m))\oplus \Delta(\pi(s))]_\oplus
+	[h(m), \Delta(\pi(m))\soplus \Delta(\pi(s))]_\soplus
 \end{align}
 unlocks for known $\Delta(\pi(s))$ (private).
 
 \begin{align}
-	\Delta(\pi(m))\oplus \Delta(\pi(s))	= \Delta
+	\Delta(\pi(m))\soplus \Delta(\pi(s))	= \Delta
 \end{align}
 
 
 \begin{align}
-	&\mathtt{sig} = \Delta(m) = \pi(m) \oplus h(\pi(m)) \nonumber\\
-	&\pi(m) = \mathtt{sig} \oplus h(\pi(m)) 
+	&\mathtt{sig} = \Delta(m) = \pi(m) \soplus h(\pi(m)) \nonumber\\
+	&\pi(m) = \mathtt{sig} \soplus h(\pi(m)) 
 \end{align}
 
 \subsection{Digital signatures}
 
 Consider parties Alice and Bob where Alice wants to sign the message \mbox{$m\in \{0,1\}^n$}. Alice prepares the signature,
 \begin{align}
-	\mathtt{sig}(m) &= \{\pi(m), \Delta(m), h(\mathtt{sk} \oplus m)\}.
+	\mathtt{sig}(m) &= \{\pi(m), \Delta(m), h(\mathtt{sk} \soplus m)\}.
 \end{align}
 
 Bob prepares $\pi(\Delta(m))$ and knows $\pi(\Delta(\mathtt{sk}))$. We have the relationship,
 \begin{align}
-	\pi(\mathtt{sk} \oplus m) = \pi(\Delta(\mathtt{sk}) \oplus \Delta(m) \oplus h(m) \oplus(h(\mathtt{sk}))%  \oplus h(\mathtt{sk}) \oplus h(m)
+	\pi(\mathtt{sk} \soplus m) = \pi(\Delta(\mathtt{sk}) \soplus \Delta(m) \soplus h(m) \soplus(h(\mathtt{sk}))%  \soplus h(\mathtt{sk}) \soplus h(m)
 \end{align}
 
 The encodings,
 \begin{align}
-	[\mathtt{sk}, \Delta(\mathtt{sk})]_H, [h(\mathtt{sk}), \Delta(\mathtt{sk})]_\oplus \nonumber\\
-	[m, \Delta(m)]_H, [h(m), \Delta(m)]_\oplus \nonumber\\
-	[m \oplus \mathtt{sk} \oplus h(m) \oplus h(\mathtt{sk}), \Delta(m) \oplus \Delta(\mathtt{sk})]_\oplus
+	[\mathtt{sk}, \Delta(\mathtt{sk})]_H, [h(\mathtt{sk}), \Delta(\mathtt{sk})]_\soplus \nonumber\\
+	[m, \Delta(m)]_H, [h(m), \Delta(m)]_\soplus \nonumber\\
+	[m \soplus \mathtt{sk} \soplus h(m) \soplus h(\mathtt{sk}), \Delta(m) \soplus \Delta(\mathtt{sk})]_\soplus
 \end{align}
 enable verification by hashing the first term.
 
 The differential code,
 \begin{align}
-	[\mathtt{sk} \oplus m, \Delta(\mathtt{sk} \oplus m)] %\oplus h(m) \oplus h(\mathtt{sk})]
+	[\mathtt{sk} \soplus m, \Delta(\mathtt{sk} \soplus m)] %\soplus h(m) \soplus h(\mathtt{sk})]
 \end{align}
-is verifiable given $h(\mathtt{sk} \oplus m)$, while the permuted code,
+is verifiable given $h(\mathtt{sk} \soplus m)$, while the permuted code,
 \begin{align}
-	[\pi(\mathtt{sk} \oplus m), \Delta(\pi(\mathtt{sk} \oplus m))]_H 
+	[\pi(\mathtt{sk} \soplus m), \Delta(\pi(\mathtt{sk} \soplus m))]_H 
 \end{align}
-is only verifiable with $h(\pi(\mathtt{sk} \oplus m))$.
+is only verifiable with $h(\pi(\mathtt{sk} \soplus m))$.
 
 \begin{align}
-	&[h(\mathtt{sk} \oplus m), \Delta(\mathtt{sk} \oplus m)]_\oplus \nonumber\\
-	&[h(\pi(\mathtt{sk} \oplus m)), \Delta(\pi(\mathtt{sk} \oplus m))]_\oplus
+	&[h(\mathtt{sk} \soplus m), \Delta(\mathtt{sk} \soplus m)]_\soplus \nonumber\\
+	&[h(\pi(\mathtt{sk} \soplus m)), \Delta(\pi(\mathtt{sk} \soplus m))]_\soplus
 \end{align}
 are both verifiable from direct multiplication.
 
 %\begin{align}
-%	&[h(\pi(\mathtt{sk} \oplus m)), \Delta(\mathtt{sk} \oplus m)]_\oplus \nonumber\\
-%	&[h(\pi(\mathtt{sk} \oplus m)), h(\mathtt{sk} \oplus m)\oplus \mathtt{sk} \oplus m]_\oplus
+%	&[h(\pi(\mathtt{sk} \soplus m)), \Delta(\mathtt{sk} \soplus m)]_\soplus \nonumber\\
+%	&[h(\pi(\mathtt{sk} \soplus m)), h(\mathtt{sk} \soplus m)\soplus \mathtt{sk} \soplus m]_\soplus
 %\end{align}
 %is verifiable from direct multiplication where $\pi$ is known.
 
 
 
 %\begin{align}
-%	\pi(\Delta(\mathtt{sk} \oplus m)) &= \pi(h(\mathtt{sk} \oplus m)) \oplus \pi(\mathtt{sk}) \oplus \pi(\Delta(m)\oplus h(m)).
+%	\pi(\Delta(\mathtt{sk} \soplus m)) &= \pi(h(\mathtt{sk} \soplus m)) \soplus \pi(\mathtt{sk}) \soplus \pi(\Delta(m)\soplus h(m)).
 %\end{align}
 
 \subsection{Blah}
 
 Hence,
 \begin{align}
-	[h(\pi(\mathtt{sk} \oplus m)), \Delta(\pi(\mathtt{sk} \oplus m))]
+	[h(\pi(\mathtt{sk} \soplus m)), \Delta(\pi(\mathtt{sk} \soplus m))]
 \end{align}
 affords direct verification by multiplying ($t_1\cdot t_2 = h(t_2)$). The second term is equivalent to,
 \begin{align}
-	t_2 &= \Delta(\pi(\mathtt{sk} \oplus m)) \nonumber\\
-	&= \Delta(\pi(\mathtt{sk})) \oplus \Delta(\pi(m)) \nonumber\\
-	&\oplus h(\pi(\mathtt{sk} \oplus m))
- \oplus h(\pi(\mathtt{sk})) \oplus h(\pi(m))
+	t_2 &= \Delta(\pi(\mathtt{sk} \soplus m)) \nonumber\\
+	&= \Delta(\pi(\mathtt{sk})) \soplus \Delta(\pi(m)) \nonumber\\
+	&\soplus h(\pi(\mathtt{sk} \soplus m))
+ \soplus h(\pi(\mathtt{sk})) \soplus h(\pi(m))
 \end{align}
 
 %\begin{align}
-%	\pi(\Delta(\pi(x))) &= \pi(h(\pi(x))) \oplus x	
+%	\pi(\Delta(\pi(x))) &= \pi(h(\pi(x))) \soplus x	
 %\end{align}
 
 Let signature be,
 \begin{align}
-	\mathtt{sig} &= h(\pi(\mathtt{sk} \oplus m)),\nonumber\\
+	\mathtt{sig} &= h(\pi(\mathtt{sk} \soplus m)),\nonumber\\
 \end{align}
 
 \begin{align}
-	\mathtt{ver} &= \Delta(\pi(\mathtt{sk} \oplus m)) \nonumber\\
+	\mathtt{ver} &= \Delta(\pi(\mathtt{sk} \soplus m)) \nonumber\\
 \end{align}
 
 \begin{align}
@@ -1252,122 +1295,122 @@ Let signature be,
 \section{Blah}
 
 \begin{align}
-	\Delta(\pi(\mathtt{sk} \oplus m)) &= h(\pi(\mathtt{sk} \oplus m)) \oplus \pi(\mathtt{sk} \oplus m) \nonumber\\
-	&= h(\pi(\mathtt{sk}) \oplus \pi(m)) \oplus \pi(\mathtt{sk} \oplus m). \nonumber\\
-	\Delta(\pi(\mathtt{sk})) \oplus \Delta(\pi(m)) &= \pi(\mathtt{sk}) \oplus \pi(m) \nonumber\\
-	&\oplus h(\pi(\mathtt{sk})) \oplus h(\pi(m)).\nonumber\\
-	\Delta(\pi(\mathtt{sk} \oplus m)) &= \Delta(\pi(\mathtt{sk})) \oplus \Delta(\pi(m)) \nonumber\\
-	&\oplus h(\pi(\mathtt{sk} \oplus m))
- \oplus h(\pi(\mathtt{sk})) \oplus h(\pi(m))
+	\Delta(\pi(\mathtt{sk} \soplus m)) &= h(\pi(\mathtt{sk} \soplus m)) \soplus \pi(\mathtt{sk} \soplus m) \nonumber\\
+	&= h(\pi(\mathtt{sk}) \soplus \pi(m)) \soplus \pi(\mathtt{sk} \soplus m). \nonumber\\
+	\Delta(\pi(\mathtt{sk})) \soplus \Delta(\pi(m)) &= \pi(\mathtt{sk}) \soplus \pi(m) \nonumber\\
+	&\soplus h(\pi(\mathtt{sk})) \soplus h(\pi(m)).\nonumber\\
+	\Delta(\pi(\mathtt{sk} \soplus m)) &= \Delta(\pi(\mathtt{sk})) \soplus \Delta(\pi(m)) \nonumber\\
+	&\soplus h(\pi(\mathtt{sk} \soplus m))
+ \soplus h(\pi(\mathtt{sk})) \soplus h(\pi(m))
 \end{align}
 
 \begin{align}
-	\Delta(x\oplus\pi(x)) &= h(x\oplus \pi(x)) \oplus x \oplus \pi(x).
+	\Delta(x\soplus\pi(x)) &= h(x\soplus \pi(x)) \soplus x \soplus \pi(x).
 \end{align}
 
 \begin{align}
-	\Delta(\mathtt{sk} \oplus m \oplus \pi(\mathtt{sk}\oplus m)) &= h(\mathtt{sk} \oplus m \oplus \pi(\mathtt{sk}) \oplus \pi(m)) \nonumber\\
-	&\mathtt{sk} \oplus m \oplus \pi(\mathtt{sk}) \oplus \pi(m).
-\end{align}
-
-The differential permuted code,
-\begin{align}
-	&[\pi(\mathtt{sk} \oplus m), \Delta(\pi(\mathtt{sk} \oplus m))]
-\end{align}
-is verifiable from,
-\begin{align}
-	h(\pi(\mathtt{sk} \oplus m))
+	\Delta(\mathtt{sk} \soplus m \soplus \pi(\mathtt{sk}\soplus m)) &= h(\mathtt{sk} \soplus m \soplus \pi(\mathtt{sk}) \soplus \pi(m)) \nonumber\\
+	&\mathtt{sk} \soplus m \soplus \pi(\mathtt{sk}) \soplus \pi(m).
 \end{align}
 
 The differential permuted code,
 \begin{align}
-	&[\pi(\mathtt{sk} \oplus m), \Delta(\pi(\mathtt{sk} \oplus m))]
+	&[\pi(\mathtt{sk} \soplus m), \Delta(\pi(\mathtt{sk} \soplus m))]
 \end{align}
 is verifiable from,
 \begin{align}
-	&h(\pi(\mathtt{sk} \oplus m)) \oplus \pi(\mathtt{sk} \oplus m) = bob \nonumber\\
-	&\oplus h(\pi(\mathtt{sk} \oplus m)) \oplus h(\pi(\mathtt{sk})) \oplus h(\pi(m)) \nonumber\\
+	h(\pi(\mathtt{sk} \soplus m))
+\end{align}
+
+The differential permuted code,
+\begin{align}
+	&[\pi(\mathtt{sk} \soplus m), \Delta(\pi(\mathtt{sk} \soplus m))]
+\end{align}
+is verifiable from,
+\begin{align}
+	&h(\pi(\mathtt{sk} \soplus m)) \soplus \pi(\mathtt{sk} \soplus m) = bob \nonumber\\
+	&\soplus h(\pi(\mathtt{sk} \soplus m)) \soplus h(\pi(\mathtt{sk})) \soplus h(\pi(m)) \nonumber\\
 	&= 
 \end{align} 
 
 While,
 \begin{align}
-	&[\mathtt{sk} \oplus m, \Delta(\mathtt{sk} \oplus m)] \nonumber\\
-	&= [\mathtt{sk} \oplus m, \Delta(\mathtt{sk}) \oplus \Delta(m) \nonumber\\
-	&\oplus h(\mathtt{sk} \oplus m) \oplus h(\mathtt{sk}) \oplus h(m)],
+	&[\mathtt{sk} \soplus m, \Delta(\mathtt{sk} \soplus m)] \nonumber\\
+	&= [\mathtt{sk} \soplus m, \Delta(\mathtt{sk}) \soplus \Delta(m) \nonumber\\
+	&\soplus h(\mathtt{sk} \soplus m) \soplus h(\mathtt{sk}) \soplus h(m)],
 \end{align}
-is verifiable from $h(\mathtt{sk} \oplus m)$.
+is verifiable from $h(\mathtt{sk} \soplus m)$.
 
 Bob's test passes if,
 \begin{align}
-	\pi(\mathtt{sk} \oplus m) &= \Delta(\pi(\mathtt{sk})) \oplus \Delta(\pi(m)) \oplus h(\pi(\mathtt{sk})) \oplus h(\pi(m))
+	\pi(\mathtt{sk} \soplus m) &= \Delta(\pi(\mathtt{sk})) \soplus \Delta(\pi(m)) \soplus h(\pi(\mathtt{sk})) \soplus h(\pi(m))
 \end{align}
 
 Bob is not allowed to know $h(\mathtt{sk})$.
 
 Similarly,
 \begin{align}
-	&[\mathtt{sk} \oplus m, \Delta(\mathtt{sk}\oplus m)] \nonumber\\
-	&= [\mathtt{sk} \oplus m, h(\mathtt{sk}\oplus m) \oplus h(\mathtt{sk}) \oplus h(m)],
+	&[\mathtt{sk} \soplus m, \Delta(\mathtt{sk}\soplus m)] \nonumber\\
+	&= [\mathtt{sk} \soplus m, h(\mathtt{sk}\soplus m) \soplus h(\mathtt{sk}) \soplus h(m)],
 \end{align}
 are verifiable from hashing the first term, while,
 \begin{align}
-	&[\pi(\mathtt{sk} \oplus m), \Delta(\mathtt{sk}\oplus m)] \nonumber\\
-	&= [\pi(\mathtt{sk} \oplus m), h(\mathtt{sk}\oplus m) \oplus h(\mathtt{sk}) \oplus h(m)],
+	&[\pi(\mathtt{sk} \soplus m), \Delta(\mathtt{sk}\soplus m)] \nonumber\\
+	&= [\pi(\mathtt{sk} \soplus m), h(\mathtt{sk}\soplus m) \soplus h(\mathtt{sk}) \soplus h(m)],
 \end{align}
 are verifiable by hashing the unpermuted first term. Equivalently,
 \begin{align}
-	&[\pi(\mathtt{sk} \oplus m), \Delta(\mathtt{sk}\oplus m)] \nonumber\\
-	&[\pi(\mathtt{sk} \oplus m), \Delta(\mathtt{sk})\oplus \Delta(m) \oplus h(\mathtt{sk}\oplus m) \oplus h(\mathtt{sk}) \oplus h(m)] \nonumber\\\end{align}
+	&[\pi(\mathtt{sk} \soplus m), \Delta(\mathtt{sk}\soplus m)] \nonumber\\
+	&[\pi(\mathtt{sk} \soplus m), \Delta(\mathtt{sk})\soplus \Delta(m) \soplus h(\mathtt{sk}\soplus m) \soplus h(\mathtt{sk}) \soplus h(m)] \nonumber\\\end{align}
 is verifiable by hashing the unpermuted first term.
 
 Using,
 \begin{align}
-	\Delta(\mathtt{sk}) \oplus \Delta(m) &= \Delta(\mathtt{sk} \oplus m) \oplus h(\mathtt{sk} \oplus m)	\oplus h(\mathtt{sk}) \oplus h(m),\nonumber\\
+	\Delta(\mathtt{sk}) \soplus \Delta(m) &= \Delta(\mathtt{sk} \soplus m) \soplus h(\mathtt{sk} \soplus m)	\soplus h(\mathtt{sk}) \soplus h(m),\nonumber\\
 \end{align}
 
 %We have,
 %\begin{align}
-%	\pi(\Delta(\mathtt{sk}\oplus m)) = \pi(\Delta(\mathtt{sk}) \oplus \Delta(m) h(\mathtt{sk}\oplus m) \oplus h(\mathtt{sk}) \oplus h(m))
+%	\pi(\Delta(\mathtt{sk}\soplus m)) = \pi(\Delta(\mathtt{sk}) \soplus \Delta(m) h(\mathtt{sk}\soplus m) \soplus h(\mathtt{sk}) \soplus h(m))
 %\end{align}
 
 Ver:
 \begin{align}
-	\{\pi(m)\oplus \pi(\mathtt{sk}), \Delta(m)\oplus \Delta(\mathtt{sk})\} \nonumber\\
-	\{\pi(m\oplus \mathtt{sk}), \Delta(m)\oplus \Delta(\mathtt{sk})\}
+	\{\pi(m)\soplus \pi(\mathtt{sk}), \Delta(m)\soplus \Delta(\mathtt{sk})\} \nonumber\\
+	\{\pi(m\soplus \mathtt{sk}), \Delta(m)\soplus \Delta(\mathtt{sk})\}
 \end{align}
 
 We have the relationships,
 \begin{align}
-	\Delta(\mathtt{sk}) \oplus \Delta(m) &= \mathtt{sk} \oplus m \oplus h(\texttt{sk}) \oplus h(m),\nonumber\\
-	\Delta(\mathtt{sk} \oplus m)	 &= h(\mathtt{sk} \oplus m) \oplus \mathtt{sk} \oplus m,\nonumber\\
+	\Delta(\mathtt{sk}) \soplus \Delta(m) &= \mathtt{sk} \soplus m \soplus h(\texttt{sk}) \soplus h(m),\nonumber\\
+	\Delta(\mathtt{sk} \soplus m)	 &= h(\mathtt{sk} \soplus m) \soplus \mathtt{sk} \soplus m,\nonumber\\
 \end{align}
 Under composition we obtain,
 \begin{align}
-	\Delta(\mathtt{sk} \oplus m)	 \oplus \Delta(\mathtt{sk}) \oplus \Delta(m) &= h(\mathtt{sk} \oplus m) \oplus h(\mathtt{sk}) \oplus h(m).	
+	\Delta(\mathtt{sk} \soplus m)	 \soplus \Delta(\mathtt{sk}) \soplus \Delta(m) &= h(\mathtt{sk} \soplus m) \soplus h(\mathtt{sk}) \soplus h(m).	
 \end{align}
 The differential encoding,
 \begin{align}
-	[h(\mathtt{sk}\oplus m), \Delta(\mathtt{sk} \oplus m)],
+	[h(\mathtt{sk}\soplus m), \Delta(\mathtt{sk} \soplus m)],
 \end{align}
 
 Consider the permuted differential code,
 \begin{align}
-	[\pi(\mathtt{sk}\oplus m), \pi(\Delta(\mathtt{sk})) \oplus \pi(\Delta(m))].
+	[\pi(\mathtt{sk}\soplus m), \pi(\Delta(\mathtt{sk})) \soplus \pi(\Delta(m))].
 \end{align}
 we equivalently obtain,
 \begin{align}
-	[\Delta(\mathtt{sk} \oplus m) \oplus h(\mathtt{sk} \oplus m), \Delta(\mathtt{sk}) \oplus \Delta(m)].
+	[\Delta(\mathtt{sk} \soplus m) \soplus h(\mathtt{sk} \soplus m), \Delta(\mathtt{sk}) \soplus \Delta(m)].
 \end{align}
-%is verifiable if $\pi(\mathtt{sk} \oplus m)$ is known.
+%is verifiable if $\pi(\mathtt{sk} \soplus m)$ is known.
 
 Therefore if Alice provides the signature,
 \begin{align}
-	\mathtt{sig}(m) = [\pi(\mathtt{sk} \oplus m), h(\mathtt{sk} \oplus m)],
+	\mathtt{sig}(m) = [\pi(\mathtt{sk} \soplus m), h(\mathtt{sk} \soplus m)],
 \end{align}	
 Bob is able to verify via,
 \begin{align}
-		[\mathtt{sig}(m),\Delta(\mathtt{sk}) \oplus \Delta(m)].
+		[\mathtt{sig}(m),\Delta(\mathtt{sk}) \soplus \Delta(m)].
 \end{align}
 
 
@@ -1375,7 +1418,7 @@ Bob is able to verify via,
 
 %which Bob is able to verify using Alice's verification hash,
 %\begin{align}
-%	h(\mathtt{sk}\oplus m).
+%	h(\mathtt{sk}\soplus m).
 %\end{align}
 %
 %For $n$-bit messages 
