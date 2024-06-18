@@ -29,6 +29,7 @@
 \def\asymd#1#2#3#4{\langle #1_{#3} \cdot #2_{#4}\rangle}
 \def\braid#1#2#3#4{\langle#1,#2\rangle_{#3}^{#4}}
 \def\selfbraid#1#2#3{\langle#1\rangle_{#2}^{#3}}
+\def\symbraid#1{\langle#1\rangle_{\pi}^{\pi^{-1}}}
 \def\comm#1#2#3#4{[#1,#2]_{#3}^{#4}}
 
 \makeatletter
@@ -59,7 +60,9 @@
 \section{Links \& chats}
 
 \begin{itemize}
-	\item One way functions and P vs NP: \url{https://en.wikipedia.org/wiki/One-way_function}: "The existence of such one-way functions is still an open conjecture. Their existence would prove that the complexity classes P and NP are not equal,"
+	\item One way functions and P vs NP: \url{https://en.wikipedia.org/wiki/One-way_function}: "The existence of such one-way functions is still an open conjecture. Their existence would prove that the complexity classes P and NP are not equal,"\\
+		* one-way permutation.\\
+		* Trapdoor function.\\
 	\item GapP, NP, binary optimisation problems: \url{https://chatgpt.com/share/2e9f8c0f-fa1d-4d97-9af0-c195ad3cd22c}
 	\item Homomorphism between $B_n$ and $S_n$: \url{https://chatgpt.com/share/c0390897-77f1-403e-bce9-ca2bf5c9fccc}
 	\item Even Hamming weight for $H(x\soplus y)\in 2\mathbb{Z}$ if $H(x)=H(y)$. Hence also for $y=\pi\circ x$ where $\pi\in S_n$.
@@ -209,13 +212,57 @@ Differential codes preserve their differential structure under common global per
 	\diff{x_\pi}{y} &\not\sim \diff{x}{y}
 \end{align}
 
+\subsection{Braid codes}
+
+Defining the braid operators,
+\begin{align}
+	\symbraid{x,y} &\equiv x_{\pi} y_{\pi^{-1}}, \nonumber\\
+	\symbraid{x} &\equiv x_{\pi} x_{\pi^{-1}}.
+\end{align}
+the braid objects exhibit trapdoor locking effects. Knowing $\pi$ does not reveal $x$ from the braid $\symbraid{x}$. Given $\symbraid{x,y}$ and $\pi$, knowing either input $x$ or $y$ reveals the other input. Hence, for known $\pi$ both inputs $x$ and $y$ act as trapdoors.
+
+\section{Codewords}
+
+Codewords are the space of balanced bit-strings, defining the code-space,
+\begin{align}
+	C_n: x\in\{0,1\}^n,\, \mathrm{wt}(x)=\frac{n}{2},\, n\in 2\mathbb{Z}^+.
+\end{align}
+The order of the code-space is,
+\begin{align}
+	|C_n| = \binom{n}{n/2}.
+\end{align}
+All codewords are permutations of one another,
+\begin{align}
+	x_i = \pi \circ x_j,\quad \pi\in S_n.
+\end{align}
+Code-words can be related via their permutational difference or their symmetric (XOR) difference,
+\begin{align}
+	x_i &= \pi \circ x_j,\nonumber\\
+	x_i &= c \oplus x_j.
+\end{align}
+
+Permutations preserve Hamming weight,
+\begin{align}
+	\mathrm{wt}(\pi\circ x) = \mathrm{wt}(x),
+\end{align}
+while bit-strings symmetric differences in general do not. Code-space is therefore automorphic under the action of the symmetric group,
+\begin{align}
+	\mathrm{Aut}(C_n) = S_n.
+\end{align}
+
+
+A random permutation $\pi\in\mathcal{X}(S_n)$ applied to a codeword uniformly randomly samples another codeword,
+\begin{align}
+	\mathcal{X}:\quad \mathrm{Unif}(\pi\in S_n) \circ x_0 \equiv \mathrm{Unif}(x\in C_n).
+\end{align}
+Difference: Both sample uniformly over code-space. The former does so by uniformly sampling over transformations of an initial bit-string, while the latter samples directly. Operator sampling inherits the operator's algebraic properties, transforming code-space via a frame of reference change, affording composability and distributivity. For any chosen $\pi$ the former acts as a pseudo-random function over pre-image space $x$ while the latter is defined as a (non-pseudo) random function.
+
 \section{Asymmetric codes}
 
 Consider objects $s_\pi s$ and $m_\pi \cdot h(m)$, both public, where Alice knows secret $s$ and Alice knows secret $m$.
 \begin{align}
 	[s_\pi s] \cdot [m_\pi h(m)] &= [s \cdot m] \cdot [s_\pi \cdot h(m_\pi)]
 \end{align}
-
 
 We use the notation,
 \begin{align}
@@ -230,11 +277,55 @@ Sloppily we'll also use $x\soplus y \equiv x \cdot y \equiv xy$ as shorthand.
 
 \subsection{One-way functions}
 
-For secret $x$ we define the public object,
-\begin{align} \label{eq:one_way_sum}
-	x \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}}.
+Definition: a function $f:\{0,1\}^* \to \{0,1\}^*$ is one-way if for BPP algorithm $F$ the average case success probability of finding a pseudo-inverse is negligible,
+\begin{align}
+	\mathbb{P}[f(F(f(x))) = f(x)] < \mathtt{negl}(n),
 \end{align}
-This defines a one-way function enabling verification given $x$ and $\pi$ but does not allow reverse evaluation of $x$ even if $\pi$ is known via pre-image resistance.
+for $x\in\mathrm{Unif}(\{0,1\}^n)$.
+
+For random $\pi$, $y=x_\pi$ is a uniformly distributed sample over the same space as $x$, randomised under the action of $\pi$, independent of $x$.
+
+Inverting $y=\symbraid{x}$: define $x = \hat\pi x_0$, where $x_0$ is a sorted canonical balanced bit-string used as a reference for which all $x$ may be defined relative to permutations,
+\begin{align}
+	x_0 &= \{0^{\times(n/2)},1^{\times(n/2)}\},\nonumber\\
+	x &= \hat\pi \circ x_0,
+\end{align}
+for some $\hat\pi$ which are in general non-unique. The general braid $\symbraid{x}$ can be re-expressed in terms of the canonical $x_0$ as,
+\begin{align}
+	x_\pi x_{\pi^{-1}} &= y,\nonumber\\
+	x \cdot x_{\pi^2} &= \pi[y],\quad (\pi\circ)\nonumber\\
+	\hat\pi(x_0) \cdot [\pi \cdot \hat\pi (x_0)] &= y,\quad (x\to \hat\pi \cdot x_0)\nonumber\\
+	x_0 \cdot [\hat\pi^{-1} \pi \cdot \hat\pi (x_0)] &= \hat\pi^{-1}(y),\quad (\hat\pi^{-1}\circ)\nonumber\\
+	[\hat\pi^{-1}\cdot \pi \cdot \hat\pi](x_0) &= x_0 \cdot \hat\pi^{-1}(y),\nonumber\\
+\end{align}
+
+* Conjugacy Problem for Permutations (NP-complete): \url{https://chatgpt.com/share/5716548b-5407-4b77-947c-cc84b47c47fc}.
+
+* Definition of CPP: Given $\sigma,\tau\in S_n$, find $\pi$ such that,
+\begin{align}
+	\pi\sigma\pi^{-1} = \tau.	
+\end{align}
+
+* Defining $\tau(x_0) = x_0 \cdot \hat\pi^{-1}(y)$ transforms the equation into a common reference frame relative to $x_0$.
+
+* In the collision-free space only a single solution for $x$ exists and finding $\pi$ is equivalent to finding $x$.
+
+* Conjugate space corresponds to collision space, separating into conjugacy classes of different orders of collisions. In the collision free regime there is exactly one conjugate solution.
+
+%* Show that uniform sampling of $x_\pi$ implies inversion is equivalent.
+
+%For secret $x$ we define the public object,
+%\begin{align} \label{eq:one_way_sum}
+%	x \xrightarrow{\pi} \selfbraid{x}{\pi}{\pi^{-1}}.
+%\end{align}
+%This defines a one-way function enabling verification given $x$ and $\pi$ but does not allow reverse evaluation of $x$ even if $\pi$ is known via pre-image resistance.
+
+
+
+%The likelihood of random $x$ being a collision-free pre-image of $f: x\to \symbraid{x}$ is,
+%\begin{align}
+%	p &= \frac{\overline{\mathrm{Col}}(f)}{\mathrm{Col}(f)}.
+%\end{align}
 
 \subsection{Pre-image resistance}
 
@@ -791,7 +882,7 @@ Two parties $\{i,j\}$ publicly share their differential terms yielding the respe
 	\mathtt{Priv}:\, &\{s,\mathcal{X}_i,\mathcal{X}_j,\mathcal{X}_{i,j}\} \sim \langle s,\mathcal{X}_i,\mathcal{X}_j \rangle\nonumber\\
 	&\sim \mathrm{GF}(2^3),\nonumber\\
 	\mathtt{Pub}:\, &\{s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, \mathcal{X}_{i,j} \}\nonumber\\
-	&\sim \langle s\soplus \mathcal{X}_i,s\soplus \mathcal{X}_j \rangle \sim \langle \mathcal{X}_i,\mathcal{X}_j \rangle  \nonumber\\
+	&\sim \langle s\soplus \mathcal{X}_i,s\soplus \mathcal{X}_j \rangle \sim \langle \mathcal{X}_i,\mathcal{X}_j \rangle \times \langle s\rangle \nonumber\\
 	&\sim \mathrm{GF}(2^2),
 \end{align}
 where,
@@ -827,15 +918,57 @@ Define a pair of secrets $\{s,p\}$,
 \end{align}
 let us instead encode $m$ against $p$,
  \begin{align}
-	[p, m\soplus p \soplus \mathcal{X}_{i,j}].
+	[p, m\soplus p \soplus \mathcal{X}_i].
 \end{align}
 
 Then the public and private groups are generated by,
 \begin{align}
 	G_\mathrm{priv} &\sim \langle s,p,m,\mathcal{X}_i,\mathcal{X}_j \rangle, \nonumber\\
-	G_\mathrm{pub} &\sim \langle s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, p\soplus m\rangle,
+	G_\mathrm{pub} &\sim \langle s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, p\soplus m\soplus \mathcal{X}_i \rangle \nonumber\\
+	&= \{ \mathcal{X}_{i,j}, s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, \nonumber\\
+	&\quad p\soplus m\soplus \mathcal{X}_i, p\soplus m\soplus \mathcal{X}_j, \nonumber\\
+	&\quad s\soplus p \soplus m, s \soplus p\soplus m \soplus \mathcal{X}_{i,j} \}.
+\end{align}
+%Now the group structure of $G_\mathrm{pub}$ is independent of $s$ and its group elements are,
+%\begin{align}
+%G_\mathrm{pub} &\sim \langle s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, p\soplus s\soplus m\rangle \nonumber\\
+%	&= \{\mathcal{X}_{i,j}, s\soplus \mathcal{X}_i, s\soplus \mathcal{X}_j, p\soplus s\soplus m\}.	
+%\end{align}
+
+%\begin{align}
+%	\mathtt{Pub}:\, &\langle s\soplus \mathcal{X}_i, p\soplus \mathcal{X}_j \rangle \sim \{ s\soplus \mathcal{X}_i, p\soplus \mathcal{X}_j, s\soplus p \soplus \mathcal{X}_{i,j} \}.
+%\end{align}
+
+--
+
+HERE:
+
+Sending the encoded message $m\soplus s \soplus \mathcal{X}_{j}$ (one-time-pad encoding against $s\soplus \mathcal{X}_{i,j}$) we obtain the groups,
+\begin{align}
+	\mathtt{Priv}:\, &\langle s, p, m, \mathcal{X}_i, \mathcal{X}_j\rangle,\nonumber\\
+	\mathtt{Pub}:\, &\langle s\soplus \mathcal{X}_i, p\soplus \mathcal{X}_j, m \soplus s \soplus \mathcal{X}_{i,j} \rangle \nonumber\\
+	\sim &\{ s\soplus \mathcal{X}_i, p\soplus \mathcal{X}_j, s\soplus p\soplus \mathcal{X}_{i,j},\nonumber\\
+	&m \soplus \mathcal{X}_j, m \soplus p \soplus \mathcal{X}_i,\nonumber\\
+	& \} %m \soplus \mathcal{X}_{i,j}, s\soplus p\soplus m \}.
 \end{align}
 
+--
+
+\begin{align}
+	A &\to [s_i,s_i\soplus \mathcal{X}_i], \nonumber\\	
+	B &\to [p_j,p_j\soplus \mathcal{X}_j], \nonumber\\	
+	A,B &\gets [s_i \soplus p_j, s_i\soplus p_j\soplus \mathcal{X}_{i,j}],\nonumber\\
+%	B &\to [s, s\soplus \mathcal{X}_i \soplus \mathcal{X}_j], \nonumber\\
+%	A,B &\gets \{\mathcal{X}_i, \mathcal{X}_j \}, \nonumber\\
+	E &\gets \{s_i \soplus \mathcal{X}_i, p_j \soplus \mathcal{X}_j,s_i \soplus p_j \soplus \mathcal{X}_{i,j} \},\nonumber\\
+	A &\to [p_j, p_j \soplus m\soplus \mathcal{X}_i],\nonumber\\
+	B &\gets m,\nonumber\\
+	E &\gets \{s\soplus \mathcal{X}_i, s \soplus \mathcal{X}_{i,j},\mathcal{X}_j,\nonumber\\
+	&\quad p\soplus m \soplus \mathcal{X}_i, p\soplus s\soplus m \} 
+\end{align}
+
+
+--
 
 Upon publicly communicating only the differential terms other parties in possession of $s$ can decode all $x_i$. Upon repeating using independent samples of $x_i$ but with the same secret Eve is in possession of $s\soplus x_i$ for each sample. Combining multiple interceptions Eve can produce,
 \begin{align}
