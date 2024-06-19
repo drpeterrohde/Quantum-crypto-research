@@ -1,0 +1,149 @@
+--- Abstract ---
+
+Being that the random subset problem is not the official name of what youre trying to address (if any), maybe briefly state what it is you're trying to solve and then give it a proper name in the bulk of the paper. Perhaps something along the lines of: We present a secure distributed algorithm which randomly samples uniform subsets of a network such that it cannot be compromised unless all nodes dishonestly collude with each other.
+
+You mention "While the protocol is synchronous, a staking mechanism ensures
+self-synchronisation with no dependence on an external reference." I understand the mechanism behind the distributed consensus network paper, but to me it seems the use of the work "stake" implies some reward beyond mutual benefit, much like rewards given to successful miners in proof-of-work scenarios. 
+
+--- Introduction ---
+
+What exactly do you want to motivate here? I can come up with a draft as I really like writing introductions to motivate things from basic principles. It seems like you want to base it off complexity class arguments from Schneier.
+
+---- Consensus ---
+
+"As dishonest parties are assumed to be in the minority"
+
+I agree with this. However, what sort of scenario would occur if they were the majority? I wonder what the maximal ratio of the network would have to be dishonest to ensure a dishonest outcome. Perhaps much like how you formulate the minimum consensus set size based on the epsilon parameter, perhaps we could come up with a framework that holds up to some upper limit of a dishonest majority. 
+
+"MajorityVote(N,id) -> {0,1}"
+
+Maybe just put a line saying that {0,1} represents a boolean outcome where the consensus either results in agreement of validity (1) or invalidity (0).
+
+--- Centralised algorithm ---
+
+When you first reference an algorithm (such as Alg. 1), I would put a reference to a piece of the appendix where you explain the general structure of your notation of algorithms. I understand its pseudocode which is fairly standard, however for example the left vs right facing arrows were not immediately obvious to me until I asked you what they meant. (Also in Alg. 1 then \mathcal{S} should be replaced with \mathcal{N}, and |\mathcal{C}| with N_C.)
+
+--- Proof-of-work ---
+
+For your first footnote, I would be weary of notation. Usually it is written as Hash: x -> y to imply the element x \in X gets mapped to Hash(x) = y \in Y. Alternatively it can be written as x \in X \mapsto Hash(x) \in Y. The notation used here is a bit strange as its saying something gets mapped to itself.
+
+For Algorithm 2, I would put more inline comments like you did for algorithm 1. Also again the notation is a bit unconventional for the procedure part, where more commonly it would be written: Valid: x \in {0,1}^n -> {0,1}.
+
+--- Hash-based random subsets ---
+
+I like how you described the XOR operation briefly as addition modulo 2 (its more intuitive to me as I have dealt less with logic operations). Maybe add 1 line why this is a sufficient analogous description of the XOR operation?
+
+"Importantly, the randomness of the global key, X_S, cannot be compromised unless all X_i are controlled."
+
+Maybe put 1/2 lines describing why this is the case? Personally my argument would be along the lines of the fact that the colluding nodes would need to predict the preimages to 2 successive hash function outputs why is extremely infeasible, as it is already difficult to predict the preimage of 1 iteration/application of a hash function.
+
+--- Consensus Assignment Problem ---
+
+In the caption for figure 3, its best to describe whats actually going on (what is S, S_i, C_j, and the meaning of deg^+ and deg^-).
+
+Furthermore, is it actually a bipartite graph or a multigraph? I see that you collect all consensus sets as one set to make up the other vertices set but in reality they are disjoint. Perhaps it makes computations and semantics less painful to group them all up, HOWEVER, there is some information lost by grouping them up, such as which nodes get assigned to what vertex. Moreover, on the part that shows up later where you have conditions on bipartite graphs (equations 4.24), perhaps with the use of multigraphs you would get more insight on this, but theres a chance it just makes things more complicated of course. I'll leave this decision up to the reader.
+
+Maybe don't notate |E| as the net consensus work since E has already been used to describe the set of edges. Unless you can show that equation 4.4 precisely corresponds to the cardinality of the set E, probably go with a different symbol. Also for the bottom of the sums, write something like u_i \in U instead of i \in U because i comes from an index set and not the vertex set itself. Formally for some index set I, then i \in I and u_i \in U.
+
+"The assignment of network nodes to consensus sets is equivalent to assigning edge sets E subject to the constraints imposed by the degree sequences."
+
+Can you show this? Personally I would interpret it in the opposite direction, and say given the constraints of the degree set (the vertex sets), then this tells us how to select edge sets. More explicitly, if I know the contributed work of the network and the allocation of load requests of the consensus sets, then it is a matter of coming up with a directed edge set.
+
+Maybe also slightly change the wording when introducing consensus groups. The current wording implies it is already an established concept, so maybe instead write "we define the consensus group as". I guess it is weird to me to define the space of satisfying graphs as a group and not a moduli space of graphs. Also a point for notation consistency: here Sym(E) denotes the symmetric group of the edge set, and you have written it to be equal to the group action \phi on the set. Maybe instead write that the consensus group has a group action \phi and how it reduces to Sym(E) under certain constraints.
+
+Also explicitly say that C(U,V) is the consensus group.
+
+Are you sure about equation 4.7? If it is based off of equation 3.1, then it should involve some subtraction somewhere. Like equation 3.1 is equivalent to |B|!/(|A|!*(|B|-|A|)!).
+
+"reflecting the set of node permutations discounted by their degeneracies, upper-bounded by the order of the symmetric group |Sn| = n! with no degeneracies."
+
+Not sure what you're trying to say here. Maybe elaborate on it a bit. Also I see in this draft version you have not defined with orb_C(E) is. If I recall from the last draft, then it is precisely equation 4.7. If that is the case, however, I would be careful on notation. |C(U,V)| is the cardinality of a set which is just a scalar, while orb_C(E) is itself a set.
+
+Note to self: Group is not modded out but what it acts on is (edge set mod out degeneracy). Sometimes E refers to set of all edge sets.
+
+Also I noticed another small bit of notation inconsistency. In equation 4.9 you write G(U,U,E) while in equation 4.2 you wrote G = G(U,V,E). Maybe for consistency sake I say for equation 4.2 instead write G = G(U,V,E).
+
+--- Fisher-Yates shuffle ---
+
+In the generalized Fisher-Yates shuffle section, again distinguish that equation 4.14 is the action of the group on the set.
+
+For equation 4.15, the more common notation for orbits include:
+
+Orb(x) = G \cdot x
+
+Can you prove equation 4.16? Is this a known result?
+
+NOTE: I have no further comments on this section as we have to meet again to discuss what is going on!
+
+--- Distributed consensus networks ---
+
+In the subsection D on network policy there is a line:
+
+"When the network accepts new nodes they are unable
+to immediately make consensus requests and instead
+make null-bids, offering to contribute load without
+return."
+
+The network can accept new nodes so it is no longer a closed network? The only mention of increasing network size or comibining networks that I know of are from our conversations of the project we will do with Igor that involves topology (and some game theory as well).
+
+Besides that I like the setup in this section where nodes initially have to participate to increase their tally and only then are they able to make requests. That being the case, how does one differentiate requested consensus set sizes to tally values? If my tally value is 3 for example (meaning I participated in 3 consensus events), this means I can request for validation of 3 transactions. However, is there a restriction on how large I can request the consensus size? Is this limited by my tally value as well?
+
+"During the Accept stage of the protocol, the network must also agree on the network’s updated tally state."
+
+Maybe this should be mentioned in the previous subsection? (The synchronous protocol)
+
+--- Distributed quantum consensus networks ---
+
+"Interactive proofs of quantumness: require quantum
+computation but no quantum communication"
+
+I thought that this was an interplay to basis measurement which is quantum communication.
+
+In equation 6.4, why does the Shannon entropy have an upper bound of 1? Maybe add in a line describing why or proving it.
+
+--- Quantum random oracles ---
+
+Here what exactly is X_i(t) in equation 6.6? Are these time-dependent bit-streams? If so you might want to comment on their time dependence.
+
+Again, careful with the notation here of using i \in \mathcal{O}(t) as i should actually be an element of an index set (such as the integers)
+
+--- Quantum key distribution ---
+
+Under equation 6.9 it states:
+
+"requiring full O(n^2) quantum communications connectivity"
+
+It should be mentioned what n is in reference to and a small mention of why this is the case.
+
+For equation 6.10, why are we limited to two bases? Would it not be more secure to include the y-basis as well? I understand the notation is to stay in line with the (0,1) string booleans but some justification might be required to the limitation.
+
+For equation 6.12, I am not sure if the i,j subscripts on the left side of the equation match the expression on the right. I see what is meant but perhaps some care can be injected here for consistency in notation.
+
+For figure 5, the definition of G_{QKD} involves a graph of degree |G_QKD|, so the definition is a bit cyclical. I get what is trying to be said but maybe instead reformlate it. Also I would chose a symbol to replace the letters QKD as it is often used as a subscript and so looks a bit messy.
+
+Although this subsection makes sense to me, I would not without our previous discussion over call. I would start this subsection with a brief motivation of what is being done, as well as a barebones overview of the entire process (as well as some point explicitly making reference to figure 5, perhaps in the overview preamble).
+
+--- Interactive proofs of quantumness ---
+
+Personal suggestion but you can remove the argument piece whenever mentioning a function. Like you can write "some function f" instead of "some function f(\cdot)".
+
+After equation 6.19 you mention \omega \in \{0,1\}^{n-1}, why is it the case that it is necessarily one dimension lower than the input? Why can't the output be of the same dimension?
+
+In equation 6.25, on the right-hand most expression you are missing a \ket{0} which is then to be initialized as \ket{f(x)} in the following equation.
+
+Also in subsection 4 (QDCN), you have to mention what the IPQ acronym means as it has not been introduced thus far. 
+
+--- Economics ---
+
+"The DCN is a floating market instrument with instantaneous value. Consensus is necessarily consumed upon production and cannot be saved."
+
+Isn't the proof of consensus (information which I assume would be store on the distributed ledger) saved? Is it not given by equation 5.10?
+
+--- Applications ---
+
+In what way are protocols time dependent? I understand the information of the system and the participating nodes are dynamic, but I don't see how a preset protocol could be modified with time. Would this change all the steps mentioned in the DCN protocol section? If so in what way?
+
+Interesting use of the star symbol in equation 8.1, maybe you want to define it? When I see a star I think of the Hodge star operator in differential geometry.
+
+
+

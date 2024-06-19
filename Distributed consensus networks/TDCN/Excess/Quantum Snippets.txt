@@ -1,0 +1,26 @@
+--- Bloch Spheres
+
+In classical computers, the infinitesimal information required for computations are
+given by bits which take a value from the set {0, 1}. On the other hand, qubits are an
+extension of this where we can have some state |ψ⟩ that it is a superposition of these binary
+values, given by |ψ⟩ = α|0⟩ + β|1⟩ for some complex coefficients α,β. The advantages of using
+such a construction for computations in a quantum computer is the non-localization of
+information through what is known as quantum entanglement (see the entanglement key term!). For a system admitting many entangled qubits, if a subset of the system is corrupted, the information is still globally preserved. This is characterized by the entanglement entropy which tells you how much information is lost when looking only at a subset of the system.
+
+We can represent this state geometrically via a three dimensional coordinate system where one axis is |0⟩ and its opposite is |1⟩. Whatever state we are in |ψ⟩ is a superposition of these vectors, i.e. some addition of them. Since probability must be conserved in quantum mechanics, how we change these states in time are through unitary transformations and thus the vector is simply only ever rotated. Thus all possible new states of this qubit is represented as all possible rotations of itself and hence this traces out the bloch sphere. This is visualized in the following figure:
+
+-- Entanglement 
+
+At very small length scales, new effects develop that we cannot perceive with our eyes (at the classical level). From these small scale emerges new behaviour --- quantum behaviour --- and we get new effects, one of which is quantum entanglement. This is the property of having particles share information which cannot be separated and by such we can learn information of the full global system by only looking locally at a subset of it, i.e., the information of one of the particles. This makes the information non-local, and makes describing entire quantum systems much more efficient than having to describe the information of all particles individually classically. This affords more compact descriptions of states in a quantum computer and hence more effective computations. Entanglement also gives rise to phenomena such as quantum teleportation or holographic wormhole duals. 
+
+-- Superposition
+
+Due to the small length scale at which quantum mechanics is defined, there is a certain level of uncertainty inherent in its construction. This could take form of a tradeoff in information where the accuracy of one aspect is at the cost of the accuracy of other information (such as the Heisenberg uncertainty principle where one cannot be certain of both a particle's position and momentum). Instead of indicating with certainty a particles position, one describes a probability distribution in which it has a certain probability being in a certain position or state. It is by this construction we define what is known as superposition, i.e. a particle that is simultaneously in all possible states, each weighted by a probability of the particle being in that individual state. The actual state of the particle can be measured and collapsed into a single state.
+
+-- Measurement
+
+When a particle is in a superposition (see the superposition key item), it effectively has the information of all possible states it can be in given certain constraints of the system. One could project the state of the particle in a certain basis to measure what state the particle is most likely in via what are known as projection operators. The measurement-superposition nature of particles in the quantum realm can be captured with phenomena such as the double slit experiment where particles will exhibit different behaviour when observed or non-observed. This lends itself to what is known as particle-wave duality in which a state can exhibit features of both a particle or a wave, however this nuance can be disregarded by describing the particle as an excitation of a field, such as is done in quantum field theory.
+
+-- Gates
+
+Particle states change under transformations which tell us how they evolve. These transformations must be unitary, meaning the states norm is constant and such the probability is preserved. If we want to change a state in time, this is known as particle evolution. These transformations are given by operators or gates which give us a precription on how to evolve a system in time.
