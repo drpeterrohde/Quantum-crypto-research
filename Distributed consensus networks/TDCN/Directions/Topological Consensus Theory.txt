@@ -1,0 +1,18 @@
+-- Topological Consensus Theory (with Igor) --
+
+More generally, proof-of-consensus is a cryptographic theory and isnt specific to blockchains and hence transactions that are timestamped. Transactions can instead be generically a state that imposes transformations. 
+
+
+- Selecting minimal genus branches after every iteration of consensus
+- Using topological invariants (such as link invariants) to describe equivalent topologies of consensus history (equivalence of corruption)
+- Corruption simulation to show robustness
+
+
+-- Extend this to not only bifurcations/merges but also introduction of other networks to algorithmically change set membership via combinatorics such as Feynman diagrams
+-- How do the different ledgers controlled by different networks mix when combining different network topologies? Can they see the information of the other networks before and if so what information can they do with that? (Modify their own topology to match that of the others or choosing to split off unilaterally)
+-- What if ledgers are able to follow arbitrary Turing-complete state update rules?
+
+- Excess -
+
+-- Applications to game theory
+- Interacting nodes via Ising model to simulate corruption evolution in quasi-node structures

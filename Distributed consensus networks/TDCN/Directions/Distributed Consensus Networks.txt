@@ -1,0 +1,10 @@
+-- Distributed Consensus Networks --
+
+Future Layout
+> Comment functionality of code
+> Update code to new version of protocol on paper draft
+> Quantum random numbers implementation
+> Parallelize computations
+> Simulations of failure (robust against)
+
+> Clean up paper + polish Github for public
