@@ -1,0 +1,7 @@
+- Look over the paper in its entirety
+
+- Code up the generalized Fisher-Yates shuffle and shows its uniformly sampling (tests using small degrees)
+-- one case is where the consensus set size is 1 and so it reduces to the usual symmetric group
+-- allow for multiplicities
+
+- Code up the protocol that I did a write up on (start with each node asks for constant consensus set size, each node can ask for 1 set of that size)
