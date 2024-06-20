@@ -542,6 +542,22 @@ There may be an inherent underlying connection here via complexity arguments. Un
 
 * Collision space vanishes with $n\to\infty$, hence hash function model becomes bijective in the infinite limit. 
 
+--
+
+Using the model,
+\begin{align}
+	h(x) = \stackbraid{x}{x} \oplus c,	
+\end{align}
+we have,
+\begin{align}
+	h(x\oplus y) &= h(x)\oplus h(y) \oplus c,
+\end{align}
+and,
+\begin{align}
+	[h(x\oplus y), h(x)\oplus h(y)] = c,
+\end{align}
+is the additive commutator (or distributor) of the action of $h$ over its pre-image space.
+
 \subsection{TCF model}
 
 Using the asymmetric model,
