@@ -32,6 +32,12 @@
 \def\symbraid#1{\langle#1\rangle_{\pi}^{\pi^{-1}}}
 \def\comm#1#2#3#4{[#1,#2]_{#3}^{#4}}
 
+%\def\stackbraid#1#2{\genfrac[]{#1}{#2}_{\pi}^{\pi^{-1}}}
+%\def\stackbraid#1#2{\langle\begin{subarray}{c}#1\\#2\end{subarray}\rangle_{\pi}^{\pi^{-1}}}
+%\newcommand{\stackbraid}[2]{\genfrac{[}{]}{0pt}{}{$#1$}{$#2$}^{\pi^{-1}}_{\pi}}
+
+\newcommand{\stackbraid}[2]{{\genfrac{[}{]}{0pt}{}{{#1}}{{#2}}}^{\pi^{-1}}_{\pi}}
+
 \makeatletter
 \newcommand{\soplus}{{{\hspace{1pt}}{\mathbin{\mathpalette\make@small{\mathbin\oplus}}}}{\hspace{1pt}}}
 
@@ -87,6 +93,29 @@ The security of asymmetric objects relates to their pre-image space which decomp
 
 The schemes resulting from this are compositional under binary XOR algebra.
 
+--
+
+Encrypt,
+\begin{align}
+	\mathtt{Alice}:\, &\stackbraid{h(m)}{m},\nonumber\\
+	\mathtt{Bob}:\, &\stackbraid{s}{p},\nonumber\\
+	\mathtt{Alice}:\, &h(m),\nonumber\\
+	\mathtt{Decrypt}:\, &\stackbraid{h(m)}{m}\oplus \stackbraid{s}{p} = \stackbraid{h(m)\oplus s}{m\oplus p},\nonumber\\
+		&\stackbraid{h(m)\oplus s}{m\oplus p} \oplus [h(m)\oplus s]_{\pi^{-1}} \oplus p_\pi\nonumber\\
+		&= m_\pi \to m.
+\end{align}
+
+Sign,
+\begin{align}
+	\mathtt{Alice}:\, &\stackbraid{h(m)}{m},\nonumber\\
+	\mathtt{Bob}:\, &\stackbraid{s}{p},\nonumber\\
+	\mathtt{Alice}:\, &m,\nonumber\\
+	\mathtt{Verify}:\, &\stackbraid{h(m)}{m}\oplus \stackbraid{p}{s} = \stackbraid{h(m)\oplus p}{m\oplus s},\nonumber\\
+		&\stackbraid{h(m)\oplus p}{m\oplus s} \oplus [m\oplus p]_{\pi^{-1}} \oplus s_\pi\nonumber\\
+		&= h(m)_\pi \to h(m).
+\end{align}
+
+
 \section{Differential encoding}
 
 A pair of bit-strings $\{x,y\}\in\{0,1\}^n$ may be expressed differentially using the tuple,
@@ -105,6 +134,74 @@ with the properties,
 	\diff{\zerovec}{x\soplus y} &= \diff{x}{y}, \nonumber\\
 	\diff{x}{y} &\Rightarrow x=y.
 \end{align}
+
+\subsection{New stuff}
+
+Use the convention of differentially encoded private and public information,
+\begin{align}
+	\Delta_i^{(k)} = [\mathtt{priv}_i^{(k)},\mathtt{pub}_i]_i,
+\end{align}
+where $i$ indexes an encoding and $k$ denotes an individual private party. Given a set of $\{\Delta_i\}_i$,
+\begin{align}
+	g_\mathtt{priv}^{(k)} &= \bigcup_i \mathtt{priv}_i^{(k)} \cup \mathtt{pub}_i,\nonumber\\
+	g_\mathrm{pub} &=  \bigcup_i \mathtt{pub}_i
+\end{align}
+are the publicly and privately available objects, acting as group generators for the available algebra of operations under XOR,
+\begin{align}
+	G_\mathrm{priv}^{(k)} &\sim \langle g_\mathtt{priv}^{(k)} \rangle, \nonumber\\
+	G_\mathrm{pub} &\sim \langle g_\mathtt{pub} \rangle,
+\end{align}
+where the public group is a subgroup of the private group,
+\begin{align}
+	G_\mathrm{pub} \subseteq G_\mathrm{priv}^{(k)}.
+\end{align}
+
+\subsubsection{Differential random codes}
+
+Round of entropy exchange
+\begin{align}
+	A\to B:\quad &[s, s\soplus \mathcal{X}_i^A], \nonumber\\
+	B\to A:\quad &[s, s\soplus \mathcal{X}_i^B],
+\end{align}
+yields the public information under addition,
+\begin{align}
+	A,B,\mathtt{pub}:\quad &[\zerovec, \mathcal{X}_i^A \soplus \mathcal{X}_i^B].
+\end{align}
+Hence the private and public group generators and elements are given by,
+\begin{align}
+	g_\mathtt{priv}^{A,B} &= \langle s, \mathcal{X}_i^A, \mathcal{X}_i^B \rangle,\nonumber\\
+	&= \{\zerovec, s, \mathcal{X}_i^A, \mathcal{X}_i^B, s\soplus \mathcal{X}_i^A, s\soplus \mathcal{X}_i^B, \mathcal{X}_i^A \soplus \mathcal{X}_i^B, s\soplus \mathcal{X}_i^A \soplus \mathcal{X}_i^B \},\nonumber\\
+	&= \mathrm{GF}(2^3), \nonumber\\
+	g_\mathtt{pub} &= \langle s\soplus \mathcal{X}_i^A, s\soplus \mathcal{X}_i^B \rangle \nonumber\\
+	&= \{\zerovec, s\soplus \mathcal{X}_i^A, s\soplus \mathcal{X}_i^B, \mathcal{X}_i^A \soplus \mathcal{X}_i^B \}, \nonumber\\
+	&= \mathrm{GF}(2^2),
+\end{align}
+which factors into,
+\begin{align}
+	G_\mathtt{priv} = G_\mathtt{pub} \times \langle s\rangle,
+\end{align}
+where the private group is the subgroup of the public group invariant under $s$.
+
+The above implements agreement upon the publicly known shared entropy source where,
+\begin{align}
+	\tilde{\mathcal{X}}_i &= \mathcal{X}_i^A \soplus \mathcal{X}_i^B.
+\end{align}
+
+Differentially encoding two independent shared public entropy sources $\{i,j\}$ over users $\{A,B\}$. Publicly share,
+\begin{align}
+\Delta_A &= [s\soplus p\soplus{\mathcal{X}}_i^A, {\mathcal{X}}_i^A \soplus {\mathcal{X}}_j^A]_A,\nonumber\\
+\Delta_B &= [s\soplus p\soplus {\mathcal{X}}_i^B, {\mathcal{X}}_i^B \soplus {\mathcal{X}}_j^B]_B,\nonumber\\
+%\mathtt{priv}:&\, [s\soplus \tilde{\mathcal{X}}_i, \tilde{\mathcal{X}}_i \soplus \tilde{\mathcal{X}}_j],\nonumber\\
+\mathtt{pub}:&\, [s\soplus p\soplus \tilde{\mathcal{X}}_i, \tilde{\mathcal{X}}_i \soplus \tilde{\mathcal{X}}_j],
+\end{align}
+
+Encode message $m$,
+\begin{align}
+\mathtt{enc}(m) &= s\soplus m \soplus \tilde{\mathcal{X}}_j,\nonumber\\
+%\mathtt{enc}(m) \soplus \mathtt{priv},\nonumber\\
+\Delta(m) &= [s\soplus \tilde{\mathcal{X}}_i, m \soplus \tilde{\mathcal{X}}_j],
+\end{align}
+decode $s\soplus m$ given known $\tilde{\mathcal{X}}_i \soplus \tilde{\mathcal{X}}_j]$.
 
 \section{Entropy codes}
 
@@ -204,6 +301,32 @@ Via distributivity we have the additional symmetric property,
 	\pi^{-1} \circ (x_\pi x)	 = x_{\pi^{-1}} x.
 \end{align}
 
+Complementation:
+\begin{align}
+	\overline{x_\pi \oplus x \oplus c} &= \overline{x_\pi} \oplus x \oplus c \nonumber\\
+	&= x_\pi \oplus \overline{x} \oplus c \nonumber\\
+	&= x_\pi \oplus x \oplus \overline{c} \nonumber\\
+	&= x_\pi \oplus x \oplus c \oplus \mathbb{I}.
+\end{align}
+Hence,
+\begin{align}
+	\overline{\stackbraid{x}{x}} &= \stackbraid{\overline{x}}{x} = \stackbraid{x}{\overline{x}} = \stackbraid{x}{x} \oplus \mathbb{I}.%\nonumber\\
+	%\stackbraid{\overline{x}}{\overline{x}} &= \stackbraid{x}{x}.
+\end{align}
+Since,
+\begin{align}
+	\stackbraid{\overline{x}}{\overline{x}} &= \stackbraid{x}{x},
+\end{align}
+braid pre-images occur in complimentary pairs, $\{x,\overline{x}\}$.
+
+The Hamming weight of a braid is even,
+\begin{align}
+	\mathrm{wt}\left(\stackbraid{x}{x}\right) \in 2\mathbb{Z},
+\end{align}
+hence while the pre-image space is $2^n$ the image space is $2^{n-1}$ owing to the parity constraint and complimentary pairwise pre-images.
+
+%Since permutations 
+
 Differential codes preserve their differential structure under common global permutations but not under non-uniform permutations,
 \begin{align}
 	\pi\circ \diff{x}{y}	 &\equiv \diff{x_\pi}{y_\pi},\nonumber\\
@@ -214,27 +337,26 @@ Differential codes preserve their differential structure under common global per
 
 \subsection{Braid codes}
 
-Defining the braid operators,
+Defining the braid operator,
 \begin{align}
-	\symbraid{x,y} &\equiv x_{\pi} y_{\pi^{-1}}, \nonumber\\
-	\symbraid{x} &\equiv x_{\pi} x_{\pi^{-1}}.
+	\stackbraid{x}{y} &\equiv x_{\pi^{-1}} \oplus y_{\pi},
 \end{align}
 the braid objects exhibit trapdoor locking effects. Knowing $\pi$ does not reveal $x$ from the braid $\symbraid{x}$. Given $\symbraid{x,y}$ and $\pi$, knowing either input $x$ or $y$ reveals the other input. Hence, for known $\pi$ both inputs $x$ and $y$ act as trapdoors.
 
 Braids preserve distributivity over $\oplus$,
 \begin{align}
-	\symbraid{x,x'} \oplus \symbraid{y,y'} &= \symbraid{x\soplus y, x'\soplus y'},\nonumber\\
-	\symbraid{x} \oplus \symbraid{y} &= \symbraid{x\oplus y}.
+	\stackbraid{x}{x'} \oplus \stackbraid{y}{y'} &= \stackbraid{x\oplus y}{x'\oplus y'},\nonumber\\
+	\stackbraid{x}{x} \oplus \stackbraid{y}{y} &= \stackbraid{x\oplus y}{x\oplus y}.
 \end{align}
 
 A braided differential hash operator takes the form,
 \begin{align}
-	\Delta(x) = \symbraid{x,h(x)} = x_\pi \cdot h_{\pi^{-1}}(x).
+	\Delta(x) = \stackbraid{x}{h(x)} = x_{\pi^{-1}} \oplus h_{\pi}(x).
 \end{align}
 
 Preparing,
 \begin{align}
-	\Delta(s\oplus m_{\pi^{-2}}) = \symbraid{s\oplus m, h(s\oplus m)},
+	\Delta(s\oplus m_{\pi^{-2}}) = \stackbraid{s\oplus m}{h(s\oplus m)},
 \end{align}
 if $s$ is a shared secret and $\pi$ and $\Delta(s\oplus m)$ are public, sharing $h(s\oplus m)$ allows $\Delta(s\oplus m)$ to be unlocked,
 \begin{align}
