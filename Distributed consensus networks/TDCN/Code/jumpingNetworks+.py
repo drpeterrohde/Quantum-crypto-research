@@ -2,38 +2,41 @@
 
 # Standard mathematics modules
 import numpy as np
-import copy
-import matplotlib.pyplot as plt                  
-
-# Standard debugging matrix
-debugMatrix = np.array([
-    [1,2],
-    [3,4]
-    ])
 
 
-# %% Defining the different networks, trust matrices, and parameters - コンプリート
+# %% Defining the networks, trust, and security parameters - コンプリート
 
-# Defining the network elements
-networkN = [0,1,2] # i,j,k
-networkM = [3,4] # l,m
+# Defining the network and its elements
+networkN = [0,1,2] # Nodes: i,j,k
+networkM = [3,4] # Nodes: l,m
 
 # Defining node-respective empty sets
 emptySets = {0:[],1:[],2:[],3:[],4:[]}
 
-# Defining trust matrices betwixt both networks
+# Defining all trust matrix permutations
 trustNinN = np.array([
-    [0,1/2,1/4],[1/3,0,1/4],[1/2,1,0]
+    [0,1/2,1/4],
+    [1/3,0,1/4],
+    [1/2,1,0]
 ])
 trustMinM = np.array([
-    [0,1/4],[1/3,0]
+    [0,1/4],
+    [1/3,0]
 ])
 trustNinM = np.array([
-    [1,1/5],[1/3,1/2],[1/3,1]
+    [1,1/5],
+    [1/3,1/2],
+    [1/3,1]
 ])
 trustMinN = np.array([
-    [1/7,1/2,1/3],[1,1/4,1/2]
+    [1/7,1/2,1/3],
+    [1,1/4,1/2]
 ])
+
+# Combining trust matrices into one total one
+totalTrust = np.hstack((
+    np.vstack((trustNinN,trustMinN)), np.vstack((trustNinM,trustMinM))
+))
 
 # Defining the security parameters of the nodes in the network
 securityN = {0:1/6,1:1/2,2:1/3}
@@ -47,12 +50,7 @@ securityNetworkN = np.max(orderedSecurityN[int(len(orderedSecurityN)/2):])
 securityNetworkM = np.max(orderedSecurityM[int(len(orderedSecurityM)/2):])
 securityNetworks = {0:securityNetworkN,1:securityNetworkM}
 
-# Combining trust matrices into one total one
-totalTrust = np.hstack((
-    np.vstack((trustNinN,trustMinN)), np.vstack((trustNinM,trustMinM))
-))
-
-# Printing the outcome of manipulation
+# Printing the outcome of definitions
 print('Trust of network N in itself')
 print(trustNinN)
 print('Trust of network M in itself')
@@ -96,6 +94,22 @@ def r(trustAinA, forward=True):
     
     return trustSum
 
+# Defining the trust function between networks   
+def rr(trustAinB, trustBinA, forward=True):
+    
+    # Computing the individual trusts amongst the networks
+    firstNetworkTrusts = r(trustAinB)
+    secondNetworkTrusts = r(trustBinA)
+    
+    # Computing the trust between networks for r(A,B)
+    if forward == True:
+        totalNetworkTrust = np.max(firstNetworkTrusts)
+    
+    # Computing the trust between networks for r(B,A)
+    if forward == False:
+        totalNetworkTrust = np.max(secondNetworkTrusts)
+        
+    return totalNetworkTrust
 
 # Defining the boolean decision function between nodes and networks
 def f(trustAinA, nodeSecurity, networkSecurity, forward=True):
@@ -122,25 +136,7 @@ def f(trustAinA, nodeSecurity, networkSecurity, forward=True):
             
     return booleanArray
 
-
-# Defining the trust function between networks   
-def rr(trustAinB, trustBinA, forward=True):
-    
-    # Computing the individual trusts amongst the networks
-    firstNetworkTrusts = r(trustAinB)
-    secondNetworkTrusts = r(trustBinA)
-    
-    # Computing the trust between networks for r(A,B)
-    if forward == True:
-        totalNetworkTrust = np.max(firstNetworkTrusts)
-    
-    # Computing the trust between networks for r(B,A)
-    if forward == False:
-        totalNetworkTrust = np.max(secondNetworkTrusts)
-        
-    return totalNetworkTrust
-
-# Testing the functions on different networks
+# Testing the functions on the initialized network distribution
 print('--- Trust of nodes amongst same network ---')
 print('Trusts of nodes in their own network')
 print(
@@ -178,64 +174,56 @@ print(
     )
 
 
-# %% Defining the re-paritioning algorithm: Algorithm 2 - コンプリート
+# %% Defining the network partitioning algorithm - コンプリート
 
-# Defining the function which repartitions a group of networks
+# Defining the function which repartitions groups of networks
 def networkPartition(networks,trustMatrix, nodeSecurity, networkSecurity, videSets):
     
-    # Initializing network copies
+    # Initializing copies of input data
     originalN, originalM = [subnetwork for subnetwork in networks]
     N, M = originalN.copy(), originalM.copy()
+    nullSets = {k: [] for k in videSets.keys()}
     
     # Printing intial configuration of networks 
     print('--- Original state of networks ---')
     print('Initial network N: ', N)
     print('Initial network M: ', M)
-    print('Initial empty sets: ', emptySets)
+    print('Initial empty sets: ', nullSets)
     
-    # Extracting trust block matrices from total trust matrix
+    # Extracting block trust matrices from total trust matrix
     trustOfNinN = trustMatrix[:len(N), :len(N)]
-    trustOfMinM = trustMatrix[len(N):len(N) + len(M), len(N):len(N) + len(M)]
     trustOfNinM = trustMatrix[:len(N), len(N):len(N) + len(M)]
     trustOfMinN = trustMatrix[len(N):len(N) + len(M), :len(N)]
     
-    # Copying the possible empty sets allowed
-    nullSets = copy.deepcopy(videSets)
-    
-    # Computing node wide trust values (i \in N, j \in M)
+    # Computing node wide trust values for all nodes i \in N
     trustIinN = r(trustOfNinN) # {r_i(N),r_j(N),r_k(N)}
     trustIinM = r(trustOfNinM) # {r_i(M),r_j(M),r_k(M)}
-    trustJinN = r(trustOfMinN) # {r_l(N),r_m(N)}
-    trustJinM = r(trustOfMinM) # {r_l(M),r_m(M)}
     
     # Computing network wide trust values
-    trustNinI = r(trustOfNinN, False) # {r_N(i),r_N(j),r_N(k)}
-    trustNinJ = r(trustOfNinM, False) # {r_N(l),r_N(m)}
     trustMinI = r(trustOfMinN, False) # {r_M(i),r_M(j),r_M(k)}
-    trustMinJ = r(trustOfMinM, False) # {r_M(l),r_M(m)}
-
+    
     # Computing optimal locations for all nodes i \in N
-    jumpLocations = [[trustIinN[i],trustIinM[i]] for i in N]
-    optimalLocations = [set.index(np.min(set))for set in jumpLocations]
+    jumpLocations = [[trustIinN[i], trustIinM[i]] for i in range(len(N))]
+    optimalLocations = [loc.index(min(loc)) for loc in jumpLocations]
     
     # Performing jumps if optimal location network accepts
-    for i in N[:]:
+    for i in range(len(networkN)):
         location = optimalLocations[i]
         if location != 0:
+            print('Node', i, 'wants to jump.')
             if trustMinI[i] <= networkSecurity[location]:
-                M.insert(0, N.pop(N.index(i)))
+                M.insert(0, N.pop(i))
+                print('Node', networkN[i], 'has jumped to network M!')
     
     # Seeing if nodes want to leave their own network into an empty set
-    for i in range(len(N)):
-        location = optimalLocations[i]
-        if trustIinN[i] > nodeSecurity[i]:
-            nullSets[i].insert(0,N.pop(i))
+    for i in range(len(networkN)):
+        if networkN[i] in N:
+            if trustIinN[i] > nodeSecurity[networkN[i]]:
+                nullSets[networkN[i]].insert(0,N.pop(N.index(networkN[i])))
+                print('Node', networkN[i], 'has abandoned its network!')
                 
     # If empty sets have been populated, make new networks
     singularNetworks = [network for network in nullSets.values() if network]
-    
-    # Flattening the empty networks
-    flattenedSingularNetworks = [network for sublist in singularNetworks for network in sublist]
     
     # Printing final configuration of networks
     print('--- Final state of networks ---')
@@ -244,20 +232,29 @@ def networkPartition(networks,trustMatrix, nodeSecurity, networkSecurity, videSe
     print('Final empty sets: ', singularNetworks)
 
     # Retuning the networks re-paritioned
-    return N,M,flattenedSingularNetworks
+    return N,M,*singularNetworks
 
 # Testing function on example test networks
 networkPartition([networkN,networkM],totalTrust,securityNM, securityNetworks,emptySets)
-    
+
+# Note: Information that was not used and was removed from the function
+# trustOfMinM = trustMatrix[len(N):len(N) + len(M), len(N):len(N) + len(M)]
+# trustJinN = r(trustOfMinN) # {r_l(N),r_m(N)}
+# trustJinM = r(trustOfMinM) # {r_l(M),r_m(M)}
+# trustNinI = r(trustOfNinN, False) # {r_N(i),r_N(j),r_N(k)}
+# trustNinJ = r(trustOfNinM, False) # {r_N(l),r_N(m)}
+# trustMinJ = r(trustOfMinM, False) # {r_M(l),r_M(m)}
+
     
 # %% Generalizing the algorithm iteratively - コンプリート
 
 # i) Generalizing it to allow all nodes in all networks to jump
 def generalPartition(networks, trustMatrix, nodeSecurity, networkSecurity, videSets):
     
-    # Initializing network copies
+    # Initializing copies of input data
     originalN, originalM = [subnetwork for subnetwork in networks]
     N, M = originalN.copy(), originalM.copy()
+    nullSets = {k: [] for k in videSets.keys()}
     
     # Printing initial configuration of networks 
     print('--- Original state of networks ---')
@@ -271,9 +268,6 @@ def generalPartition(networks, trustMatrix, nodeSecurity, networkSecurity, videS
     trustOfNinM = trustMatrix[:len(N), len(N):len(N) + len(M)]
     trustOfMinN = trustMatrix[len(N):len(N) + len(M), :len(N)]
     
-    # Copying the possible empty sets allowed
-    nullSets = {k: [] for k in videSets.keys()}
-    
     # Computing node-wide trust values (i \in N, j \in M)
     trustIinN = r(trustOfNinN)  # {r_i(N), r_j(N), r_k(N)}
     trustIinM = r(trustOfNinM)  # {r_i(M), r_j(M), r_k(M)}
@@ -281,10 +275,8 @@ def generalPartition(networks, trustMatrix, nodeSecurity, networkSecurity, videS
     trustJinM = r(trustOfMinM)  # {r_l(M), r_m(M)}
     
     # Computing network-wide trust values
-    trustNinI = r(trustOfNinN, False)  # {r_N(i), r_N(j), r_N(k)}
     trustNinJ = r(trustOfNinM, False)  # {r_N(l), r_N(m)}
     trustMinI = r(trustOfMinN, False)  # {r_M(i), r_M(j), r_M(k)}
-    trustMinJ = r(trustOfMinM, False)  # {r_M(l), r_M(m)}
 
     # Computing optimal locations for all nodes i \in N, and j \in M
     jumpLocationsI = [[trustIinN[i], trustIinM[i]] for i in range(len(N))]
@@ -293,33 +285,35 @@ def generalPartition(networks, trustMatrix, nodeSecurity, networkSecurity, videS
     optimalLocationsJ = [loc.index(min(loc)) for loc in jumpLocationsJ]
     
     # Performing jumps if optimal location network accepts
-    for i in N[:]:
+    for i in range(len(networkN)):
         location = optimalLocationsI[i]
         if location != 0:
+            print('Node', networkN[i], 'wants to jump.')
             if trustMinI[i] <= networkSecurity[location]:
-                M.insert(0, N.pop(N.index(i)))
-    for j in range(min(len(M), len(optimalLocationsJ))):  # Iterate over the minimum length
+                M.insert(0, N.pop(N[i])) ##########
+                print('Node', networkN[i], 'has jumped to network M!')
+    for j in range(len(networkM)):
         location = optimalLocationsJ[j]
         if location != 0:
+            print('Node', networkM[j], 'wants to jump.')
             if trustNinJ[j] <= networkSecurity[location]:
-                N.insert(0, M.pop(M.index(j)))  # Use index to pop the element
-    
+                N.insert(0, M.pop(M[j])) #########
+                print('Node', networkM[j], 'has jumped to network N!')
+
     # Seeing if nodes want to leave their own network into an empty set
-    for i in range(len(N)):
-        location = optimalLocationsI[i]
-        if trustIinN[i] > nodeSecurity[i]:
-            nullSets[N[i]].insert(0, N.pop(i))
-    for j in range(len(M)):
-        if j < len(optimalLocationsJ): # Check if j is within the range
-            location = optimalLocationsJ[j]
-            if trustJinM[j] > nodeSecurity[j]:
-                nullSets[M[j]].insert(0, M.pop(j))
-                
-    # If empty sets have been populated, make new networks
-    singularNetworks = [network for network in nullSets.values() if network]
-    
-    # Flattening the empty networks
-    flattenedSingularNetworks = [network for sublist in singularNetworks for network in sublist]
+    for i in range(len(networkN)):
+        if networkN[i] in N:
+            if trustIinN[i] > nodeSecurity[networkN[i]]:
+                nullSets[networkN[i]].insert(0,N.pop(N.index(networkN[i])))
+                print('Node', networkN[i], 'has abandoned its network!')
+    for j in range(len(networkM)):
+        if networkM[j] in M:
+            if trustJinM[j] > nodeSecurity[networkM[j]]:
+                nullSets[networkM[j]].insert(0,M.pop(M.index(networkM[j])))
+                print('Node', networkM[j], 'has abandoned its network!')
+                    
+        # If empty sets have been populated, make new networks
+        singularNetworks = [network for network in nullSets.values() if network]
     
     # Printing final configuration of networks
     print('--- Final state of networks ---')
@@ -328,63 +322,74 @@ def generalPartition(networks, trustMatrix, nodeSecurity, networkSecurity, videS
     print('Final empty sets: ', singularNetworks)
     
     # Retuning the networks re-paritioned
-    return N, M, flattenedSingularNetworks
+    return N, M, *singularNetworks
 
 # Testing function on example test networks
 generalPartition([networkN, networkM], totalTrust, securityNM, securityNetworks, emptySets)
 
+# Note: Information that was not used and was removed from the function
+# trustNinI = r(trustOfNinN, False)  # {r_N(i), r_N(j), r_N(k)}
+# trustMinJ = r(trustOfMinM, False)  # {r_M(l), r_M(m)}
 
-# %% Testing the above functions with different trust values  - コンプリート
 
-# Defining the network elements
-networkN = [0,1,2] # i,j,k
-networkM = [3,4] # l,m
+# %% Testing the above functions with KNOWN examples  - コンプリート
 
-# Defining node-respective empty sets
-emptySets = {0:[],1:[],2:[],3:[],4:[]}
-
-# Defining trust matrices betwixt both networks
-trustNinN = np.array([
-    [1/3,0,1],[1/5,1/2,0],[1,1,0]
-])
-trustMinM = np.array([
-    [1,0],[1/7,1/2]
-])
-trustNinM = np.array([
-    [1/2,1/6],[1/2,0],[1/2,1/4]
-])
-trustMinN = np.array([
-    [1/6,1/3,1/2],[1,0,1/6]
-])
-
-# Defining the security parameters of the nodes in the network
-securityN = {0:1/7,1:1,2:1/2}
-securityM = {3:1/3,4:1/4}
+###### Case i) All abandon: i,j,k,l,m -> 0
+securityN = {0:0,1:0,2:0}
+securityM = {3:0,4:0}
 securityNM = securityN | securityM
-
-# Defining the network wide security parameters via most lenient n/2
 orderedSecurityN = sorted(list(securityN.values()))
 orderedSecurityM = sorted(list(securityM.values()))
 securityNetworkN = np.max(orderedSecurityN[int(len(orderedSecurityN)/2):])
 securityNetworkM = np.max(orderedSecurityM[int(len(orderedSecurityM)/2):])
 securityNetworks = {0:securityNetworkN,1:securityNetworkM}
-
-# Combining trust matrices into one total one
-totalTrust = np.hstack((
-    np.vstack((trustNinN,trustMinN)), np.vstack((trustNinM,trustMinM))
-))
-
-# Testing new network system with original partitioning function
-print(
-    networkPartition([networkN,networkM],totalTrust,securityNM, securityNetworks,emptySets)
-)
+print('---- Case i) All abandon ---')
 print(
     generalPartition([networkN, networkM], totalTrust, securityNM, securityNetworks, emptySets)
 )
 
+###### Case ii) All swap: i,j,k -> M, l,m -> N [[bug: pop index out of range]]
+# # Defining all trust matrix permutations
+# trustNinN = np.array([
+#     [0,1/2,1/4],
+#     [1/3,0,1/4],
+#     [1/2,1,0]
+# ])
+# trustMinM = np.array([
+#     [0,1/4],
+#     [1/3,0]
+# ])
+# trustNinM = np.array([
+#     [0,0],
+#     [0,0],
+#     [0,0]
+# ])
+# trustMinN = np.array([
+#     [0,0,0],
+#     [0,0,0]
+# ])
+# totalTrust = np.hstack((
+#     np.vstack((trustNinN,trustMinN)), np.vstack((trustNinM,trustMinM))
+# ))
+# securityN = {0:1/6,1:1/2,2:1/3}
+# securityM = {3:1/2,4:1/4}
+# securityNM = securityN | securityM
+# orderedSecurityN = sorted(list(securityN.values()))
+# orderedSecurityM = sorted(list(securityM.values()))
+# securityNetworkN = np.max(orderedSecurityN[int(len(orderedSecurityN)/2):])
+# securityNetworkM = np.max(orderedSecurityM[int(len(orderedSecurityM)/2):])
+# securityNetworks = {0:securityNetworkN,1:securityNetworkM}
+# print('---- Case ii) All swap ---')
+# print(
+#     generalPartition([networkN, networkM], totalTrust, securityNM, securityNetworks, emptySets)
+# )
+
+###### Case iii) Unified network: i,j,k -> M, l,m -> M
+
+
 
 # %% NEXT STEPS: 
-# - Generalize to have second choices [hard]
-# - Generalize to arbitrary amount of networks [very hard]
-# - Iterate with time to trace out continuous topologies [unknown]
+# - Modify output to fit into input
+# - Generalize to arbitrary amount of networks [Hans suggestion; work with list elements instead of calling them N,...,M = [...]]
+# [Generalize to have second choices]
 
