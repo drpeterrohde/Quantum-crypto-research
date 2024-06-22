@@ -163,9 +163,9 @@ Independent maximum entropy letters,
 \end{align}
 exhibit no mutual information,
 \begin{align}
-	I(\mathcal{X}_i,\mathcal{X}_j) = n\cdot \delta_{i,j},
+	I(\mathcal{X}_i,\mathcal{X}_j) = \delta_{i,j},
 \end{align}
-and for large $n$ are statistically orthogonal, thereby constituting distinct letters in the algebra.
+which are statistically orthogonal, thereby constituting distinct letters in the algebra.
 Zero-entropy letters reduce to constants,
 \begin{align}
 	\mathcal{X}_i\to c_i,
@@ -173,6 +173,26 @@ Zero-entropy letters reduce to constants,
 for
 \begin{align}
 	H(\mathcal{X}_i) = 0.
+\end{align}
+
+Information theoretically, for maximum entropy random variables the entropy group generators are orthogonal and,
+\begin{align}
+	G_\mathrm{ent} &= \langle \mathcal{X}_i,\mathcal{X}_j\rangle,\nonumber\\
+	&= \{e,\mathcal{X}_i,\mathcal{X}_j, \mathcal{X}_i\soplus \mathcal{X}_j\} \nonumber\\
+	&= \langle \mathcal{X}_i\rangle \times \langle \mathcal{X}_j\rangle \nonumber\\
+	&\sim \mathbb{Z}_2 \times \mathbb{Z}_2.
+\end{align}
+
+Zero-entropy random variables are constants with no information-theoretic action, reducing the action of the entropy group to the trivial group,
+\begin{align}
+	\phi:&\, \mathcal{X} \to e,\nonumber\\
+	{\tilde G}_\mathrm{ent} &= \{e\} \sim \mathbf{1}.
+\end{align}
+defining a group homomorphism mapping entropic code groups non-entropic,
+\begin{align}
+	\phi: G_\mathrm{enc} \to {\tilde G}_\mathrm{enc},\nonumber\\
+	\mathrm{ker}({\tilde G}_\mathrm{enc}) = G_\mathrm{ent},\nonumber\\
+	{\tilde G}_\mathrm{enc} = G_\mathrm{enc} \,/\, \mathrm{ker}(\phi).
 \end{align}
 
 \subsection{Symmetric encryption}
@@ -205,7 +225,7 @@ The three public objects define the group generators for the group of public inf
 	&\sim \mathrm{GF}(2^3).
 \end{align}
 
-The group defined over private group generators is,
+The group defined over private group generators is comprising the full generating set of the code group,
 \begin{align}
 	G_\mathrm{priv} = G_\mathrm{enc}.
 \end{align}
@@ -231,8 +251,9 @@ has entropy,
 \end{align}
 for arbitrary $x$, and for $H(\mathcal{X})=1$ the object $g$ is a maximum entropy random variable revealing no information about $x$,
 \begin{align}
-	I(g,x) \leq ???.	
+	I(x,g) \leq 1-H(\mathcal{X},
 \end{align}
+where $I(x,g)$ is measured per-bit.
 
 In the zero-entropy regime,
 \begin{align}
@@ -249,20 +270,6 @@ for constant $c$ under which variable $x$ is information-theoretically invariant
 	S_\mathrm{ent} &= \{\mathcal{X}_i,\mathcal{X}_j\}
 \end{align}
 
-* Information theoretically, for maximum entropy random variables the entropy group generators are orthogonal and,
-\begin{align}
-	S_\mathrm{ent} &= \{\mathcal{X}_i,\mathcal{X}_j\},\nonumber\\
-	G_\mathrm{ent} &= \langle S_\mathrm{ent} \rangle \nonumber\\
-	&= \{\mathcal{X}_i,\mathcal{X}_j, \mathcal{X}_i\soplus \mathcal{X}_j\} \nonumber\\
-	&\sim \mathbb{Z}_2 \times \mathbb{Z}_2.
-\end{align}
-
-* Zero-entropy random variables are constants with no information-theoretic action, reducing the entropy group to the trivial group,
-\begin{align}
-	{\tilde S}_\mathrm{ent} &= \{e\},\nonumber\\
-	{\tilde G}_\mathrm{ent} &= \langle {\tilde S}_\mathrm{ent}\rangle \sim \mathbf{1}.
-\end{align}
-
 * The respective zero-entropy private and public groups are,
 \begin{align}
 	{\tilde S}_\mathrm{priv} &= \{s, p, p \soplus m\},\nonumber\\
@@ -275,14 +282,6 @@ for constant $c$ under which variable $x$ is information-theoretically invariant
 The zero-entropy public group contains group element $g=p\soplus m$. As $s$ and $p$ are static private keys they have no entropy, $H(\mathcal{X}_s)=H(\mathcal{X}_p)=0$, and group element $g \sim m$.
 
 Equivalently, treating private key $p$ as a random variable, $g=m\soplus \mathcal{X}_p$ takes the form of a one-time-pad cipher. Where $p$ is an infinite maximum entropy stream we have $H(\mathcal{X}_p)=1$, hence $H(m\soplus \mathcal{X}_p) = 1$. For reused $p$ we have $H(\mathcal{X}_p)=0$ and $g=m$.
-
-Zero-entropy defines a group homomorphism mapping the entropy group to the trivial group,
-\begin{align}
-	\phi: G_\mathrm{pub} \to {\tilde G}_\mathrm{pub},\nonumber\\
-	{\tilde G}_\mathrm{ent} = \{e\},\nonumber\\
-	\mathrm{ker}({\tilde G}_\mathrm{pub}) = G_\mathrm{ent},\nonumber\\
-	{\tilde G}_\mathrm{pub} = G_\mathrm{pub} \,/\, \mathrm{ker}(\phi).
-\end{align}
 
 In the zero-entropy case the scheme reduces to a OTP with an insecure reused private key. In the maximum entropy case all public group elements are maximum entropy states.
 
