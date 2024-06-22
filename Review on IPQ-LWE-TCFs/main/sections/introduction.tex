@@ -1,0 +1,50 @@
+\section{Introduction} \label{introduction}
+%* \textcolor{red}{represent the parts \textbf{that} need to be fix\textbf{ed} and rewrit\textbf{ten}}; \textcolor{blue}{\textbf{represent} parts that are considered to be \textbf{kept or} not}.
+\subsection{Overview of Post-quantum Cryptography}
+
+The need for secure communication has been a constant throughout history, driving the development of cryptographic techniques to protect sensitive information. 
+
+The security of classical cryptography largely relies on mathematical problems assumed to be computationally hard to solve. These problems, such as integer factorization and the discrete logarithm problem, form the basis of widely used algorithms like RSA and ECC. However, the development of quantum computing presents a significant challenge. Shor's algorithm \cite{}, for example, can efficiently solve the aforementioned problems, making these cryptographic primitives vulnerable to future quantum attacks. While not all classical cryptographic primitives are vulnerable to these attacks, RSA/ECC form the basis of contemporary public-key infrastructure, essential to the functionality of the internet.
+
+In recent years, the rapid development of quantum computing raises major security concerns these cryptographic schemes. Consequently, post-quantum cryptography (PQC) is now a thriving field with the view of developing new cryptographic constructions secure against both classical and quantum attacks, often referred to as `quantum resistance'. In the context of post-quantum cryptography there are many approaches using different building blocks: \textit{hash-based, code-based, multivariate-based, isogeny-based and lattice-based schemes:}
+\begin{itemize}
+    \item Hash-based cryptography: Utilising the hard-to-invert property of hash functions to build digital signature schemes.
+    \item Code-based constructions derive their security from decoding generic linear codes.
+    \item Multivariate-based cryptography uses the NP-hard Multivariate Quadratic Problem (MQ Problem) over finite fields $\mathbb{F}_p$ to construct cryptosystems.
+    \item Isogeny-based cryptography is the youngest field whose constructions are based on the hardness of finding special maps called isogenies between supersingular elliptic curves.
+    \item Lattice-based cryptography is based on the computational difficulty of mathematical problems assocaited with lattices: short integer solution (SIS), learning with errors (LWE), module learning with errors (MLWE) and their variants.
+\end{itemize}
+
+Lattice-based cryptography is arguably the most promising branch in post-quantum cryptography today due to its versatility, supporting a wide range of symmetric and asymmetric cryptographic primitives including digital signatures and public-key encryption. Additionally, lattice-based techniques are computationally efficient with compact key sizes.
+
+\subsection{Overview of Quantum Computing}
+
+\subsubsection{Quantum computing and quantum cryptography}
+
+\textcolor{red}{Quantum computing}
+
+Quantum cryptography has a major impact on symmetric key encryption constructions since it can achieve information-theoretic security. However, this does not apply to asymmetric key encryption because one of the keys always remains public. For asymmetric constructions, developing post-quantum cryptography (PQC) is still the main research goal. Based on "hard-to-solve" assumptions, PQC faces the same problem as classical cryptography, i.e., computational security.
+
+The scope of this review, however, lies in the proof of quantumness, which is distinct from these two problems. Interactive Proofs of Quantumness (IPQ) are used to establish a connection between quantum and classical devices. Note that Trapdoor Claw-free functions still base their security on hard problems like LWE (Learning with Errors) and RLWE (Ring Learning with Errors), making them computationally secure, not information-theoretic secure.
+\subsubsection{Communication between a quantum computer and classical devices.}
+
+\subsection{Notation}
+
+The following notations are used throughout this paper:
+\begin{itemize}
+    \item $q$: prime integer;
+    \item $\lambda$: security parameter;
+    \item $\mathbb{N}$: the set of natural numbers;
+    \item $\mathbb{Z}$: the set of integers;
+    \item $\mathbb{Z}_p$: the ring of integers modulo $p$;
+    \item $x\gets S$: the action of sampling a uniformly random element $x$ from the set $S$;
+    \item $p(\lambda)$ a polynomial function associated with the security parameter $\lambda$. A function $p(\lambda)$ is said to be negligible if $p(\lambda)$ is smaller than all polynomial fractions for sufficiently large $\lambda$. We define an event to occur with overwhelming probability when its probability of occurrence is at least $1-p(\lambda)$, where $p(\lambda)$ is a negligible function. \peter{If $p(\lambda)$ is a polynomial then it isn't a negligible function? Should we here separately define the notion of a neglibile function $\mathrm{neg}(\lambda)$?}
+    \item Vectors are represented using lowercase bold letters (e.g $\mathbf{s}$), while matrices are represented in uppercase bold (e.g $\mathbf{A}$).
+    \item The inner product of vectors is denoted using angular brackets, e.g $\langle\mathbf{a},\mathbf{s}\rangle$.
+    \item The transpose of a vector or matrix is denoted using a superscript `T', e.g $\mathbf{s}^T$ or $\mathbf{A}^T$, respectively.
+    \item $\|\cdot\|$ denotes the Euclidean norm.
+    %\item \textcolor{red}{Dirac notation}
+    \item $\mathcal{L}(\mathbf{A})$: a lattice with basis $\mathbf{A}$.
+    \item For a function $f:X\to \mathbb{R}$ over a finite domain $X$, the support of $f$, denoted by $\mathsf{SUPP}$, is the set of points in $X$ where $f$ is non-zero,
+    $$\mathsf{SUPP}(f)=\{x\in X|f(x)\neq 0\}.$$
+\end{itemize}

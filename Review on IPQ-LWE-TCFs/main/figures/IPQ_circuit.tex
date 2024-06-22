@@ -1,0 +1,9 @@
+\begin{quantikz}
+\lstick{$f$} \setwiretype{c} & \gategroup[3,steps=7,style={rounded
+    corners,fill=blue!10,draw=blue!50, inner
+    xsep=5pt},background]{} & & & & \ctrl{0} & \setwiretype{n} & & & \lstick{$b$} & \setwiretype{c} \gategroup[3,steps=4,style={rounded
+    corners,fill=blue!10,draw=blue!50, inner
+    xsep=5pt},background]{} & & \ctrl{0} & \setwiretype{n} & \\
+\setwiretype{n} & & \lstick{$\ket{\mathbf{0}}$} & \setwiretype{q} \qwbundle{n} & \gate{H^{\otimes n}} & \gate[2][5em]{U_f}\gateinput{$x$}\gateoutput{$x$}\wire[u]{c} & \qwbundle{n} & & & & & \qwbundle{n} & \gate{H^{\otimes n}}\wire[u]{c} & \meter{} & \setwiretype{c} \rstick{$m$} & \setwiretype{n} & \\
+\setwiretype{n} & & \lstick{$\ket{\mathbf{0}}$} & \setwiretype{q} \qwbundle{n-1} & & \gateinput{$y$}\gateoutput{$y\oplus f(x)$} & \qwbundle{n-1} & \meter{} & \setwiretype{c} \rstick{$w$} & \setwiretype{n} & & & & & &
+\end{quantikz}

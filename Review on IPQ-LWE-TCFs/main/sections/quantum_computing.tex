@@ -1,0 +1,51 @@
+\section{Quantum computing and communications} \label{quantum_computing}
+\subsection{Quantum states}
+
+In quantum mechanics, a \textit{quantum state} is a unit vector in the complex space $\mathbb{C}^N$.
+As in classical computing, all computations are performed using classical bits, $0$ and $1$. In quantum computing, we use an equivalent term that has more interesting properties: the \textit{quantum bit} or \textit{qubit}. A qubit, a two-level system, can be considered the simplest unit of quantum information. Let us use Dirac notation and denote $\ket{0}$ and $\ket{1}$ as the two basis states of a qubit, similar to the classical case. The $\ket{0}$ and $\ket{1}$ are called `kets', more explanation about the use of this notation will be proposed soon in this section.
+
+The first special property of a quantum state is \textit{superposition}, where a quantum system is not necessarily in one specific state but can be in a \textit{superposition} of them. Hence, a quantum state $\ket{\psi}$ can be expressed as a linear combination of the two basis states $\ket{0}$ and $\ket{1}$,
+\begin{align}
+\ket{\psi}=\alpha\ket{0}+\beta\ket{1}.
+\label{eq:quantumstate}
+\end{align}
+Note that the coefficients $\alpha$ and $\beta$ are complex numbers called amplitudes. They represent the probability amplitudes of getting the results $0$ and $1$ if one measures the state. We have that
+\begin{align}
+\Pr[0] &= |\alpha|^2,\nonumber\\
+\Pr[1] &= |\beta|^2,\nonumber\\
+|\alpha|^2 + |\beta|^2 &= 1.
+\end{align}
+
+One simple example is that if one has the 
+%Write about the + and - states
+
+This ``weird'' property of qubits makes the idea of quantum computers more promising since with $n$ classical bits, one can perform up to $n$ computations, while with $n$ qubits, this number could reach up to $2^n$ computations \peter{Not computations, rather terms in the superposition}.
+
+\noindent Recall that quantum states can be written as vectors in complex space; hence, using the Dirac notation for describing quantum states simplifies linear algebra operations while working with these states. Note that kets are column vectors, for example:
+\begin{align}
+    \ket{0}=\begin{bmatrix} 1\\ 0
+\end{bmatrix} \text{, }\ket{1}=\begin{bmatrix} 0\\1
+\end{bmatrix}
+\end{align}
+The superposition state~\eqref{eq:quantumstate} can be represented as the following vector:
+\begin{align}
+    \ket{\psi}=\alpha\ket{0}+\beta\ket{1} = \begin{bmatrix} \alpha\\ \beta
+\end{bmatrix}.
+\end{align}
+
+Working with row vectors in complex vector space, we also need to deal with \textit{conjugate transpose}, ie. row vectors. In the Dirac notation, these row vectors are called ``bras'', for example
+\begin{align}
+    \bra{0}= \begin{bmatrix} 1 & 0 \end{bmatrix} \text{, }\bra{1}=\begin{bmatrix} 0 & 1
+\end{bmatrix},
+\end{align}
+and 
+\begin{align}
+    \bra{\psi}=  \begin{bmatrix} \alpha^* & \beta^*\end{bmatrix}
+\end{align}
+where $\alpha^*$ and $\beta^*$ are complex conjugates of $\alpha$ and $\beta$.
+
+%The pair $\{\ket{0},\ket{1}\}$ are orthogonal and is called 
+
+\subsection{Measurement basis}
+
+\subsection{No-cloning theorem}

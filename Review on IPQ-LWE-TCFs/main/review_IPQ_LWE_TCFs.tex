@@ -1,0 +1,76 @@
+\documentclass[aps, amsmath, amssymb, nofootinbib, superscriptaddress, longbibliography, floatfix, eqsecnum, rmp, twocolumn]{revtex4-2}
+
+\usepackage[pdftex]{graphicx}
+\usepackage{mathrsfs}
+\usepackage{amsmath}
+\usepackage[colorlinks, breaklinks, urlcolor={blue}, linkcolor={red}, citecolor={blue}]{hyperref}
+\usepackage{mathtools}
+\usepackage[english]{babel}
+\usepackage{booktabs}
+\usepackage{type1cm}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{url}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocodex}
+\usepackage[strict]{changepage}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{pgfplots}
+\usepackage{wasysym}
+\usepackage{multirow}
+
+\pgfplotsset{compat=newest}
+
+\usetikzlibrary{positioning, fit, calc, shadows, shadows.blur, arrows.meta, shapes.geometric, fillbetween, fadings, quantikz2}
+
+\let\oldalgorithmic\algorithmic
+\let\endoldalgorithmic\endalgorithmic
+\renewenvironment{algorithmic}
+{\begin{adjustwidth}{-1em}{}\oldalgorithmic}
+{\endoldalgorithmic\end{adjustwidth}}
+
+\input{src/styles.tex}
+
+\frenchspacing
+    
+\captionsetup[figure]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\captionsetup[algorithm]{margin=0pt, font=small, labelfont=bf, labelsep=endash, justification=centerlast, labelsep=colon}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+\newcommand{\peter}[1]{\textcolor{red}{#1}}
+
+\newtheorem{thm}{Theorem}%[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{defn}[thm]{Definition}
+
+\begin{document}
+
+\title{Review on IPQ-LWE-TCFs}
+
+%\input{sections/authors}
+
+\date{\today}
+
+\frenchspacing
+
+\input{sections/abstract}
+
+\maketitle
+
+\tableofcontents
+\input{sections/introduction}
+\input{sections/quantum_computing}
+\input{sections/post_quantum_cryptography}
+\input{sections/tcfs}
+\input{sections/proof_of_quantumness}
+
+
+\bibliography{bibliography} \label{references}
+
+\end{document}
