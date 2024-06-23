@@ -294,7 +294,33 @@ In the zero-entropy case the scheme reduces to a OTP with an insecure reused pri
 
 Conceptually, the scheme uses $\{s,p\}$ as to prove parity constraints against other variables. For unknown maximum entropy random variables parity proofs are ZKPs and $\{s,p\}$ are infinitely reusable without information leakage. Proofs against known variables however reveal information, reducing us to OTP security arguments. 
 
-\section{Braid code dentities}
+\subsection{Universal homomorphic computing}
+
+For an $m$-bit computation we entropically encode each bit with a unique random variable where the entropic generators are secret,
+\begin{align}
+	\bar{G}_\mathcal{X} &= \langle b_i \rangle,\quad i\in\{1,m\},\, b_i\in\{0,1\}^n,\nonumber\\
+	G_\mathcal{X} &= \langle \mathcal{X}_i \soplus b_i \rangle.
+\end{align}
+The respective group elements from both subgroups forming the computational subgroup are homomorphic under $\phi:\, \mathcal{X}\to c$,
+\begin{align}
+	\phi:\, \bar{G}_\mathcal{X} \to \bar{G}_\mathcal{X}.
+\end{align}
+
+A universal gate set may be implemented via the NOT and CNOT (reversible XOR) gates,
+\begin{align}
+	\mathrm{NOT}:\quad b_i \to \bar{b}_i \equiv b_i &\to b_i\soplus \onevec,\nonumber\\
+	\phi:\, \mathcal{X}_i\soplus b_i &\to \mathcal{X}_i\soplus b_i \soplus \onevec,\nonumber\\
+	\mathrm{CNOT}:\quad (b_i,b_j) &\to (b_i\soplus b_j,b_j),\nonumber\\
+		\phi:\, (\mathcal{X}_i\soplus b_i, s\soplus \mathcal{X}_i \soplus \mathcal{X}_j\soplus b_j) &\to (\mathcal{X}_i\soplus b_i, s\soplus \mathcal{X}_j\soplus b_j),
+\end{align}
+where the first bit is the control for the CNOT and $\mathcal{X}_i\soplus\mathcal{X}_j$ is public, allowing the delegate to perform,
+\begin{align}
+	(e,\mathcal{X}_i\soplus\mathcal{X}_j) \soplus (s\soplus \mathcal{X}_i\soplus b_i, s\soplus \mathcal{X}_j\soplus b_j) \to 
+\end{align}
+
+* FIX THIS.
+
+\section{Braid code identities}
 
 \begin{align}
 	\Delta_\pi(x) &= \stackbraid{x}{x},\nonumber\\
