@@ -39,6 +39,7 @@
 
 \newcommand{\stackbraid}[2]{{\genfrac{[}{]}{0pt}{}{{#1}}{{#2}}}^{\bar{\pi}}_{\pi}}
 \newcommand{\stackbraidpow}[3]{{\genfrac{[}{]}{0pt}{}{{#1}}{{#2}}}^{\bar{\pi}^{#3}}_{\pi^#3}}
+\newcommand{\stackbraidgen}[4]{{\genfrac{[}{]}{0pt}{}{{#1}}{{#2}}}^{#3}_{#4}}
 
 \makeatletter
 \newcommand{\soplus}{{{\hspace{1pt}}{\mathbin{\mathpalette\make@small{\mathbin\oplus}}}}{\hspace{1pt}}}
@@ -314,6 +315,16 @@ Conceptually, the scheme uses $\{s,p\}$ to prove parity constraints against othe
 
 The secret sharing of entropy achieved by quantum key distribution (QKD) is via the hidden parity constraint imposed by shared entanglement, enforcing measurement correlations in random outcomes. Entropy derives from Heisenberg uncertainty while entanglement-enforced hidden parity ensures mutual outcome. Here entropy is derived client side with hidden parity constraints imposed by the group algebra.
 
+* Probability of letter collisions scales as,
+\begin{align}
+	P_\mathrm{C} &= O(k^2/2^n).
+\end{align}
+
+* To ensure $P_\mathrm{C}< \delta$ requires space,
+\begin{align}
+	n = O(\log(k^2/\delta)).
+\end{align}
+
 \subsection{Universal homomorphic computing}
 
 For an $m$-bit computation we entropically encode each bit with a unique random variable where the entropic generators are secret,
@@ -371,7 +382,7 @@ enabling cryptographically secure entropy addition.
 Following from the binary identities,
 \begin{align}
 	\bar{x} &= x \oplus \onevec,\nonumber\\
-	\overline{x\soplus y} &= x \oplus \bar{y} = \bar{x} \oplus y.
+	\overline{x\oplus y} &= x \oplus \bar{y} = \bar{x} \oplus y.
 \end{align}
 
 \begin{align}
@@ -408,7 +419,7 @@ Braid unlocking:
 
 Braid permutations:
 \begin{align}
-	\pi \circ \stackbraid{x}{y} = \stackbraid{x}{y} ???.
+	\pi \circ \stackbraid{x}{y} = \stackbraidgen{x}{y}{e}{\pi^2}.
 \end{align}
 
 Rebraiding:
