@@ -115,12 +115,9 @@ Digital signature for $m$:
 \begin{align}
 %	\mathtt{pk}_A:\, &\stackbraid{s}{p},\nonumber\\
 	\mathtt{ver}_A:\, &\stackbraid{m}{h(m)},\nonumber\\
-	\mathtt{sig}_A:\, &h(m\oplus p),\nonumber\\
+	\mathtt{sig}_A:\, &h(m_\pi),\nonumber\\
 	\mathtt{key}_B:\, &\stackbraid{s}{p},\nonumber\\
-	\mathtt{dec}_B:\, &\stackbraid{m}{h(m)}\oplus \stackbraid{s}{p} = \stackbraid{m\oplus s}{h(m)\oplus p},
-	%\oplus \mathtt{sig}_A \nonumber\\
-	%\oplus \stackbraid{s}{p} %= \stackbraid{h(m\oplus p)}{m\oplus p} \nonumber\\
-%		&= m_\pi \xrightarrow{\pi^{-1}} m.
+	\mathtt{dec}_B:\, &\stackbraid{m}{h(m)}\oplus \stackbraid{s}{p} = \stackbraid{m\oplus s}{h(m)\oplus p}.
 \end{align}
 
 %Key agreement (shared randomness):
@@ -197,7 +194,7 @@ defining a group homomorphism mapping entropic code groups to non-entropic ones,
 
 Code groups may contain both entropic ($\mathcal{X}$) and non-entropic generators ($x$) and group elements in general comprise letters from both ($\mathcal{X}\soplus x$). Non-entropic group elements comprising only non-entropic generators expose the group generators comprising the group element ($x$), whereas entropic elements ($\mathcal{X}\soplus x$) do not. The entropic and non-entropic subgroups partition a group into a direct product (sum under $\oplus$) decomposition,
 \begin{align}
-	G = G_\mathcal{X} \times \tilde{G}_\mathcal{X},	
+	G = G_\mathcal{X} \times \tilde{G}_\mathcal{X},
 \end{align}
 where the entropic subgroup $G_\mathcal{X}$ is protected while the non-entropic group is exposed.
 
@@ -315,15 +312,18 @@ Conceptually, the scheme uses $\{s,p\}$ to prove parity constraints against othe
 
 The secret sharing of entropy achieved by quantum key distribution (QKD) is via the hidden parity constraint imposed by shared entanglement, enforcing measurement correlations in random outcomes. Entropy derives from Heisenberg uncertainty while entanglement-enforced hidden parity ensures mutual outcome. Here entropy is derived client side with hidden parity constraints imposed by the group algebra.
 
-* Probability of letter collisions scales as,
+Notes:
+
+* Probability of letter collisions exhibits birthday scaling,
 \begin{align}
 	P_\mathrm{C} &= O(k^2/2^n).
 \end{align}
-
-* To ensure $P_\mathrm{C}< \delta$ requires space,
+Ensuring $P_\mathrm{C}< \delta$ requires space overhead,
 \begin{align}
 	n = O(\log(k^2/\delta)).
 \end{align}
+
+* Initial round requires two random variables. Subsequent rounds require only one additional random variable per block,  sliding against the previous one. The parity constraint is differentially encoded against the parity between $s$ and $p$, creating a perpetually evolving parity constraint. The first random variable can be interpreted as a key exchange round, followed encryption rounds. Hence the protocol has a fixed 2-fold multiplicative communications overhead with an extra one-off overhead during initial the key exchange round.
 
 \subsection{Universal homomorphic computing}
 
