@@ -325,6 +325,12 @@ Ensuring $P_\mathrm{C}< \delta$ requires space overhead,
 
 * Initial round requires two random variables. Subsequent rounds require only one additional random variable per block,  sliding against the previous one. The parity constraint is differentially encoded against the parity between $s$ and $p$, creating a perpetually evolving parity constraint. The first random variable can be interpreted as a key exchange round, followed encryption rounds. Hence the protocol has a fixed 2-fold multiplicative communications overhead with an extra one-off overhead during initial the key exchange round.
 
+* Described above is unidirectional entropy exchange where security is bounded by the entropy of the sender. Performing the protocol in both directions and utilising their joint entropy under XOR ensures at least the entropy of either party, affording a communications channel with security satisfying both. The entropy group remains closed under multiple rounds and the additional group generators do violate the security of the group.
+
+* This can be generalised to arbitrary numbers of parties over a fully connected network with $O(n^2)$ independent two-way exchanges. This enables multi-party key agreement, where the collective serves as its own entropy oracle.
+
+* From a multi-party entropy exchange every subset of the entropic group generators forms its own secure entropic subgroup reflecting the respective complete subgraph. Every entropic subgroup is secure against all others.
+
 \subsection{Universal homomorphic computing}
 
 For an $m$-bit computation we entropically encode each bit with a unique random variable where the entropic generators are secret,
@@ -356,6 +362,20 @@ allowing the delegate to perform the $(p\soplus\mathcal{X}_i,\zerovec)$ correcti
 \end{align}
 
 * FIX THIS. Use conjugate parity differentials.
+
+* Use dual-rail complementary logical encoding, $b\to (b,\bar{b})$. This preserves parity under exchange $(\bar{b},b)$ or joint complement $(a,b)\to(\bar{a},\bar{b})$ operations.
+
+* Construct a CNOT over a four-bit (2 dual-rail) space which is parity preserving under logical operations, thereby revealing no parity correlations.
+
+* Define logical operations over of parity preserving primitives.
+
+* Client provides server with matrix of entropy correlations with coefficients $M_{i,j} = \mathcal{X}_i\soplus \mathcal{X}_j$. These operators act as swaps when acting on entropic group generators, $(\mathcal{X}_i\soplus \mathcal{X}_j) \soplus \mathcal{X}_i = \mathcal{X}_j$, but do not reveal the generators themselves, preserving closure of protected subgroups.
+
+* Turn homomorphic scheme into blind computing scheme by encoding logical operators under hidden parity constraints.
+
+* Scheme has constant 2-fold multiplicative overhead (space and computational) associated with dual-rail encoding.
+
+* Model: Arbitrary number of bits and a single CNOT acting on fixed bits. Permutation matrices reroute bits to the CNOT to enable universality. Permutation matrices are hidden in the entropy correlation matrix, \mbox{$M'=P\cdot M \cdot P^{-1}$}. Choose the $M'$ matrix to refresh entropic variables so that reuse does not reveal routing information. This has $O(m^2 d)$ overhead for an $m$-bit circuit with depth $d$.
 
 \subsection{Non-abelian entropy injection}
 
