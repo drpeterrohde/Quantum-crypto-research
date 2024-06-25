@@ -1,5 +1,5 @@
 # Quantum Cryptography Research
-#### Research in quantum division at [BTQ](https://www.btq.com/) technologies. Under collaboration with [Professor Gavin Brennen](https://researchers.mq.edu.au/en/persons/gavin-brennen) at [Macquarie University](https://researchers.mq.edu.au/en/)
+#### Research in quantum division at [BTQ](https://www.btq.com/) technologies. Under collaboration with [Professor Gavin Brennen](https://researchers.mq.edu.au/en/persons/gavin-brennen) at [Macquarie University](https://researchers.mq.edu.au/en/).
 
 ## Objective
 
