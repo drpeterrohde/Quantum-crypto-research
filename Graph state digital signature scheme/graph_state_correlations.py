@@ -1,9 +1,9 @@
 import networkx as nx
 import random
 
-def graph_simulation(msg_bits, msg_qubit_connections, graph_size):
+def graph_simulation_graph_nbhds(msg_bits, msg_qubit_connections, graph_size):
     #we first generate a random graph of size graph_size according to the Erdos Reyni G_n,p model
-    #We set p = 1/2 (probability an edge connects two nodes)
+    #We set p = 1/n (probability an edge connects two nodes)
     random_graph = nx.erdos_renyi_graph(graph_size,float(1/graph_size),457,False) #change the seed around when testing
     
     #add message qubit node pairs to the graph
@@ -15,7 +15,6 @@ def graph_simulation(msg_bits, msg_qubit_connections, graph_size):
             random_graph.add_edge('Z_%s' % i, k)
         
         random_graph.add_node('Y_%s' % i)
-
         for j_prime in range(msg_qubit_connections):
             ell = random.randrange(0,graph_size - 1)
             random_graph.add_edge('Y_%s' % i, ell)
@@ -41,7 +40,37 @@ def graph_simulation(msg_bits, msg_qubit_connections, graph_size):
         if Z_neighbor == False:
             good_measurements += 1          
     print(good_measurements) #number of nodes whose neighborhood has only Y measurements
-            
+
+def graph_simulation_msg_qubit_nbhds(msg_bits, msg_qubit_connections, graph_size):
+    #we first generate a random graph of size graph_size according to the Erdos Reyni G_n,p model
+    #We set p = 1/n (probability an edge connects two nodes)
+    random_graph = nx.erdos_renyi_graph(graph_size,float(1/graph_size),457,False) #change the seed around when testing
+    
+    #add message qubit node pairs to the graph
+    #keep track of the message qubit nodes
+    #Z_msg_qubit_nodes = [] 
+    Z_measurements = set()
+    for i in range(msg_bits):
+        random_graph.add_node('Z_%s' % i)
+        #Z_msg_qubit_nodes.append('Z_%s'% i) #easy to reference these nodes later
+        for j in range(msg_qubit_connections):
+            k = random.randrange(0,graph_size - 1) #technically I could be repeating an edge, but this should happen with low probability
+            random_graph.add_edge('Z_%s' % i, k)
+            Z_measurements.add(k)
+        
+
+        
+        random_graph.add_node('Y_%s' % i)
+        #msg_qubit_nodes.append('Y_%s' % i)
+        for j_prime in range(msg_qubit_connections):
+            ell = random.randrange(0,graph_size - 1)
+            random_graph.add_edge('Y_%s' % i, ell)
+    
+    return graph_size - len(Z_measurements) #number of graph qubits which either only Y measured or not measured at all
+
+
+
+print(graph_simulation_msg_qubit_nbhds(3,2,8))
 
 #A test graph. I basically copy paste the code in my function below and apply it to this test graph
 
@@ -99,8 +128,3 @@ def graph_simulation(msg_bits, msg_qubit_connections, graph_size):
 #         good_measurements += 1          
 # print(good_measurements)
 
-
-
-
-    
-graph_simulation(3,2,500)
