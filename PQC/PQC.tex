@@ -731,14 +731,18 @@ If a single image is known the entire class of pre-images is trivially obtained 
 Under re-braiding $f(x)$ maps to a single pre-image in the collision space of $f(f(x))$,
 \begin{align}
 	h(x) &= f(f(x)) \nonumber\\
-	&=\stackbraid{f(x)}{f(x)}\nonumber\\
-	&= \stackbraidgen{x\oplus c}{x\oplus c}{\bar{\pi}^2}{\pi^2} \oplus \stackbraid{x\oplus c}{x\oplus c} \oplus c.
+	&=\stackbraid{f(x)}{f(x)}\oplus c \nonumber\\
+	&= \stackbraidgen{x\oplus c}{x\oplus c}{\bar{\pi}^2}{\pi^2} \oplus \stackbraid{x}{x} \oplus c.
 \end{align}
 Now finding the double pre-image of $h(x)$ requires finding a single pre-image from the collision space of $f(x)$, amongst,
 \begin{align}
 	|\mathrm{Col}(f(x))| = \binom{n}{n/2},
 \end{align}
-unique pre-images, only one of which has pre-image $x$. This is in general a many-to-one map where unmapped images are forbidden outcomes with multiplicity corresponding to pre-image space.
+unique pre-images, only one of which has pre-image $x$. This is in general a many-to-one map where unmapped images are forbidden outcomes with multiplicity corresponding to collision space space.
+
+The space of the available output domain is reduced by its collision space.
+
+Can we make this bijective over the full domains under symmeterisation?
 
 %\section{Algebraic cryptography}
 
