@@ -1,0 +1,175 @@
+% \colorlet{nodeVLineColor}{blue}
+% \colorlet{nodeVFillColor}{cyan!20}
+% \colorlet{nodeULineColor}{orange}
+% \colorlet{nodeUFillColor}{yellow!20}
+\colorlet{nodeRedLineColor}{red}
+\colorlet{nodeRedFillColor}{red!20}
+\colorlet{nodeGreenLineColor}{green}
+\colorlet{nodeGreenFillColor}{green!20}
+\colorlet{nodeBlueLineColor}{blue}
+\colorlet{nodeBlueFillColor}{cyan!20}
+\colorlet{nodeBlueLineColor}{blue}
+\colorlet{nodeBlueFillColor}{cyan!20}
+\colorlet{setDFillColor}{red!20}
+\colorlet{setHFillColor}{green!20}
+\colorlet{setHDFillColor}{blue!20}
+\colorlet{topologyFillColor}{cyan!10}
+\colorlet{blockchainDiscColor}{blue!10}
+\colorlet{blockchainPendingDiscColor}{red!10}
+\colorlet{redHighlightColor}{red!80}
+\colorlet{blueHighlightColor}{blue!80}
+
+% Standardised scheme
+\colorlet{nodeConsensusLineColor}{blue}
+\colorlet{nodeConsensusFillColor}{cyan!20}
+\colorlet{nodeNetworkLineColor}{orange}
+\colorlet{nodeNetworkFillColor}{yellow!20}
+\colorlet{nodeMarketLineColor}{teal}
+\colorlet{nodeMarketFillColor}{lime!20}
+\colorlet{graphEdgeColor}{gray}
+\colorlet{graphNonEdgeColor}{lightgray}
+
+\tikzset{
+	genericStyle/.style = {
+			every node/.style = {circle, draw, minimum size=2em}, >=latex
+		}
+}
+
+\tikzset{
+	myShadow/.style = {
+			blur shadow = {shadow blur steps=5, shadow xshift=0.15em, shadow yshift=-0.1em}
+		}
+}
+
+\tikzset{
+	myLightShadow/.style = {
+			blur shadow = {shadow blur steps=5, shadow xshift=0.1em, shadow yshift=-0.066em}
+		}
+}
+
+\tikzset{
+	nodeNetworkStyle/.style = {
+			draw=nodeNetworkLineColor, fill=nodeNetworkFillColor, myShadow
+		}
+}
+
+\tikzset{
+	nodeNetworkLightStyle/.style = {
+			draw=nodeNetworkLineColor, fill=nodeNetworkFillColor, myLightShadow
+		}
+}
+
+\tikzset{
+	graphNetworkEdgeStyle/.style = {draw=nodeNetworkLineColor, line width=0.5, opacity=0.15}
+}
+
+\tikzset{
+	graphConsensusEdgeStyle/.style = {draw=nodeConsensusLineColor, line width=0.5, opacity=0.15}
+}
+
+\tikzset{
+	nodeConsensusStyle/.style = {
+			draw=nodeConsensusLineColor, fill=nodeConsensusFillColor, myShadow
+		}
+}
+
+\tikzset{
+	nodeConsensusLightStyle/.style = {
+			draw=nodeConsensusLineColor, fill=nodeConsensusFillColor, myLightShadow
+		}
+}
+
+\tikzset{
+	nodeMarketStyle/.style = {
+			draw=nodeMarketLineColor, fill=nodeMarketFillColor, myShadow
+		}
+}
+
+\tikzset{
+	nodeMarketLightStyle/.style = {
+			draw=nodeMarketLineColor, fill=nodeMarketFillColor, myLightShadow
+		}
+}
+
+\tikzset{
+	graphMarketEdgeStyle/.style = {draw=nodeMarketLineColor, line width=0.5, opacity=0.15}
+}
+
+%%%
+
+
+% \tikzset{
+% 	nodeUStyle/.style = {
+% 			draw=nodeULineColor, fill=nodeUFillColor, myShadow
+% 		}
+% }
+
+% \tikzset{
+% 	nodeVStyle/.style = {
+% 			draw=nodeVLineColor, fill=nodeVFillColor, myShadow
+% 		}
+% }
+
+\tikzset{
+	nodeGrayStyleC/.style = {
+			draw=darkgray, fill=gray!20, myShadow
+		}
+}
+
+\tikzset{
+	nodeGrayStyle/.style = {
+			draw=black, fill=gray!20, myShadow
+		}
+}
+
+\tikzset{
+	nodeLightGrayStyle/.style = {
+			draw=gray, fill=lightgray!20, myShadow
+		}
+}
+
+\tikzset{
+	nodeRedStyle/.style = {
+			draw=nodeRedLineColor, line width=0.25, line cap=round, fill=nodeRedFillColor, myLightShadow
+		}
+}
+
+\tikzset{
+	nodeBlueStyle/.style = {
+			draw=nodeBlueLineColor, line width=0.25, line cap=round, fill=nodeBlueFillColor
+		}
+}
+
+\tikzset{
+	graphEdgeStyle/.style = {
+			draw=graphEdgeColor, line width=1, line cap=round
+		}
+}
+
+\tikzset{
+	graphNonEdgeStyle/.style = {
+			draw=graphNonEdgeColor, opacity=0.25, line width=1, line cap=round
+		}
+}
+
+\tikzset{
+	graphRedEdgeStyle/.style = {
+			draw=red, opacity=0.5, line width=1.5, line cap=round
+		}
+}
+
+\tikzset{
+	graphLightRedEdgeStyle/.style = {
+			draw=nodeRedLineColor, opacity=0.15
+		}
+}
+
+\tikzset{
+	graphLightGreenEdgeStyle/.style = {
+			draw=nodeMarketLineColor, opacity=0.15
+		}
+}
+
+\tikzset{
+	graphBlueEdgeStyle/.style = {draw=blue!50, line width=0.5}
+}
