@@ -82,6 +82,7 @@
 	\item Permutation space is larger than bitstring space. Hence necessarily automorphisms.
 	\item Invertible hash functions related by permutations in mutual preimage space.
 	\item As morphisms both permutations and XOR masks preserve bijectivity. Symmetrise the hash model via $h(x)=h^{-1}(x)$. This is bijective as is $\pi\circ h(X)\oplus c=h^{-1}(x)$.
+	\item Hash function model has three orders of braining in each direction. Every braid order is pre-image protected against the next. Braid $m\oplus s$ against common $\pi$. This equates to a difference term $c'$ against braided $s$. Sending difference term to another party holding $s$ allows reconstruction. This is made asymmetric by braiding against particular braid orders. If Alice shares only a braid, lower levels cannot be inferred. But the difference terms can be evaluated with different combinations of levels. Allows asymmetric encoding in either direction.
 	\item Permutations and XOR masks preserve bijectivity. If a function $f: X\to X$ is bijective then so is $f: X\to \pi\circ X \oplus c$.
 \end{itemize}
 
@@ -357,8 +358,9 @@ Ensuring $P_\mathrm{C}< \delta$ requires space overhead,
 
 For an $m$-bit computation we entropically encode each bit with a unique random variable where the entropic generators are secret,
 \begin{align}
-	\bar{G}_\mathcal{X} &= \langle b_i \rangle_{i\in\{1,m\}},\nonumber\\
-	G_\mathcal{X} &= \langle \mathcal{X}_i \soplus b_i \rangle_{i\in\{1,m\}}.
+	\bar{G}_\mathcal{X} &= \langle b_i \rangle,\nonumber\\
+	G_\mathcal{X} &= \langle \mathcal{X}_i \soplus b_i \rangle,\nonumber\\
+	b_i &\in\{0,1\},\, i\in\{1,m\}.
 \end{align}
 The respective group elements from both subgroups forming the computational subgroup form an injective group homomorphism under the information-theoretic action $\phi:\, \mathcal{X}\to c$,
 \begin{align}
@@ -559,6 +561,7 @@ Rebraiding:
 \begin{align}
 	\Delta_\pi \circ \stackbraid{x}{y} = \stackbraidpow{x}{y}{2}
 \end{align}
+* Show identities.
 
 Parity exchange:
 \begin{align}
