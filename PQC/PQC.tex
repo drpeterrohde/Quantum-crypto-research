@@ -83,7 +83,18 @@
 	\item Invertible hash functions related by permutations in mutual preimage space.
 	\item As morphisms both permutations and XOR masks preserve bijectivity. Symmetrise the hash model via $h(x)=h^{-1}(x)$. This is bijective as is $\pi\circ h(X)\oplus c=h^{-1}(x)$.
 	\item Hash function model has three orders of braining in each direction. Every braid order is pre-image protected against the next. Braid $m\oplus s$ against common $\pi$. This equates to a difference term $c'$ against braided $s$. Sending difference term to another party holding $s$ allows reconstruction. This is made asymmetric by braiding against particular braid orders. If Alice shares only a braid, lower levels cannot be inferred. But the difference terms can be evaluated with different combinations of levels. Allows asymmetric encoding in either direction.
-	\item Permutations and XOR masks preserve bijectivity. If a function $f: X\to X$ is bijective then so is $f: X\to \pi\circ X \oplus c$.
+	\item Permutations and XOR masks preserve bijectivity. If a function $f: X\to X$ is bijective then so is $f: X\to \pi\circ X \oplus c$. Taking the perfectly symmetric hash model with three orders of braiding (0,1,2) implements the trivial identity map. Adding bijectivity-preserving transformations defines the class of hash models.
+	\item The space of all bijective maps over $n$-bit bitstrings has,
+		\begin{align}
+			&f:\, X\to X,\, |X|=2^n,\nonumber\\
+			&|f| = (2^n)!,	
+		\end{align}
+		assignments. The respective space for the hash model is that afforded by permutation transforming the bijective map,
+		\begin{align}
+			&|h| = n! = O(\log\log n),
+		\end{align}
+		[a guess, check that] a reduced subspace of the allowed space of bijective maps. The full space cannot be efficiently encoded. 
+		\url{https://chatgpt.com/share/bbe8cbb0-7012-4959-a125-5bacfaac3e07}
 \end{itemize}
 
 \section{Overview}
