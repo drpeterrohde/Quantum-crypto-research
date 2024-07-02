@@ -3,12 +3,12 @@
     \coordinate (XAxisMin) at (-3,0);
     \coordinate (XAxisMax) at (5,0);
     \coordinate (YAxisMin) at (0,-3);
-    \coordinate (YAxisMax) at (0,4);
+    \coordinate (YAxisMax) at (0,3);
     \draw [thin, gray,-latex] (XAxisMin) -- (XAxisMax);% Draw x axis
     \draw [thin, gray,-latex] (YAxisMin) -- (YAxisMax);% Draw y axis
     \draw[color=blue,very thick,fill=gray, fill opacity=0.4](0,0) circle(1.6) node [above left] {$\overline{\mathcal{B}}(0,r)$};
 
-    \clip (-3,-3) rectangle (5cm,4cm); % Clips the picture...
+    \clip (-3,-3) rectangle (5cm,3cm); % Clips the picture...
     
     \pgftransformcm{1}{0.4}{0.6}{1}{\pgfpoint{0cm}{0cm}}
     \coordinate (Bone) at (0,2);
