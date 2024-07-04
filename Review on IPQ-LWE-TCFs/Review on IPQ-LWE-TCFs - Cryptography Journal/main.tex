@@ -148,7 +148,8 @@ $^{2}$ \quad Affiliation 2; e-mail@e-mail.com}
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{}
+\abstract{The recent development of quantum computers poses a significant threat to classical cryptographic systems, necessitating a collaborative effort between quantum computing and cryptography researchers. This review aims to bridge the gap between these fields by providing an accessible overview of Interactive Proof of Quantumness (IPQ), Trapdoor Claw-free Functions, and the Learning with Errors (LWE) problem for those not experienced in both areas. The IPQ protocol offers a method for a classical verifier to validate the quantum capabilities of a quantum prover. Additionally, we explore the definition and applications of Trapdoor Claw-free Functions in constructing quantum-resistant cryptographic protocols and give a brief overview of the foundational aspects of the LWE problem in post-quantum cryptography. Our review underscores the necessity for knowledge exchange between QC and cryptography communities in the quantum era by presenting these complex topics in an approachable manner.
+}
 
 % Keywords
 \keyword{interactive proof of quantumness, trapdoor claw-free function, lattice, lwe} 
@@ -529,9 +530,11 @@ Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mat
 \subsection{RLWE problem}
 
 There is a variant of the LWE problem that has been widely used in recent years called the Ring Learning With Error problem (RLWE). The primary benefit of using polynomial rings in RLWE offer more efficient and practical implementations of cryptographic schemes with significantly smaller keys and signature sizes while maintaining strong security guarantees.
-\minh{add more details to the RLWE problem since the more technical stuff has been moved to appendix}
+
+%\minh{add more details to the RLWE problem since the more technical stuff has been moved to Appendix A}
+
 \subsubsection{The Ring-LWE problem}
-Here we define the Ring-LWE in a similarly natural way as the LWE problem.
+Here, we define the Ring-LWE in a way similar to the LWE problem. More details about the technical aspects of RLWE can be found in Appendix~\ref{RLWE}.
 
 For integers $q\geq 2$, a power of two $n$, and an error distribution $\chi$ over short elements in $R_q = \mathbb{Z}_q[x]/(x^n+1)$, the (average-case, search) Ring-LWE problem (RLWE) is defined as follows: 
 Given $a_1,\dots, a_{m}\in R_q$ sampled independently and uniformly at random together with $b_1,\dots,b_{m}\in R_q$ where $b_i=a_i s + e_i \mod R_q$ for $s\in R_q$, and $e_i\gets \chi$, find $s$.
@@ -905,7 +908,7 @@ NTCFs & Noisy trapdoor claw-free functions
 \appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
 \appendixstart
 \appendix
-\section[\appendixname~\thesection]{Ring Learning With Errors problem (RLWE)}~\label{NTCFs}
+\section[\appendixname~\thesection]{Ring Learning With Errors problem (RLWE)}~\label{RLWE}
 
 Here, let's first recall some basic ideas of the RLWE problem.
 
