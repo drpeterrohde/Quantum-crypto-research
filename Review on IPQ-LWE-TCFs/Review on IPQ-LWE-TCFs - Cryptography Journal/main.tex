@@ -403,20 +403,33 @@ The no-cloning theorem is a fundamental principle in quantum mechanics that stat
 \subsection{Lattices}
 \subsubsection{Definitions}\label{lattice}
 \begin{Definition}
-    Lattices in $\mathbb{R}^n$ are discrete subgroups of $\mathbb{R}^n$. Consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{B}=[\mathbf{b}_1,\cdots,\mathbf{b}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{b}_i$ is written in column form as follow: 
+    Lattices in $\mathbb{R}^n$ are discrete subgroups of $\mathbb{R}^n$. Consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{A}=[\mathbf{a}_1,\cdots,\mathbf{a}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{a}_i$ is written in column form as follow: 
 
-$$\mathcal{L}(\mathbf{B}):=\left\{\sum_{i=1}^n\mathbf{b}_i x_i | x_i\in\mathbb{Z}~\forall i=1,\cdots,n \right\}\subseteq\mathbb{Z}^m.$$ 
+\begin{align}
+    \mathcal{L}(\mathbf{A}):=\left\{\sum_{i=1}^n\mathbf{a}_i x_i | x_i\in\mathbb{Z}~\forall i=1,\cdots,n \right\}\subseteq\mathbb{Z}^m.
+\end{align}
 \end{Definition}
 
-We refer to $n$ as the rank of the lattice $\mathcal{L}$ and $m$ as its dimension. $\mathcal{L}$ is called a full-rank lattice if $n=m$.
+We refer to $n$ as the rank of the lattice $\mathcal{L}$ and $m$ as its dimension. $\mathcal{L}$ is called a full-rank lattice if $n=m$. In most lattice-based cryptographic constructions, we primarily utilize full-rank lattices that include $q\mathbb{Z}^m$, known as $q$-ary lattices lattices, which are defined as follows 
+\begin{align}
+%\mathcal{L}_q(\mathbf{A}) &:= \left\{ \mathbf{x}\in\mathbb{Z}^m ~\rm{s.t.}~ \mathbf{x}\mod q \in\mathbf{A}^T\mathbb{Z}^n_q \right\}\\
+\mathcal{L}_q(\mathbf{A}) &:= \left\{ \mathbf{x}\in\mathbb{Z}^m ~\rm{s.t.}~\exists \mathbf{s}\in\mathbb{Z}_q^n~\rm{where}~\mathbf{A}^T\mathbf{s}=\mathbf{x}\mod q \right\}\\
+\mathcal{L}^{\perp}_q(\mathbf{A}) &:= \left\{  \mathbf{x}\in\mathbb{Z}^m~\rm{s.t.}~\mathbf{A}\mathbf{x}=0\mod q \right\} 
+\end{align}
 
-For a basis $\mathbf{B}$ of $\mathcal{L}$, we called $P(\mathbf{B})=\{\mathbf{B}\mathbf{x}|\mathbf{x}\in[0,1)^n\}$ is the fundamental parallelepiped of $\mathbf{B}$. A ``good'' basis of $\mathcal{L}$ results in a parallelepiped that is more square-like, whereas a ``bad'' basis produces a very thin parallelepiped. We denote$\|\mathbf{B}\|:=\max_{1 \le i \le k} \|\mathbf{b}_i\|$ the maximum $l_2$ length of the vectors in $\mathbf{B}$ and $\tilde{\mathbf{B}}:=\{\tilde{\mathbf{b}}_1,\cdots,\tilde{\mathbf{b}}_k \}$ the Gram-Schmidt orthogonalization of the vectors $\mathbf{b}_1,\cdots,\mathbf{b}_k$ in that order.
+However, to simplify the notation, we will omit $q$ and simply write $\mathcal{L}(\mathbf{A})$ and $\mathcal{L}^{\perp}(\mathbf{A})$ for a given matrix $\mathbf{A}$. 
+
+
+Consider a basis $\mathbf{A}$ of $\mathcal{L}$, we called $P(\mathbf{A})=\{\mathbf{A}\mathbf{x}|\mathbf{x}\in[0,1)^n\}$ is the fundamental parallelepiped of $\mathbf{A}$. A ``good'' basis of $\mathcal{L}$ results in a parallelepiped that is more square-like, whereas a ``bad'' basis produces a very thin parallelepiped. We denote$\|\mathbf{A}\|:=\max_{1 \le i \le k} \|\mathbf{a}_i\|$ the maximum $l_2$ length of the vectors in $\mathbf{A}$ and $\tilde{\mathbf{A}}:=\{\tilde{\mathbf{a}}_1,\cdots,\tilde{\mathbf{a}}_k \}$ the Gram-Schmidt orthogonalization of the vectors $\mathbf{a}_1,\cdots,\mathbf{a}_k$ in that order.
+
+
 \begin{figure}[!htb]
     \centering
     \input{figures/lattice_basis}    
-    \caption{Consider a two-dimensional lattice $\mathcal{L}$, a basis for $\mathcal{L}$ consists of two non-zero vectors $\mathbf{b}_1$ and  $\mathbf{b}_2$ such that any vector in $\mathcal{L}$ can be written as a linear combination of $\mathbf{b}_1$ and $\mathbf{b}_2$, e.g. $\mathbf{b}_1+\mathbf{b}_2$, $2\mathbf{b}_1+\mathbf{b}_2\in \mathcal{L}$. The grey areas are the fundamental parallelepipeds formed by different bases of $\mathcal{L}$. A good basis for $\mathcal{L}$ will have vectors with lengths that are close to each other and an angle between them that is close to $90$ degrees and forms a more square-like parallelepiped.}
+    \caption{Consider a two-dimensional lattice $\mathcal{L}$, a basis for $\mathcal{L}$ consists of two non-zero vectors $\mathbf{a}_1$ and  $\mathbf{a}_2$ such that any vector in $\mathcal{L}$ can be written as a linear combination of $\mathbf{a}_1$ and $\mathbf{a}_2$, e.g. $\mathbf{a}_1+\mathbf{a}_2$, $2\mathbf{a}_1+\mathbf{a}_2\in \mathcal{L}$. The grey areas are the fundamental parallelepipeds formed by different bases of $\mathcal{L}$. A good basis for $\mathcal{L}$ will have vectors with lengths that are close to each other and an angle between them that is close to $90$ degrees and forms a more square-like parallelepiped.}
     \label{fig:lattice_basis}
 \end{figure}
+
 
 For a given lattice $\mathcal{L}$, let $\mathbf{s}$ denote the shortest vector of $\mathcal{L}$. One basic parameter of a lattice is the length of this shortest vector, denoted as $\lambda_1(\mathcal{L}) = \|\mathbf{s}\|$. This parameter is also called \textit{successive minima} if one considers the scenario where $\lambda_1$ is the smallest $r$ such that all the lattice points inside a ball of radius $r$ $\overline{\mathcal{B}}(0,r)$ span a space of dimension $1$. Similarly, we can define the $n^{th}$ successive minimum $\lambda_n(\mathcal{L})$ this lattice as the smallest number $r$ that all the lattice points inside $\overline{\mathcal{B}}(0,r)$ span a space of dimension $n$. 
 %More concretely, $\lambda_n(\mathcal{L}) = \inf\{r|\dim(\mathsf{span}(\mathcal{L}\cap \overline{\mathcal{B}}(0,r)))\leq n\}$.
@@ -512,13 +525,23 @@ In cryptography, a \textbf{trapdoor} refers to a concealed backdoor embedded wit
 
 The first approach to constructing trapdoors for lattices involves the use of short bases, as these lead to more efficient algorithms for solving lattice problems. Algorithms designed to tackle challenges such as the Shortest Vector Problem (SVP) or the Closest Vector Problem (CVP) become more practical with basis vectors that are short and nearly orthogonal~\ref{lattice}. This is because the computations involved are simpler and can be executed more swiftly. Specifically, for solving the LWE problem using a short basis, one strategy employs Babai's nearest plane algorithm~\cite{Babai}. The initial step involves utilizing a short basis $\mathbf{T}_{\mathbf{A}}$ of a lattice $\mathcal{L}(\mathbf{A})$ to identify the lattice vector closest to $\mathbf{y}$. Given that the error is sufficiently ``small'', it becomes feasible to extract the secret vector $\mathbf{s}$'s information. A sequence of works has been carried out to develop more trapdoor mechanisms. Two of the notable approaches are~\cite{AP09}, which created "short bases trapdoors," and~\cite{MP12}, which constructed "gadget-based trapdoors."
 
-\cite{AP09} presented an algorithm called $\mathsf{TrapGen}(n,m,q)$ to sample a uniform matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ with a low Gram-Schmidt norm such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The idea is to sample a uniformly random matrix $\mathbf{A}_1$ that has dimension $m_1$ smaller than $m$, then extend $\mathbf{A}_1\in\mathbb{Z}^{n\times m_1}_q$ to $\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2]\in\mathbb{Z}^{n\times m}_q$ by generating $\mathbf{A}_2\in\mathbb{Z}^{n\times m_2}_q$ together with a short matrix $\mathbf{T}_{\mathbf{A}}\in\mathbb{Z}^{m\times m}$ ($m=m_1+m_2$).
+\cite{AP09} presented an algorithm called $\mathsf{TrapGen}(n,m,q)$ to sample a matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The idea is to sample a uniformly random matrix $\mathbf{A}_1$ that has dimension $m_1$ smaller than $m$, then extend $\mathbf{A}_1\in\mathbb{Z}^{n\times m_1}_q$ to $\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2]\in\mathbb{Z}^{n\times m}_q$ by generating $\mathbf{A}_2\in\mathbb{Z}^{n\times m_2}_q$ together with a short matrix $\mathbf{T}_{\mathbf{A}}\in\mathbb{Z}^{m\times m}$ ($m=m_1+m_2$).
 \begin{algorithm}[H]
 	\begin{algorithmic}
 		\Function{TrapGen}{$(n,m,q)$}
-  
-        \minh{filling up information of the TrapGen algorithm}\\
-		\Return{$(\mathbf{A},\mathbf{T}_{\mathbf{A}})$}
+        \State{$m= m_1+m_2$}
+		\LComment{Sample a uniformly random matrix $\mathbf{A}_1$}
+        \State{$\mathbf{A}_1\gets\mathbb{Z}^{n\times m_1}_q$}
+		\LComment{Generate component matrices}
+        \State{$\mathbf{U}\in\mathbb{Z}^{m_2\times m_2}$, $\mathbf{R}\in\mathbb{Z}^{m_1\times m_2}$, $\mathbf{P}\in\mathbb{Z}^{m_2\times m_1}$ and $\mathbf{C}\in\mathbb{Z}^{m_1\times m_1}$ such that $\mathbf{U}$ is nonsingular and $(\mathbf{G}\mathbf{P}+\mathbf{C})\subset\mathcal{L}^{\perp}(\mathbf{A}_1)$.}
+		\LComment{Generate matrix $\mathbf{A}_2$}
+        \State{$\mathbf{A}_2=-\mathbf{A}_1\cdot (\mathbf{R}+\mathbf{G})\in\mathbb{Z}^{n\times m_2}_q$.}
+        \LComment{Generate the trapdoor $\mathbf{T}_{\mathbf{A}}$}
+        \State{$\mathbf{T}_{\mathbf{A}}=\begin{bmatrix} 
+        (\mathbf{G}+\mathbf{R})\mathbf{U} & \mathbf{R}\mathbf{P})-\mathbf{C}\\
+        \mathbf{U} & \mathbf{P}
+        \end{bmatrix}$}
+        \State\Return{$(\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2],\mathbf{T}_{\mathbf{A}})$}
 		\EndFunction
 	\end{algorithmic}
 	\caption{$\mathsf{TrapGen}(n,m,q)$ generates a uniformly random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its trapdoor $\mathbf{T}_\mathbf{A}\in\mathbb{Z}^{m\times m}$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}}=\mathbf{0}$} \label{alg:random_subset}
@@ -528,12 +551,10 @@ The second approach is the trapdoor technique from~\cite{MP12}, which we focus o
 a matrix $\mathbf{G}\in\mathbb{Z}^{n\times m}_q$ is called ``primitive matrix'' if its columns generate all of $\mathbb{Z}^n_q$, i.e., $\mathbf{G}\mathbb{Z}^m=\mathbb{Z}^n_q$. We can now define the $\mathbf{G}$-trapdoor of a lattice $\mathcal{L}$ is a matrix $\mathbf{R}\in\mathbb{Z}^{(m-\omega)\times \omega}$ such that $\mathbf{A}\begin{pmatrix}
     \mathbf{R}\\ 
     \mathbf{I}
-  \end{pmatrix} = \mathbf{H}\mathbf{G}$ for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. 
-
-The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly (in $n$) close to the uniform distribution. 
+  \end{pmatrix} = \mathbf{H}\mathbf{G}$ for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly (in $n$) close to the uniform distribution. 
 
 Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mathbf{A}$, $t_{\mathbf{A}}$ and $\mathbf{A}\mathbf{s}+\mathbf{y}$ where $\mathbf{s}\in\mathbb{Z}^n_q$ is arbitrary and $\mathbf{y}\gets \mathcal{D}_{\mathbb{Z}^m,\alpha q}$ for $1/\alpha \geq \sqrt{n\log q}\cdot \omega(\sqrt{\log n})$, outputs $\mathbf{s}$ and $\mathbf{y}$ with overwhelming probability over $(\mathbf{A},\mathbf{t}_{\mathbf{A}})\gets \mathsf{GenTrap}(1^n,1^m,q)$. By using the ``strong'' trapdoor $\mathbf{R}$, one also can efficiently generate the ``weak'' trapdoor $\mathbf{T}_{\mathbf{A}}$ or $\mathbf{s}$. Since in lattice-based PQC, these trapdoors $\mathbf{R},\mathbf{T}_{\mathbf{A}}, \mathbf{s}$ can be used as the secret keys of hierarchical parties in some hierarchical cryptosystems.
-
+\minh{rewriting the gadget trapdoor}
 %\peter{The above we could also expand to make more accessible.}
 
 \subsection{RLWE problem}
