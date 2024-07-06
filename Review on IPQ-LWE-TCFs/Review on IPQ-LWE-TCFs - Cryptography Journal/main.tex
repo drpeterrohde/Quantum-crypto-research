@@ -302,14 +302,12 @@ Another property of quantum states is \textit{measurement} where it helps one as
 \end{align}
 This collapse of quantum states is not reversible, meaning once the measurement is made, the original superposition state is lost, and we are left with classical information. This property of quantum measurement underlies many quantum algorithms and cryptographic protocols, impacting how information is extracted from quantum systems and ensuring that certain quantum properties, like entanglement and superposition, can be harnessed effectively only until the measurement is performed.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/measurement}
     \caption{Measuring a quantum state:  The thin line denotes quantum information and the double lines denote classical information. The result of the measurement $m$ is a classical result according to a probability distribution~\eqref{eq:probability_quantum_state}.}
     \label{fig:measurement}
 \end{figure}
-
-
 
 
 In quantum computing, basis quantum gates are fundamental operations used to manipulate qubits, similar to classical logic gates in classical computing. These quantum gates are represented by unitary matrices $\mathbf{U}$, which preserve the norm of quantum states and ensure reversibility. A matrix $\mathbf{U}$ is called unitary if and only if it satisfies
@@ -369,7 +367,7 @@ Note that when one applies the Hadamard gate to each qubit in an $n$-qubit syste
     H^{\otimes n}\ket{\mathbf{0}}=\frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}.
 \end{align}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/hadamardtransform}
     \caption{Quantum circuit applying the Hadamard transform to $n$-qubit system.}
@@ -382,7 +380,7 @@ U_f\Bigl(\frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}\ket{0
 \end{align}
 
 By measuring the output register, which holds $f(\mathbf{x})$, one can obtain the function's value for a specific input $\mathbf{x}$. 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/evaluate_a_function}
     \caption{Evaluation of a classical function $f(\mathbf{x})$ on quantum registers.}
@@ -525,15 +523,16 @@ In cryptography, a \textbf{trapdoor} refers to a concealed backdoor embedded wit
 
 The first approach to constructing trapdoors for lattices involves the use of short bases, as these lead to more efficient algorithms for solving lattice problems. Algorithms designed to tackle challenges such as the Shortest Vector Problem (SVP) or the Closest Vector Problem (CVP) become more practical with basis vectors that are short and nearly orthogonal~\ref{lattice}. This is because the computations involved are simpler and can be executed more swiftly. Specifically, for solving the LWE problem using a short basis, one strategy employs Babai's nearest plane algorithm~\cite{Babai}. The initial step involves utilizing a short basis $\mathbf{T}_{\mathbf{A}}$ of a lattice $\mathcal{L}(\mathbf{A})$ to identify the lattice vector closest to $\mathbf{y}$. Given that the error is sufficiently ``small'', it becomes feasible to extract the secret vector $\mathbf{s}$'s information. A sequence of works has been carried out to develop more trapdoor mechanisms. Two of the notable approaches are~\cite{AP09}, which created "short bases trapdoors," and~\cite{MP12}, which constructed "gadget-based trapdoors."
 
-\cite{AP09} presented an algorithm called $\mathsf{TrapGen}(n,m,q)$ to sample a matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The idea is to sample a uniformly random matrix $\mathbf{A}_1$ that has dimension $m_1$ smaller than $m$, then extend $\mathbf{A}_1\in\mathbb{Z}^{n\times m_1}_q$ to $\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2]\in\mathbb{Z}^{n\times m}_q$ by generating $\mathbf{A}_2\in\mathbb{Z}^{n\times m_2}_q$ together with a short matrix $\mathbf{T}_{\mathbf{A}}\in\mathbb{Z}^{m\times m}$ ($m=m_1+m_2$).
-\begin{algorithm}[H]
+\cite{AP09} presented an algorithm called $\mathsf{TrapGen}(n,m,q)$ to sample a matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The idea is to sample a uniformly random matrix $\mathbf{A}_1$ that has dimension $m_1$ smaller than $m$, then extend $\mathbf{A}_1\in\mathbb{Z}^{n\times m_1}_q$ to $\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2]\in\mathbb{Z}^{n\times m}_q$ by generating $\mathbf{A}_2\in\mathbb{Z}^{n\times m_2}_q$ together with a short matrix $\mathbf{T}_{\mathbf{A}}\in\mathbb{Z}^{m\times m}$.
+
+\begin{algorithm}[!htbp]
 	\begin{algorithmic}
 		\Function{TrapGen}{$(n,m,q)$}
         \State{$m= m_1+m_2$}
 		\LComment{Sample a uniformly random matrix $\mathbf{A}_1$}
         \State{$\mathbf{A}_1\gets\mathbb{Z}^{n\times m_1}_q$}
 		\LComment{Generate component matrices}
-        \State{$\mathbf{U}\in\mathbb{Z}^{m_2\times m_2}$, $\mathbf{R}\in\mathbb{Z}^{m_1\times m_2}$, $\mathbf{P}\in\mathbb{Z}^{m_2\times m_1}$ and $\mathbf{C}\in\mathbb{Z}^{m_1\times m_1}$ such that $\mathbf{U}$ is nonsingular and $(\mathbf{G}\mathbf{P}+\mathbf{C})\subset\mathcal{L}^{\perp}(\mathbf{A}_1)$.}
+        \State{$\mathbf{U}\in\mathbb{Z}^{m_2\times m_2}$, $\mathbf{R}\in\mathbb{Z}^{m_1\times m_2}$, $\mathbf{P}\in\mathbb{Z}^{m_2\times m_1}$ and $\mathbf{C}\in\mathbb{Z}^{m_1\times m_1}$ such that $\mathbf{U}$ is non-singular and $(\mathbf{G}\mathbf{P}+\mathbf{C})\subset\mathcal{L}^{\perp}(\mathbf{A}_1)$.}
 		\LComment{Generate matrix $\mathbf{A}_2$}
         \State{$\mathbf{A}_2=-\mathbf{A}_1\cdot (\mathbf{R}+\mathbf{G})\in\mathbb{Z}^{n\times m_2}_q$.}
         \LComment{Generate the trapdoor $\mathbf{T}_{\mathbf{A}}$}
@@ -544,17 +543,43 @@ The first approach to constructing trapdoors for lattices involves the use of sh
         \State\Return{$(\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2],\mathbf{T}_{\mathbf{A}})$}
 		\EndFunction
 	\end{algorithmic}
-	\caption{$\mathsf{TrapGen}(n,m,q)$ generates a uniformly random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its trapdoor $\mathbf{T}_\mathbf{A}\in\mathbb{Z}^{m\times m}$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}}=\mathbf{0}$} \label{alg:random_subset}
+	\caption{$\mathsf{TrapGen}(n,m,q)$ generates a uniformly random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its trapdoor $\mathbf{T}_\mathbf{A}\in\mathbb{Z}^{m\times m}$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}}=\mathbf{0}$} \label{alg:trapgen}
 \end{algorithm}
 
-The second approach is the trapdoor technique from~\cite{MP12}, which we focus on more due to its simpler, more elegant nature, and its support for more efficient cryptographic constructions. \cite{MP12} first defined a ``primitive vector'' $\mathbf{g}=\{g_1,\dots,g_k\}\in\mathbb{Z}^k_q$ where $\gcd(g_1,\dots,g_k,q)=1$. Then
-a matrix $\mathbf{G}\in\mathbb{Z}^{n\times m}_q$ is called ``primitive matrix'' if its columns generate all of $\mathbb{Z}^n_q$, i.e., $\mathbf{G}\mathbb{Z}^m=\mathbb{Z}^n_q$. We can now define the $\mathbf{G}$-trapdoor of a lattice $\mathcal{L}$ is a matrix $\mathbf{R}\in\mathbb{Z}^{(m-\omega)\times \omega}$ such that $\mathbf{A}\begin{pmatrix}
+The second approach is the trapdoor technique from ~\cite{MP12}, called the gadget trapdoor, which is simpler, has a more elegant nature, and supports more efficient cryptographic constructions. \cite{MP12} first defined a ``primitive vector'' $\mathbf{g}=\{g_1,\dots,g_k\}\in\mathbb{Z}^k_q$ where $\gcd(g_1,\dots,g_k,q)=1$ and $n\cdot k=m$, then generates the ``primitive matrix'' (or gadget matrix) $\mathbf{G}=\mathbf{I}_n\otimes\mathbf{g}^T\in\mathbb{Z}^{n\times m}_q$. The gadget trapdoor of a lattice $\mathcal{L}(\mathbf{A})$ is a matrix $\mathbf{R}\in\mathbb{Z}^{(m-\omega)\times \omega}$ such that 
+\begin{align}
+    \mathbf{A}\begin{pmatrix}
     \mathbf{R}\\ 
     \mathbf{I}
-  \end{pmatrix} = \mathbf{H}\mathbf{G}$ for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly (in $n$) close to the uniform distribution. 
+  \end{pmatrix} = \mathbf{H}\mathbf{G}
+  \label{eq:gadget_matrix}
+\end{align}
+for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly close to the uniform distribution. 
 
-Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mathbf{A}$, $t_{\mathbf{A}}$ and $\mathbf{A}\mathbf{s}+\mathbf{y}$ where $\mathbf{s}\in\mathbb{Z}^n_q$ is arbitrary and $\mathbf{y}\gets \mathcal{D}_{\mathbb{Z}^m,\alpha q}$ for $1/\alpha \geq \sqrt{n\log q}\cdot \omega(\sqrt{\log n})$, outputs $\mathbf{s}$ and $\mathbf{y}$ with overwhelming probability over $(\mathbf{A},\mathbf{t}_{\mathbf{A}})\gets \mathsf{GenTrap}(1^n,1^m,q)$. By using the ``strong'' trapdoor $\mathbf{R}$, one also can efficiently generate the ``weak'' trapdoor $\mathbf{T}_{\mathbf{A}}$ or $\mathbf{s}$. Since in lattice-based PQC, these trapdoors $\mathbf{R},\mathbf{T}_{\mathbf{A}}, \mathbf{s}$ can be used as the secret keys of hierarchical parties in some hierarchical cryptosystems.
-\minh{rewriting the gadget trapdoor}
+\begin{algorithm}[!htbp]
+	\begin{algorithmic}
+		\Function{Gentrap}{$(n,m,q)$}
+		\LComment{Sample a uniformly random matrix $\mathbf{A}_1$}
+        \State{$\mathbf{A}_1\gets\mathbb{Z}^{n\times m_1}_q$}
+		\LComment{Choose a desired tag $\mathbf{H}$}
+        \State{$\mathbf{H}\gets\mathbb{Z}^{n\times n}_q$ such that $\mathbf{H}$ is an invertible matrix. The algorithm can also set $\mathbf{H}=\mathbf{I}$.}
+		\LComment{Sample the gadget trapdoor $\mathbf{R}$ from a random distribution $\mathcal{D}$ over $\mathbb{Z}^{(m-\omega)\times \omega}$}
+        \State{$\mathbf{R}\gets\mathcal{D}$.}
+        \LComment{Compute matrix $\mathbf{A}$}
+        \State{$\mathbf{A}=[\mathbf{A}_1|\mathbf{H}\mathbf{G}-\mathbf{A}_1\mathbf{R}]\in\mathbb{Z}^{n\times m}_q$}
+        \State\Return{$(\mathbf{A},\mathbf{T}_{\mathbf{A}}=\mathbf{R})$}
+		\EndFunction
+	\end{algorithmic}
+	\caption{$\mathsf{Gentrap}(n,m,q)$ generates a (pseudo) random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its gadget trapdoor $\mathbf{T}_\mathbf{A}=\mathbf{R}$ satisfies~\eqref{eq:gadget_matrix}} \label{alg:gentrap}
+\end{algorithm}
+
+
+%Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mathbf{A}$, $t_{\mathbf{A}}$ and $\mathbf{A}\mathbf{s}+\mathbf{y}$ where $\mathbf{s}\in\mathbb{Z}^n_q$ is arbitrary and $\mathbf{y}\gets \mathcal{D}_{\mathbb{Z}^m,\alpha q}$ for $1/\alpha \geq \sqrt{n\log q}\cdot \omega(\sqrt{\log n})$, outputs $\mathbf{s}$ and $\mathbf{y}$ with overwhelming probability over $(\mathbf{A},\mathbf{t}_{\mathbf{A}})\gets \mathsf{GenTrap}(1^n,1^m,q)$.
+
+In some cases, the pair of vector $(\mathbf{s},\mathbf{e})$ given an LWE problem instance $(\mathbf{A},\mathbf{y}=\mathbf{A}\mathbf{s}+\mathbf{e})$ is also used as the secret trapdoor.
+
+By using the ``strong'' trapdoor $\mathbf{R}$, one also can efficiently generate the ``weak'' trapdoor $\mathbf{T}_{\mathbf{A}}$ or $\mathbf{s}$. Since in lattice-based PQC, these trapdoors $\mathbf{R},\mathbf{T}_{\mathbf{A}}, \mathbf{s}$ can be used as the secret keys of hierarchical parties in some hierarchical cryptosystems.
+
 %\peter{The above we could also expand to make more accessible.}
 
 \subsection{RLWE problem}
