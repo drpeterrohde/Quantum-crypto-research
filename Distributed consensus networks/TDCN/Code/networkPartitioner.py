@@ -114,11 +114,20 @@ securityM = {3:1/2,4:1/4}
 nodeSecurity = securityN | securityM
 
 # Defining the network wide security parameters via most lenient n/2 nodes
-orderedSecurityN = sorted(list(securityN.values()))
-orderedSecurityM = sorted(list(securityM.values()))
-securityNetworkN = np.max(orderedSecurityN[int(len(orderedSecurityN)/2):])
-securityNetworkM = np.max(orderedSecurityM[int(len(orderedSecurityM)/2):])
-networkSecurity = {0:securityNetworkN,1:securityNetworkM}
+networkSecurity = {}
+for networkIndex, network in enumerate(networks):
+    
+    # Get the security values for the current network
+    securityValues = [nodeSecurity[node] for node in network]
+    
+    # Sort the security values in increasing order
+    orderedSecurity = sorted(securityValues)
+    
+    # Find the most lenient security value among the top n/2 nodes
+    mostLenientSecurity = np.max(orderedSecurity[len(orderedSecurity) // 2:])
+    
+    # Assign the most lenient security value to the corresponding network
+    networkSecurity[networkIndex] = mostLenientSecurity
 
 # Printing the outcome of definitions
 print('Trust of network N in N:')
@@ -144,8 +153,6 @@ print('Trust of a network in its nodes:')
 print(r(trustNinN,False))
 print('Security parameters of nodes in network N:')
 print(securityN)
-print('Security parameters of network N:')
-print(securityNetworkN)
 print('--- Trust between different networks ---')
 print('Trust of network N in network M:')
 print(rr(trustNinM,trustMinN))
@@ -387,6 +394,82 @@ securityNetworkM = np.max(orderedSecurityM[int(len(orderedSecurityM)/2):])
 networkSecurity = {0:securityNetworkN,1:securityNetworkM}
 print('---- Case iii) Unified network ---')
 caseThreeOutput = networkPartitioner(networks,systemTrust,nodeSecurity,networkSecurity)
+
+
+# %% Testing the code with N = 3 networks
+
+# Defining the networks and their elements
+N = [0,1,2] # Network N with nodes: i,j,k = 0,1,2
+M = [3,4] # Network M with nodes: l,m = 3,4
+P = [5] # Network P with nodes: p = 5
+networks = [N,M,P]
+
+# Defining random total trust matrix
+systemTrust = np.random.rand(6,6)
+
+# Defining the security parameters of the nodes in the network
+securityN = {0:1/6,1:1/2,2:1/3}
+securityM = {3:1/2,4:1/4}
+securityP = {5:1/7}
+nodeSecurity = securityN | securityM | securityP
+
+# Defining the network wide security parameters via most lenient n/2 nodes
+networkSecurity = {}
+for networkIndex, network in enumerate(networks):
+    
+    # Get the security values for the current network
+    securityValues = [nodeSecurity[node] for node in network]
+    
+    # Sort the security values in increasing order
+    orderedSecurity = sorted(securityValues)
+    
+    # Find the most lenient security value among the top n/2 nodes
+    mostLenientSecurity = np.max(orderedSecurity[len(orderedSecurity) // 2:])
+    
+    # Assign the most lenient security value to the corresponding network
+    networkSecurity[networkIndex] = mostLenientSecurity
+
+# Testing the function above on our network configuration
+testOutput = networkPartitioner(networks,systemTrust,nodeSecurity,networkSecurity)
+
+
+# %% Testing the code with N = 4 networks
+
+# Defining the networks and their elements
+N = [0,1,2] # Network N with nodes: i,j,k = 0,1,2
+M = [3,4] # Network M with nodes: l,m = 3,4
+P = [5,6,7] # Network P with nodes: p,q,r = 5,6,7
+Q = [8,9] # Network Q with nodes: a,b = 8,9
+networks = [N,M,P,Q]
+
+# Defining random total trust matrix
+systemTrust = np.random.rand(10,10)
+
+# Defining the security parameters of the nodes in the network
+securityN = {0:1/6,1:1/2,2:1/3}
+securityM = {3:1/2,4:1/4}
+securityP = {5:1/7,6:1/8,7:1/2}
+securityQ = {8:1/3,9:1/4}
+nodeSecurity = securityN | securityM | securityP | securityQ
+
+# Defining the network wide security parameters via most lenient n/2 nodes
+networkSecurity = {}
+for networkIndex, network in enumerate(networks):
+    
+    # Get the security values for the current network
+    securityValues = [nodeSecurity[node] for node in network]
+    
+    # Sort the security values in increasing order
+    orderedSecurity = sorted(securityValues)
+    
+    # Find the most lenient security value among the top n/2 nodes
+    mostLenientSecurity = np.max(orderedSecurity[len(orderedSecurity) // 2:])
+    
+    # Assign the most lenient security value to the corresponding network
+    networkSecurity[networkIndex] = mostLenientSecurity
+
+# Testing the function above on our network configuration
+testOutput = networkPartitioner(networks,systemTrust,nodeSecurity,networkSecurity)
 
 
 # %%
