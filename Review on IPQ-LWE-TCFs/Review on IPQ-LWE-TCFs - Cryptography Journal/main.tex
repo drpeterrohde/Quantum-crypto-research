@@ -18,7 +18,7 @@
 \usepackage{pgfplots}
 \usepackage{wasysym}
 \usepackage{multirow}
-
+\setlength{\headheight}{20.0pt}
 \pgfplotsset{compat=newest}
 
 \usetikzlibrary{positioning, fit, calc, shadows, shadows.blur, arrows.meta, shapes.geometric, fillbetween, fadings, quantikz2}
@@ -374,7 +374,9 @@ Note that when one applies the Hadamard gate to each qubit in an $n$-qubit syste
     \label{fig:fig:hadamard-transform}
 \end{figure}
 
-This superposition is crucial for quantum computing because it allows a quantum computer to process multiple inputs simultaneously. When a function $f(\mathbf{x})$ is evaluated on this input register, it effectively evaluates the function for all possible inputs $\mathbf{x}$ in parallel, which significantly enhances the computational power of quantum computers. This phenomenon is also called quantum parallelism. Concretely, one first uses an auxiliary qubit register (initialized to $\ket{0}$) to store the function's output then uses a quantum circuit evaluating the classical function $U_f$ that maps each basis state $\ket{\mathbf{x}}$ to $\ket{\mathbf{x}}\ket{f(\mathbf{x})}$:
+This superposition is crucial for quantum computing because it allows a quantum computer to process multiple inputs simultaneously. Note that in quantum computing, a register is a collection of qubits where different registers within a quantum system can serve various purposes. For example, the input registers hold the initial state of the input data for a quantum computation while the output register is where the results of the quantum computation are stored. After the quantum algorithm has been executed, measuring the qubits in the output register collapses their state to classical bits, providing the final result of the computation.
+
+When a function $f(\mathbf{x})$ is evaluated on the aforementioned input register, it effectively evaluates the function for all possible inputs $\mathbf{x}$ in parallel, which significantly enhances the computational power of quantum computers. This phenomenon is also called quantum parallelism. Concretely, one first uses an auxiliary qubit register (initialized to $\ket{0}$) to store the function's output then uses a quantum circuit evaluating the classical function $U_f$ that maps each basis state $\ket{\mathbf{x}}$ to $\ket{\mathbf{x}}\ket{f(\mathbf{x})}$:
 \begin{align}
 U_f\Bigl(\frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}\ket{0}\Bigr) = \frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}\ket{f(\mathbf{x})}
 \end{align}
@@ -401,7 +403,7 @@ The no-cloning theorem is a fundamental principle in quantum mechanics that stat
 \subsection{Lattices}
 \subsubsection{Definitions}\label{lattice}
 \begin{Definition}
-    Lattices in $\mathbb{R}^n$ are discrete subgroups of $\mathbb{R}^n$. Consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{A}=[\mathbf{a}_1,\cdots,\mathbf{a}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{a}_i$ is written in column form as follow: 
+    Lattices in $\mathbb{R}^n$ are sets of linear combinations for some basis. Concretely, consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{A}=[\mathbf{a}_1,\cdots,\mathbf{a}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{a}_i$ is written in column form as follow: 
 
 \begin{align}
     \mathcal{L}(\mathbf{A}):=\left\{\sum_{i=1}^n\mathbf{a}_i x_i | x_i\in\mathbb{Z}~\forall i=1,\cdots,n \right\}\subseteq\mathbb{Z}^m.
@@ -433,6 +435,7 @@ For a given lattice $\mathcal{L}$, let $\mathbf{s}$ denote the shortest vector o
 %More concretely, $\lambda_n(\mathcal{L}) = \inf\{r|\dim(\mathsf{span}(\mathcal{L}\cap \overline{\mathcal{B}}(0,r)))\leq n\}$.
 
 %\textcolor{red}{Add an figure of successive minimum}
+
 \begin{figure}[!htb]
     \centering
     \input{figures/lattice_sucessive_minimum}
@@ -470,14 +473,14 @@ Let us first consider solving the linear equation
 
 given $n,m \in \mathbb{Z}$, a prime number $q$, a matrix $\mathbf{A}$ in $\mathbb{Z}^{m\times n}_q$ and $\mathbf{y}$ is a vector in $\mathbb{Z}^m_q$. 
 
-We can now view the matrix $\mathbf{A}$ as a basis for a lattice $\mathcal{L}(\mathbf{A})$. Solving Eq.~\eqref{eq:linear_equation} is achievable through Gaussian elimination. However, its variations and many other related lattice problems, are known to be NP-hard (based on the factors of polynomial approximation problems). Here, we highlight some significant lattice problems: \textbf{The shortest integer solution (SIS)} and \textbf{The Learning With Errors (LWE)} problems, further information on lattice-related problems can be found in~\cite{Pei16}.
+We can now view the matrix $\mathbf{A}$ as a basis for a lattice $\mathcal{L}(\mathbf{A})$. Solving Eq.~\eqref{eq:linear_equation} is achievable through Gaussian elimination. However, its variations and many other related lattice problems, are known to be NP-hard (based on the factors of polynomial approximation problems). Here, we highlight some significant lattice problems: \textbf{The short integer solution (SIS)} and \textbf{The Learning With Errors (LWE)} problems, further information on lattice-related problems can be found in~\cite{Pei16}.
 
-\subsubsection{The shortest integer solution (SIS)}
+\subsubsection{The short Integer solution (SIS)}
 
 Recall that initially, we are attempting to find a solution for the equation $\mathbf{A}\mathbf{s} = \mathbf{y} \mod q$. Consider an additional constraint that $\mathbf{s}$ is ``short'', i.e $\mathbf{s}$ lies in the subset $S=\{0,1\}^n\subset\mathbb{Z}^n_q$; or more generally, $S=[-B,\dots, B]^n$  ($B\ll q/2$). Since we are seeking a \textit{short solution} to linear equations, this problem is referred to as the \textit{Short Integer Solution} (SIS) problem. Many cryptographic protocol deal with the case $\mathbf{y}=\mathbf{0}$; hence the $\mathbf{SIS}_{n,m,q,B}$ problem can now be stated as follows:
 
 \begin{Definition}
-    Let $n,m,q, B \in \mathbb{N}$ be positive integers. Given a uniformly sampled matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$, the shortest integer solution problem asks to find a none zero vector $\mathbf{s}\in\mathbb{Z}^m_q$ such that $\mathbf{A}\mathbf{s}=\mathbf{0}\mod q$ and $\|\mathbf{s}\|_{\infty}\leq B$.
+    Let $n,m,q, B \in \mathbb{N}$ be positive integers. Given a uniformly sampled matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$, the short integer solution problem asks to find a none zero vector $\mathbf{s}\in\mathbb{Z}^m_q$ such that $\mathbf{A}\mathbf{s}=\mathbf{0}\mod q$ and $\|\mathbf{s}\|_{\infty}\leq B$.
 \end{Definition}
 
 One should think of $n$ as the security parameter that defines the hardness of the problem (the bigger $n$ is, the harder the problem becomes), $m$ usually depends on the specific application, generally $m\gg n$, $q=poly(n)$ and $B$ should be set large enough to ensure that a solution exists, but not trivial to solve. It is proven that solving the $\mathbf{SIS}_{n,m,q, B}$ problem is at least as hard as solving the $\mathsf{SVP}_{\gamma}$ on worst-case $n$-dimensional lattices with high probability for some approximation factor $\gamma$~\cite{Pei16}.
@@ -597,7 +600,7 @@ Given $a_1,\dots, a_{m}\in R_q$ sampled independently and uniformly at random to
 
 \subsubsection{Trapdoor algorithms in the ring setting}
 
-The trapdoor mechanism techniques from~\cite{MP12} can be generalised to the ring setting where there exists an efficient randomised algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns $\mathbf{a}=(a_1,\dots,a_m)\in R^{m}_q$ and a trapdoor $t_{\mathbf{a}}$ such that the distribution of $\mathbf{a}$ is negligibly (in $n$) close to the uniform distribution. Moreover, there is an efficient algorithm $\mathsf{Invert}$ and a universal constant $C_T$ that, on input $\mathbf{a}$, $t_{\mathbf{a}}$ and $\mathbf{a}\cdot s+\mathbf{e}$ where $s \in R_q$ is arbitrary and $\|\mathbf{e}\|\leq q/(C_T\sqrt{n\log q})$, outputs $s$ with overwhelming probability.
+The trapdoor mechanism techniques from~\cite{MP12} can be generalised to the ring setting where there exists an efficient randomised algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns $\mathbf{a}=(a_1,\dots,a_m)\in R^{m}_q$ and a trapdoor $t_{\mathbf{a}}$ such that the distribution of $\mathbf{a}$ is statistically (in $n$) close to the uniform distribution. Moreover, there is an efficient algorithm $\mathsf{Invert}$ and a universal constant $C_T$ that, on input $\mathbf{a}$, $t_{\mathbf{a}}$ and $\mathbf{a}\cdot s+\mathbf{e}$ where $s \in R_q$ is arbitrary and $\|\mathbf{e}\|\leq q/(C_T\sqrt{n\log q})$, outputs $s$ with overwhelming probability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Trapdoor Claw Free Functions - TCFs} \label{tfcs}
@@ -658,7 +661,7 @@ More formally, we can define the trapdoor claw-free function as follows:
 \end{itemize}
 \end{Definition}
 
-\noindent Note that a quantum device can not invert the function a find the claw $(x_0,x_1)$, but it can hold these two preimages together with $w$ in a superposition
+\noindent Note that a quantum device cannot invert the function and find the claw $(x_0,x_1)$, but it can hold these two preimages together with $w$ in a superposition
 \begin{align}
     \frac{1}{\sqrt{2}}(\ket{x_0}+\ket{x_1})\ket{w}.
     \label{eq:tcfstate1}
@@ -671,7 +674,9 @@ then evaluating $f_{\mathcal{I},b}(x)$ into an output register to yield
 \begin{align}
     \frac{1}{\sqrt{\mathcal{X}}}\sum_{x\in\mathcal{X}}\ket{x}\ket{f_{\mathcal{I},b}(x)}.\label{eq:tcfstate3}
 \end{align}
-If one measures the output register of~\eqref{eq:tcfstate3} and obtains the result $y$, the state would collapse to the~\eqref{eq:tcfstate1} state such that $w=f_{\mathcal{I},0}(x_0)=f_{\mathcal{I},1}(x_1)$.
+
+When measuring the output register of the quantum state described by equation \eqref{eq:tcfstate3}, and obtaining a classical result $w$, the whole system undergoes a collapse, leading the state in the remaining register to collapse as well. The state would collapse to \eqref{eq:tcfstate1}, such that $w=f_{\mathcal{I},0}(x_0)=f_{\mathcal{I},1}(x_1)$. 
+
 Measuring the~\eqref{eq:tcfstate1} state in the standard basis ($Z$ basis), one would obtain a random preimage as the measurement result, i.e. $m=x_0$ or $m = x_1$, but not both, since measuring a quantum state means collapsing that state to one possible outcome. Besides, measuring the~\eqref{eq:tcfstate1} state in the $X$ basis yields a measurement result $m$ and a bit $c$ that satisfies $m \cdot (x_0\oplus x_1) = c$. One may observe that the measurement result using the $X$ basis $(m,c)$ can be used as the hardcore bit, as in the case of a one-way function. However, there is a subtle point in using TCFs in cryptographic protocols: not all TCFs possess the hardcore bit property, just as not all one-way functions successfully hide the information of the input. In all existing TCFs constructions, the only one that satisfies the hardcore bit property is the one utilising LWE problem, we will go into more detail and explaination in the next subsection.
 
 Note that these special properties of TCFs could be used to construct a Proof of Quantumness protocol, the details of which will be discussed in section~\ref{proof_of_quantumness}. However, a fully constructive TCFs that satisfies most cryptographic protocol requirements has not been explored yet. The paper \cite{Brakerski18_Interactiveproofofquantumness} considers a ``relaxed'' version of the TCFs, referred to as \textbf{Noisy trapdoor claw-free functions (NTCFs)}. For more detail and technical information about NTCFs, please refer to the Appendix~\ref{NTCFs}.
@@ -944,13 +949,13 @@ The following abbreviations are used in this manuscript:\\
 \begin{tabular}{@{}ll}
 PQC & Post-quantum cryptography\\
 RSA & Rivest-Shamir-Adleman algorithm\\
-ECC & Elliptic Curve  cryptography\\
-QKD & Quantum Key Distribution\\
+ECC & Elliptic curve cryptography\\
+QKD & Quantum key distribution\\
 IPQ & Interactive proof of quantumness\\
 SVP & Shortest vector problem\\
 SIVP & Shortest independent vectors problem\\
 CVP & Closest vector problem\\
-SIS & Shortest integer solution\\
+SIS & Short integer solution\\
 LWE & Learning with error\\
 RLWE & Ring-Learning with error\\
 TFCs & Trapdoor claw-free functions\\
