@@ -431,7 +431,7 @@ functionInput = ([N, M], emptySets, systemTrust, nodeSecurity, networkSecurity)
 
 # Iteratively calling the partitioning function
 for iteration in range(totalIterations):
-    print('Iteration:',iteration)
+    print('Iteration:',iteration+1)
     functionInput = generalPartition(*functionInput)
 
 

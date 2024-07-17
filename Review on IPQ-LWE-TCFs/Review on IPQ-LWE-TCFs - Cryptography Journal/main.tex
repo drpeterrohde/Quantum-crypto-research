@@ -18,7 +18,7 @@
 \usepackage{pgfplots}
 \usepackage{wasysym}
 \usepackage{multirow}
-
+\setlength{\headheight}{20.0pt}
 \pgfplotsset{compat=newest}
 
 \usetikzlibrary{positioning, fit, calc, shadows, shadows.blur, arrows.meta, shapes.geometric, fillbetween, fadings, quantikz2}
@@ -148,7 +148,7 @@ $^{2}$ \quad Affiliation 2; e-mail@e-mail.com}
 %\conference{} % An extended version of a conference paper
 
 % Abstract (Do not insert blank lines, i.e. \\) 
-\abstract{The recent development of quantum computers poses a significant threat to classical cryptographic systems, necessitating a collaborative effort between quantum computing and cryptography researchers. This review aims to bridge the gap between these fields by providing an accessible overview of Interactive Proof of Quantumness (IPQ), Trapdoor Claw-free Functions, and the Learning with Errors (LWE) problem for those not experienced in both areas. The IPQ protocol offers a method for a classical verifier to validate the quantum capabilities of a quantum prover. Additionally, we explore the definition and applications of Trapdoor Claw-free Functions in constructing quantum-resistant cryptographic protocols and give a brief overview of the foundational aspects of the LWE problem in post-quantum cryptography. Our review underscores the necessity for knowledge exchange between QC and cryptography communities in the quantum era by presenting these complex topics in an approachable manner.
+\abstract{The recent development of quantum computers poses a significant threat to classical cryptographic systems, necessitating a collaborative effort between quantum computing and cryptography researchers. This review aims to bridge the gap between these fields by providing an accessible overview of Proof of Quantumness (PQ), Trapdoor Claw-free Functions, and the Learning with Errors (LWE) problem for those not experienced in both areas. The PQ protocol offers a method for a classical verifier to validate the quantum capabilities of a quantum prover. Additionally, we explore the definition and applications of Trapdoor Claw-free Functions in constructing quantum-resistant cryptographic protocols and give a brief overview of the foundational aspects of the LWE problem in post-quantum cryptography. Our review underscores the necessity for knowledge exchange between QC and cryptography communities in the quantum era by presenting these complex topics in an approachable manner.
 }
 
 % Keywords
@@ -211,7 +211,7 @@ Quantum computing represents a transformative leap in computational capabilities
 
 The need for secure communication has been a constant throughout history, driving the development of cryptographic techniques to protect sensitive information. The security of classical cryptography largely relies on mathematical problems assumed to be computationally hard to solve. These problems, such as integer factorization and the discrete logarithm problem, form the basis of widely used algorithms like RSA and ECC. However, the development of quantum computing presents a significant challenge. Shor's algorithm \cite{Shor94}, for example, can efficiently solve the problems mentioned above, making these cryptographic primitives vulnerable to future quantum attacks. While not all classical cryptographic primitives are vulnerable to these attacks, RSA/ECC form the basis of contemporary public-key infrastructure, essential to the functionality of the internet.
 
-In recent years, the rapid development of quantum computing has raised major security concerns in these cryptographic schemes. Consequently, post-quantum cryptography (PQC) is now a thriving field with the view of developing new cryptographic constructions secure against both classical and quantum attacks, often referred to as `quantum resistance'. In the context of post-quantum cryptography, there are many approaches using different building blocks: \textit{hash-based, code-based, multivariate-based, isogeny-based and lattice-based schemes:}
+In recent years, the rapid development of quantum computing has raised major security concerns in these cryptographic schemes. Consequently, post-quantum cryptography (PQC) is now a thriving field with the view of developing new cryptographic constructions secure against classical and quantum attacks, often referred to as `quantum resistance'. In the context of post-quantum cryptography, many approaches are using different building blocks: \textit{hash-based, code-based, multivariate-based, isogeny-based and lattice-based schemes:}
 \begin{itemize}
     \item Hash-based cryptography: Utilising the hard-to-invert property of hash functions to build digital signature schemes.
     \item Code-based constructions derive their security from decoding generic linear codes.
@@ -222,13 +222,14 @@ In recent years, the rapid development of quantum computing has raised major sec
 
 Lattice-based cryptography is arguably the most promising branch in post-quantum cryptography today due to its versatility, supporting a wide range of symmetric and asymmetric cryptographic primitives including digital signatures and public-key encryption. Additionally, lattice-based techniques are computationally efficient with compact key sizes.
 
-Another significant field that has emerged in recent years is quantum cryptography, which has a major impact on symmetric key encryption constructions by achieving information-theoretic security. An example of this is Quantum Key Distribution (QKD)~\cite{BB84,E91}, a technique that allows two parties to generate a shared secret key, which can then be used for symmetric encryption. QKD leverages the principles of quantum mechanics to ensure that any attempt at eavesdropping on the key exchange can be detected; hence providing a level of security that is theoretically unbreakable by any computational means.
+Another significant field that has emerged in recent years is quantum cryptography, which has a major impact on symmetric key encryption constructions by achieving information-theoretic security. An example of this is Quantum Key Distribution (QKD)~\cite{BB84,E91}, a technique that allows two parties to generate a shared secret key, which can then be used for symmetric encryption. QKD leverages the principles of quantum mechanics to ensure that any attempt at eavesdropping on the key exchange can be detected; hence providing a level of security called information-theoretic security.
+%that is theoretically unbreakable by any computational means.
 
 However, this does not apply to asymmetric key encryption because one of the keys always remains public. For asymmetric constructions, developing post-quantum cryptography (PQC) is still the main research goal. Based on "hard-to-solve" assumptions, PQC faces the same problem as classical cryptography, i.e., computational security.
 
 \subsection{Communication between a quantum computer and classical devices.}
 
-The focus of this review is on the proof of quantumness, which explores the intersection between the classical and quantum realms, where communication between a quantum computer and classical devices is a critical aspect of integrating quantum technology into existing computational frameworks. This interaction often requires protocols that allow classical devices to verify the quantum power of other devices. One such protocol is the Interactive Proof of Quantumness (IPQ), which provides a method for a classical verifier to interact with a quantum prover. The IPQ framework ensures that the quantum device can demonstrate its quantum capabilities by performing computations that are infeasible for classical devices, thereby establishing a proof of quantumness. This verification is essential for tasks where quantum advantages need to be reliably authenticated, such as in secure communications and advanced cryptographic protocols. By bridging the gap between quantum and classical worlds, IPQs facilitate the trust and usability of quantum computers in practical applications.
+The focus of this review is on the proof of quantumness, which explores the intersection between the classical and quantum realms, where communication between a quantum computer and classical devices is a critical aspect of integrating quantum technology into existing frameworks. This interaction often requires protocols that allow classical devices to verify the quantum power of other devices. One such protocol is the Proof of Quantumness (PQ), which provides a method for a classical verifier to interact with a quantum prover. The PQ protocol ensures that the quantum device can demonstrate its quantum capabilities by performing computations that are infeasible for classical devices, thereby establishing a proof of quantumness. This verification is essential for tasks where quantum advantages need to be reliably authenticated, such as in secure communications and advanced cryptographic protocols. By bridging the gap between quantum and classical worlds, PQ protocol facilitates the trust and usability of quantum computers in practical applications.
 
 One recent approach is to use Trapdoor Claw-free functions to build Proof of Quantumness protocols. Note that Trapdoor Claw-free functions still base their security on hard problems like learning with errors (LWE) and ring learning with errors (RLWE), making them computationally secure but not information-theoretically secure.
 
@@ -301,14 +302,12 @@ Another property of quantum states is \textit{measurement} where it helps one as
 \end{align}
 This collapse of quantum states is not reversible, meaning once the measurement is made, the original superposition state is lost, and we are left with classical information. This property of quantum measurement underlies many quantum algorithms and cryptographic protocols, impacting how information is extracted from quantum systems and ensuring that certain quantum properties, like entanglement and superposition, can be harnessed effectively only until the measurement is performed.
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/measurement}
     \caption{Measuring a quantum state:  The thin line denotes quantum information and the double lines denote classical information. The result of the measurement $m$ is a classical result according to a probability distribution~\eqref{eq:probability_quantum_state}.}
     \label{fig:measurement}
 \end{figure}
-
-
 
 
 In quantum computing, basis quantum gates are fundamental operations used to manipulate qubits, similar to classical logic gates in classical computing. These quantum gates are represented by unitary matrices $\mathbf{U}$, which preserve the norm of quantum states and ensure reversibility. A matrix $\mathbf{U}$ is called unitary if and only if it satisfies
@@ -368,20 +367,22 @@ Note that when one applies the Hadamard gate to each qubit in an $n$-qubit syste
     H^{\otimes n}\ket{\mathbf{0}}=\frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}.
 \end{align}
 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/hadamardtransform}
     \caption{Quantum circuit applying the Hadamard transform to $n$-qubit system.}
     \label{fig:fig:hadamard-transform}
 \end{figure}
 
-This superposition is crucial for quantum computing because it allows a quantum computer to process multiple inputs simultaneously. When a function $f(\mathbf{x})$ is evaluated on this input register, it effectively evaluates the function for all possible inputs $\mathbf{x}$ in parallel, which significantly enhances the computational power of quantum computers. This phenomenon is also called quantum parallelism. Concretely, one first uses an auxiliary qubit register (initialized to $\ket{0}$) to store the function's output then uses a quantum circuit evaluating the classical function $U_f$ that maps each basis state $\ket{\mathbf{x}}$ to $\ket{\mathbf{x}}\ket{f(\mathbf{x})}$:
+This superposition is crucial for quantum computing because it allows a quantum computer to process multiple inputs simultaneously. Note that in quantum computing, a register is a collection of qubits where different registers within a quantum system can serve various purposes. For example, the input registers hold the initial state of the input data for a quantum computation while the output register is where the results of the quantum computation are stored. After the quantum algorithm has been executed, measuring the qubits in the output register collapses their state to classical bits, providing the final result of the computation.
+
+When a function $f(\mathbf{x})$ is evaluated on the aforementioned input register, it effectively evaluates the function for all possible inputs $\mathbf{x}$ in parallel, which significantly enhances the computational power of quantum computers. This phenomenon is also called quantum parallelism. Concretely, one first uses an auxiliary qubit register (initialized to $\ket{0}$) to store the function's output then uses a quantum circuit evaluating the classical function $U_f$ that maps each basis state $\ket{\mathbf{x}}$ to $\ket{\mathbf{x}}\ket{f(\mathbf{x})}$:
 \begin{align}
 U_f\Bigl(\frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}\ket{0}\Bigr) = \frac{1}{\sqrt{2}^n}\sum_{\mathbf{x}\in\{0,1\}^n}\ket{\mathbf{x}}\ket{f(\mathbf{x})}
 \end{align}
 
 By measuring the output register, which holds $f(\mathbf{x})$, one can obtain the function's value for a specific input $\mathbf{x}$. 
-\begin{figure}[h]
+\begin{figure}[!htbp]
     \center
     \input{figures/evaluate_a_function}
     \caption{Evaluation of a classical function $f(\mathbf{x})$ on quantum registers.}
@@ -393,7 +394,7 @@ By measuring the output register, which holds $f(\mathbf{x})$, one can obtain th
 
 \subsection{No-cloning theorem}
 
-The no-cloning theorem is a fundamental principle in quantum mechanics that states it is impossible to create an exact copy of an arbitrary unknown quantum state. The no-cloning theorem has a profound impact on cryptography, especially in quantum key distribution (QKD). The security of the BB84 protocol, a well-known QKD construction, relies on the impossibility of an adversary perfectly cloning the quantum states, preventing them from interfering with the states being transferred between honest parties. Furthermore, any attempt to clone a quantum state by measuring it would collapse the state, exposing the eavesdropper's existence.
+The no-cloning theorem is a fundamental principle in quantum mechanics that states it is impossible to create an exact copy of an arbitrary unknown quantum state. The no-cloning theorem has a profound impact on cryptography, especially in quantum key distribution (QKD). The security of the BB84 protocol~\cite{BB84}, a well-known QKD construction, relies on the impossibility of an adversary perfectly cloning the quantum states, preventing them from interfering with the states being transferred between honest parties. Furthermore, any attempt to clone a quantum state by measuring it would collapse the state, exposing the eavesdropper's existence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -402,25 +403,39 @@ The no-cloning theorem is a fundamental principle in quantum mechanics that stat
 \subsection{Lattices}
 \subsubsection{Definitions}\label{lattice}
 \begin{Definition}
-    Lattices in $\mathbb{R}^n$ are discrete subgroups of $\mathbb{R}^n$. Consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{B}=[\mathbf{b}_1,\cdots,\mathbf{b}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{b}_i$ is written in column form as follow: 
+    Lattices in $\mathbb{R}^n$ are sets of linear combinations for some basis. Concretely, consider integer lattice $\mathcal{L}\subseteq \mathbb{Z}^n$, $\mathcal{L}$ can be represented by a basis $\mathbf{A}=[\mathbf{a}_1,\cdots,\mathbf{a}_n]\in\mathbb{Z}^{m\times n}$, where each vector $\mathbf{a}_i$ is written in column form as follow: 
 
-$$\mathcal{L}(\mathbf{B}):=\left\{\sum_{i=1}^n\mathbf{b}_i x_i | x_i\in\mathbb{Z}~\forall i=1,\cdots,n \right\}\subseteq\mathbb{Z}^m.$$ 
+\begin{align}
+    \mathcal{L}(\mathbf{A}):=\left\{\sum_{i=1}^n\mathbf{a}_i x_i | x_i\in\mathbb{Z}~\forall i=1,\cdots,n \right\}\subseteq\mathbb{Z}^m.
+\end{align}
 \end{Definition}
 
-We refer to $n$ as the rank of the lattice $\mathcal{L}$ and $m$ as its dimension. $\mathcal{L}$ is called a full-rank lattice if $n=m$.
+We refer to $n$ as the rank of the lattice $\mathcal{L}$ and $m$ as its dimension. $\mathcal{L}$ is called a full-rank lattice if $n=m$. In most lattice-based cryptographic constructions, we primarily utilize full-rank lattices that include $q\mathbb{Z}^m$, known as $q$-ary lattices lattices, which are defined as follows 
+\begin{align}
+%\mathcal{L}_q(\mathbf{A}) &:= \left\{ \mathbf{x}\in\mathbb{Z}^m ~\rm{s.t.}~ \mathbf{x}\mod q \in\mathbf{A}^T\mathbb{Z}^n_q \right\}\\
+\mathcal{L}_q(\mathbf{A}) &:= \left\{ \mathbf{x}\in\mathbb{Z}^m ~\rm{s.t.}~\exists \mathbf{s}\in\mathbb{Z}_q^n~\rm{where}~\mathbf{A}^T\mathbf{s}=\mathbf{x}\mod q \right\}\\
+\mathcal{L}^{\perp}_q(\mathbf{A}) &:= \left\{  \mathbf{x}\in\mathbb{Z}^m~\rm{s.t.}~\mathbf{A}\mathbf{x}=0\mod q \right\} 
+\end{align}
 
-For a basis $\mathbf{B}$ of $\mathcal{L}$, we called $P(\mathbf{B})=\{\mathbf{B}\mathbf{x}|\mathbf{x}\in[0,1)^n\}$ is the fundamental parallelepiped of $\mathbf{B}$. A ``good'' basis of $\mathcal{L}$ results in a parallelepiped that is more square-like, whereas a ``bad'' basis produces a very thin parallelepiped. We denote$\|\mathbf{B}\|:=\max_{1 \le i \le k} \|\mathbf{b}_i\|$ the maximum $l_2$ length of the vectors in $\mathbf{B}$ and $\tilde{\mathbf{B}}:=\{\tilde{\mathbf{b}}_1,\cdots,\tilde{\mathbf{b}}_k \}$ the Gram-Schmidt orthogonalization of the vectors $\mathbf{b}_1,\cdots,\mathbf{b}_k$ in that order.
+However, to simplify the notation, we will omit $q$ and simply write $\mathcal{L}(\mathbf{A})$ and $\mathcal{L}^{\perp}(\mathbf{A})$ for a given matrix $\mathbf{A}$. 
+
+
+Consider a basis $\mathbf{A}$ of $\mathcal{L}$, we called $P(\mathbf{A})=\{\mathbf{A}\mathbf{x}|\mathbf{x}\in[0,1)^n\}$ is the fundamental parallelepiped of $\mathbf{A}$. A ``good'' basis of $\mathcal{L}$ results in a parallelepiped that is more square-like, whereas a ``bad'' basis produces a very thin parallelepiped. We denote$\|\mathbf{A}\|:=\max_{1 \le i \le k} \|\mathbf{a}_i\|$ the maximum $l_2$ length of the vectors in $\mathbf{A}$ and $\tilde{\mathbf{A}}:=\{\tilde{\mathbf{a}}_1,\cdots,\tilde{\mathbf{a}}_k \}$ the Gram-Schmidt orthogonalization of the vectors $\mathbf{a}_1,\cdots,\mathbf{a}_k$ in that order.
+
+
 \begin{figure}[!htb]
     \centering
     \input{figures/lattice_basis}    
-    \caption{Consider a two-dimensional lattice $\mathcal{L}$, a basis for $\mathcal{L}$ consists of two non-zero vectors $\mathbf{b}_1$ and  $\mathbf{b}_2$ such that any vector in $\mathcal{L}$ can be written as a linear combination of $\mathbf{b}_1$ and $\mathbf{b}_2$, e.g. $\mathbf{b}_1+\mathbf{b}_2$, $2\mathbf{b}_1+\mathbf{b}_2\in \mathcal{L}$. The grey areas are the fundamental parallelepipeds formed by different bases of $\mathcal{L}$. A good basis for $\mathcal{L}$ will have vectors with lengths that are close to each other and an angle between them that is close to $90$ degrees and forms a more square-like parallelepiped.}
+    \caption{Consider a two-dimensional lattice $\mathcal{L}$, a basis for $\mathcal{L}$ consists of two non-zero vectors $\mathbf{a}_1$ and  $\mathbf{a}_2$ such that any vector in $\mathcal{L}$ can be written as a linear combination of $\mathbf{a}_1$ and $\mathbf{a}_2$, e.g. $\mathbf{a}_1+\mathbf{a}_2$, $2\mathbf{a}_1+\mathbf{a}_2\in \mathcal{L}$. The grey areas are the fundamental parallelepipeds formed by different bases of $\mathcal{L}$. A good basis for $\mathcal{L}$ will have vectors with lengths that are close to each other and an angle between them that is close to $90$ degrees and forms a more square-like parallelepiped.}
     \label{fig:lattice_basis}
 \end{figure}
 
-For a given lattice $\mathcal{L}$, let $\mathbf{s}$ denotes  the shortest vector of $\mathcal{L}$. One basic parameter of a lattice is the length of this shortest vector, denoted as $\lambda_1(\mathcal{L}) = \|\mathbf{s}\|$. This parameter is also called \textit{successive minima} if one considers the scenario where $\lambda_1$ is the smallest $r$ such that all the lattice points inside a ball of radius $r$ $\overline{\mathcal{B}}(0,r)$ span a space of dimension $1$. Similarly, we can define the $n^{th}$ successive minimum $\lambda_n(\mathcal{L})$ this lattice as the smallest number $r$ that all the lattice points inside $\overline{\mathcal{B}}(0,r)$ span a space of dimension $n$. 
+
+For a given lattice $\mathcal{L}$, let $\mathbf{s}$ denote the shortest vector of $\mathcal{L}$. One basic parameter of a lattice is the length of this shortest vector, denoted as $\lambda_1(\mathcal{L}) = \|\mathbf{s}\|$. This parameter is also called \textit{successive minima} if one considers the scenario where $\lambda_1$ is the smallest $r$ such that all the lattice points inside a ball of radius $r$ $\overline{\mathcal{B}}(0,r)$ span a space of dimension $1$. Similarly, we can define the $n^{th}$ successive minimum $\lambda_n(\mathcal{L})$ this lattice as the smallest number $r$ that all the lattice points inside $\overline{\mathcal{B}}(0,r)$ span a space of dimension $n$. 
 %More concretely, $\lambda_n(\mathcal{L}) = \inf\{r|\dim(\mathsf{span}(\mathcal{L}\cap \overline{\mathcal{B}}(0,r)))\leq n\}$.
 
 %\textcolor{red}{Add an figure of successive minimum}
+
 \begin{figure}[!htb]
     \centering
     \input{figures/lattice_sucessive_minimum}
@@ -458,37 +473,37 @@ Let us first consider solving the linear equation
 
 given $n,m \in \mathbb{Z}$, a prime number $q$, a matrix $\mathbf{A}$ in $\mathbb{Z}^{m\times n}_q$ and $\mathbf{y}$ is a vector in $\mathbb{Z}^m_q$. 
 
-We can now view the matrix $\mathbf{A}$ as a basis for a lattice $\mathcal{L}(\mathbf{A})$. Solving Eq.~\eqref{eq:linear_equation} is achievable through Gaussian elimination. However, its variations, along with many other related lattice problems, are known to be NP-hard (based on the factors of polynomial approximation problems). Here, we highlight some significant lattice problems: \textbf{The shortest integer solution (SIS)} and \textbf{The Learning With Errors (LWE)} problems, further information on lattice-related problems can be found in~\cite{Pei16}.
+We can now view the matrix $\mathbf{A}$ as a basis for a lattice $\mathcal{L}(\mathbf{A})$. Solving Eq.~\eqref{eq:linear_equation} is achievable through Gaussian elimination. However, its variations and many other related lattice problems, are known to be NP-hard (based on the factors of polynomial approximation problems). Here, we highlight some significant lattice problems: \textbf{The short integer solution (SIS)} and \textbf{The Learning With Errors (LWE)} problems, further information on lattice-related problems can be found in~\cite{Pei16}.
 
-\subsubsection{The shortest integer solution (SIS)}
+\subsubsection{The short Integer solution (SIS)}
 
-Recall that initially, we are attempting to find a solution for the equation $\mathbf{A}\mathbf{s} = \mathbf{y} \mod q$. Consider an additional constraint that $\mathbf{s}$ is ``short'', i.e $\mathbf{s}$ lies in the subset $S=\{0,1\}^n\in\mathbb{Z}^n_q$; or more generally, $S=[-B,\dots, B]^n$  ($B\ll q/2$). Since we are seeking a \textit{short solution} to linear equations, this problem is referred to as the \textit{Short Integer Solution} (SIS) problem. Many cryptographic protocol deal with the case $\mathbf{y}=\mathbf{0}$, the $\mathbf{SIS}_{n,m,q,B}$ problem can be stated as follows:
+Recall that initially, we are attempting to find a solution for the equation $\mathbf{A}\mathbf{s} = \mathbf{y} \mod q$. Consider an additional constraint that $\mathbf{s}$ is ``short'', i.e $\mathbf{s}$ lies in the subset $S=\{0,1\}^n\subset\mathbb{Z}^n_q$; or more generally, $S=[-B,\dots, B]^n$  ($B\ll q/2$). Since we are seeking a \textit{short solution} to linear equations, this problem is referred to as the \textit{Short Integer Solution} (SIS) problem. Many cryptographic protocol deal with the case $\mathbf{y}=\mathbf{0}$; hence the $\mathbf{SIS}_{n,m,q,B}$ problem can now be stated as follows:
 
 \begin{Definition}
-    Let $n,m,q, B \in \mathbb{N}$ be positive integers. Given a uniformly sampled matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$, the shortest integer solution problem asks to find a none zero vector $\mathbf{s}\in\mathbb{Z}^m_q$ such that $\mathbf{A}\mathbf{s}=\mathbf{0}\mod q$ and $\|x\|_{\infty}\leq B$.
+    Let $n,m,q, B \in \mathbb{N}$ be positive integers. Given a uniformly sampled matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$, the short integer solution problem asks to find a none zero vector $\mathbf{s}\in\mathbb{Z}^m_q$ such that $\mathbf{A}\mathbf{s}=\mathbf{0}\mod q$ and $\|\mathbf{s}\|_{\infty}\leq B$.
 \end{Definition}
 
 One should think of $n$ as the security parameter that defines the hardness of the problem (the bigger $n$ is, the harder the problem becomes), $m$ usually depends on the specific application, generally $m\gg n$, $q=poly(n)$ and $B$ should be set large enough to ensure that a solution exists, but not trivial to solve. It is proven that solving the $\mathbf{SIS}_{n,m,q, B}$ problem is at least as hard as solving the $\mathsf{SVP}_{\gamma}$ on worst-case $n$-dimensional lattices with high probability for some approximation factor $\gamma$~\cite{Pei16}.
 
 
 \subsubsection{The learning with errors problem (LWE)}
-This subsection recalls the definition of the Learning With Errors (LWE) problem~\cite{Pei16}. Let's revisit Eq.~\eqref{eq:linear_equation}, we can consider a slight variant of it where the input pair $(\mathbf{A}\in \mathbb{Z}^{m\times n}_q, \mathbf{y} \in \mathbb{Z}^m)$ satisfies
+This subsection recalls the definition of the Learning With Errors (LWE) problem~\cite{Pei16}. Let's revisit Eq.~\eqref{eq:linear_equation}, we can consider a slight variant of it where the input pair $(\mathbf{A}\in \mathbb{Z}^{m\times n}_q, \mathbf{y} \in \mathbb{Z}^m_q)$ satisfies
 \begin{align}
     \mathbf{A}\mathbf{s} + \mathbf{e}= \mathbf{y}\mod q \label{eq:lwe}
 \end{align}
-where $n, m, q$ are positive integers and $\mathbf{e}$ is an additional small noise term sample from an error distribution $\chi$ over $\mathbb{Z}^n$. 
+where $n, m, q$ are positive integers and $\mathbf{e}$ is an additional small noise term sample from an error distribution $\chi$ over $\mathbb{Z}^m_q$. 
 
-The ``search'' $\mathsf{LWE}_{n,m,q,\chi}$ problem asks to find $\mathbf{s}\in\mathbb{Z}^n$ and the ``decision'' version asks to to distinguish between the distribution $ (\mathbf{A},\mathbf{y}=\mathbf{A}\mathbf{s}+\mathbf{e} \mod q)$ and a uniformly random sample $(\overline{\mathbf{A}},\mathbf{u})$.
+The ``search'' $\mathsf{LWE}_{n,m,q,\chi}$ problem asks to find $\mathbf{s}\in\mathbb{Z}^n_q$ and the ``decision'' version asks to to distinguish between the distribution $ (\mathbf{A},\mathbf{y}=\mathbf{A}\mathbf{s}+\mathbf{e} \mod q)$ and a uniformly random sample $(\mathbf{A},\mathbf{u})$.
 
-The error term $\mathbf{e}$ effectively affects the exact relationship between the secret $\mathbf{s}$ and $\mathbf{y}$. Specifically, this term $\mathbf{e}$ ensures that although anyone can observe the pairs $(\mathbf{A},\mathbf{y})$, extracting the information of $\mathbf{s}$ is computationally infeasible if the problem is properly parameterized. The hardness of the $\mathsf{LWE}_{n,m,q,\chi}$ problem (and thus the security of many $\mathsf{LWE}$-based cryptosystems) relies on the assumption that finding $\mathbf{s}$ with random errors is as difficult as solving certain worst-case problems on lattices, more information is mentioned in~\ref{reduction}.
+The error term $\mathbf{e}$ effectively affects the exact relationship between the secret $\mathbf{s}$ and $\mathbf{y}$. Specifically, this term $\mathbf{e}$ ensures that although anyone can observe the pairs $(\mathbf{A},\mathbf{y})$, extracting the information of $\mathbf{s}$ is computationally infeasible if the problem is properly parameterized. The hardness of the $\mathsf{LWE}_{n,m,q,\chi}$ problem (and thus the security of many $\mathsf{LWE}$-based cryptosystems) relies on the assumption that finding $\mathbf{s}$ with random errors $\mathbf{e}$ is as difficult as solving certain worst-case problems on lattices.
 
 \subsubsection{Distribution over lattices}
-It's important to note that the choice of the error distribution $\chi$ is crucial. A widely utilized distribution in numerous lattice-based cryptosystems is the Discrete Gaussian distribution. Typically, the discrete Gaussian is chosen in a way that ensures the errors $\mathbf{e}$ are small enough to allow for the correct extraction of the secret information but large enough to prevent adversaries from solving the problem.
+Note that the choice of the error distribution $\chi$ is crucial. A widely utilized distribution in numerous lattice-based cryptosystems is the Discrete Gaussian distribution. Typically, the discrete Gaussian is chosen in a way that ensures the errors $\mathbf{e}$ are small enough to allow for the correct extraction of the secret information but large enough to prevent adversaries from solving the problem.
 
 
 For any positive integer $n$ and real $\sigma>0$, which is taken to be $1$ when omitted, the \textit{Gaussian function} $\rho_{\sigma}:\mathbb{R}^n\to \mathbb{R}^+$ of parameter (or width) $\sigma$ is defined 
 \begin{align}
-    \rho_{\sigma}(\mathbf{s}):=\exp(-\pi\|\mathbf{s}|\|^2/\sigma^2).
+    \rho_{\sigma}(\mathbf{s}):=\exp(-\pi\|\mathbf{s}\|^2/\sigma^2).
 \end{align}
 
 A \textbf{discrete Gaussian probability distribution} $D_{\mathcal{L},\sigma}$ over a lattice $\mathcal{L}$ is given by
@@ -497,9 +512,7 @@ A \textbf{discrete Gaussian probability distribution} $D_{\mathcal{L},\sigma}$ o
 \end{align}
 
 
-The utilization of Gaussian distributions comes from its ability to effectively connect the Learning With Errors (LWE) problem to the worst-case scenario of the lattice NP-hard problems, thus providing a solid foundation for cryptographic security.
-
-More concretely, a long sequence of works has established progressively stronger results about the worst-case lattice problems. It is shown that for any $\alpha>0$ such that $\sigma=\alpha q \geq 2\sqrt{n}$, the $\mathsf{LWE}_{n,m,q, D_{\mathbb{Z}_q,\sigma}}$, where $D_{\mathbb{Z}_q,\sigma}$ is a discrete Gaussian distribution, is at least as hard as approximating the shortest independent vector problem $(\mathsf{SIVP}_{\gamma})$ to within a factor of $\gamma = \Tilde{O}(n)$~\cite{Reg09,RPS17}.
+The utilisation of Gaussian distributions comes from its ability to effectively connect the Learning With Errors (LWE) problem to the worst-case scenario of the lattice NP-hard problems, thus providing a solid foundation for cryptographic security. More concretely, a long sequence of works has established progressively stronger results about the worst-case lattice problems. It is shown that for any $\alpha>0$ such that $\sigma=\alpha q \geq 2\sqrt{n}$, the $\mathsf{LWE}_{n,m,q, D^m_{\mathbb{Z}_q,\sigma}}$, where $D_{\mathbb{Z}_q,\sigma}$ is a discrete Gaussian distribution, is at least as hard as approximating the shortest independent vector problem $(\mathsf{SIVP}_{\gamma})$ to within a factor of $\gamma = \Tilde{O}(n)$~\cite{Reg09,RPS17}.
 
 %For a lattice $\mathcal{L}$ and $\epsilon>0$, the smoothing parameter $\eta_{\epsilon}(\mathcal{L})$ of $\mathcal{L}$ is the smallest number $s$ satisfied $\rho_{1/\sigma}(\mathcal{L}^*\setminus \{0\})\leq \epsilon$.
 
@@ -509,23 +522,68 @@ More concretely, a long sequence of works has established progressively stronger
 
 \subsubsection{Trapdoor mechanism}
 
-In cryptography, a \textbf{trapdoor} refers to a concealed backdoor embedded within an algorithm or a specific piece of data. The idea is that, except for the individuals authorized to hold the trapdoor, others cannot extract any information about the trapdoor. This characteristic enables secure communication between parties. This subsection revisits certain trapdoor mechanisms to provide a fundamental understanding of the relationship between lattices and their trapdoors.
+In cryptography, a \textbf{trapdoor} refers to a concealed backdoor embedded within an algorithm or a specific piece of data that can be used to extract information about some secret. The idea is that, except for the individuals authorised to hold the trapdoor, others cannot extract any information about both the trapdoor and the secret. This characteristic enables secure communication between parties. This subsection revisits certain trapdoor mechanisms to provide a fundamental understanding of the relationship between lattices and their trapdoor in lattice-based cryptography.
 
-The first approach to constructing trapdoors for lattices involves the use of short bases, as these lead to more efficient algorithms for solving lattice problems. Algorithms designed to tackle challenges such as the Shortest Vector Problem (SVP) or the Closest Vector Problem (CVP) become more practical with basis vectors that are short and nearly orthogonal~\ref{lattice}. This is because the computations involved are simpler and can be executed more swiftly. Specifically, for solving the LWE problem using a short basis, one strategy employs Babai's nearest plane algorithm~\cite{Babai}. The initial step involves utilizing a short basis $\mathbf{T}_{\mathbf{A}}$ of a lattice $\mathcal{L}(\mathbf{A})$ to identify the lattice vector closest to $\mathbf{y}$. Given that the error is sufficiently ``small'', it becomes feasible to extract the secret vector $\mathbf{s}$'s information. A sequence of works has been carried out to develop more trapdoor mechanisms. Two of the notable approaches are~\cite{AP09} and~\cite{MP12}.
+The first approach to constructing trapdoors for lattices involves the use of short bases, as these lead to more efficient algorithms for solving lattice problems. Algorithms designed to tackle challenges such as the Shortest Vector Problem (SVP) or the Closest Vector Problem (CVP) become more practical with basis vectors that are short and nearly orthogonal~\ref{lattice}. This is because the computations involved are simpler and can be executed more swiftly. Specifically, for solving the LWE problem using a short basis, one strategy employs Babai's nearest plane algorithm~\cite{Babai}. The initial step involves utilizing a short basis $\mathbf{T}_{\mathbf{A}}$ of a lattice $\mathcal{L}(\mathbf{A})$ to identify the lattice vector closest to $\mathbf{y}$. Given that the error is sufficiently ``small'', it becomes feasible to extract the secret vector $\mathbf{s}$'s information. A sequence of works has been carried out to develop more trapdoor mechanisms. Two of the notable approaches are~\cite{AP09}, which created "short bases trapdoors," and~\cite{MP12}, which constructed "gadget-based trapdoors."
 
-\cite{AP09} presented an algorithm to sample a uniform matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ with a low Gram-Schmidt norm such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The second approach is the trapdoor technique from~\cite{MP12}, which we focus on more due to its simpler, more elegant nature, and its support for more efficient cryptographic constructions.
+\cite{AP09} presented an algorithm called $\mathsf{TrapGen}(n,m,q)$ to sample a matrix $\mathbf{A}\in\mathbb{Z}_q^{n\times m}$ together with an associated basis $\mathbf{T}$ of $\mathcal{L}({\mathbf{A}})$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}} = \mathbf{0}$ as the public matrix and its secret trapdoor. The idea is to sample a uniformly random matrix $\mathbf{A}_1$ that has dimension $m_1$ smaller than $m$, then extend $\mathbf{A}_1\in\mathbb{Z}^{n\times m_1}_q$ to $\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2]\in\mathbb{Z}^{n\times m}_q$ by generating $\mathbf{A}_2\in\mathbb{Z}^{n\times m_2}_q$ together with a short matrix $\mathbf{T}_{\mathbf{A}}\in\mathbb{Z}^{m\times m}$.
 
-\cite{MP12} first defined a ``primitive vector'' $\mathbf{g}=\{g_1,\dots,g_k\}\in\mathbb{Z}^k_q$ where $\gcd(g_1,\dots,g_k,q)=1$. Then
-a matrix $\mathbf{G}\in\mathbb{Z}^{n\times m}_q$ is called ``primitive matrix'' if its columns generate all of $\mathbb{Z}^n_q$, i.e., $\mathbf{G}\mathbb{Z}^m=\mathbb{Z}^n_q$. We can now define the $\mathbf{G}$-trapdoor of a lattice $\mathcal{L}$ is a matrix $\mathbf{R}\in\mathbb{Z}^{(m-\omega)\times \omega}$ such that $\mathbf{A}\begin{pmatrix}
+\begin{algorithm}[!htbp]
+	\begin{algorithmic}
+		\Function{TrapGen}{$(n,m,q)$}
+        \State{$m= m_1+m_2$}
+		\LComment{Sample a uniformly random matrix $\mathbf{A}_1$}
+        \State{$\mathbf{A}_1\gets\mathbb{Z}^{n\times m_1}_q$}
+		\LComment{Generate component matrices}
+        \State{$\mathbf{U}\in\mathbb{Z}^{m_2\times m_2}$, $\mathbf{R}\in\mathbb{Z}^{m_1\times m_2}$, $\mathbf{P}\in\mathbb{Z}^{m_2\times m_1}$ and $\mathbf{C}\in\mathbb{Z}^{m_1\times m_1}$ such that $\mathbf{U}$ is non-singular and $(\mathbf{G}\mathbf{P}+\mathbf{C})\subset\mathcal{L}^{\perp}(\mathbf{A}_1)$.}
+		\LComment{Generate matrix $\mathbf{A}_2$}
+        \State{$\mathbf{A}_2=-\mathbf{A}_1\cdot (\mathbf{R}+\mathbf{G})\in\mathbb{Z}^{n\times m_2}_q$.}
+        \LComment{Generate the trapdoor $\mathbf{T}_{\mathbf{A}}$}
+        \State{$\mathbf{T}_{\mathbf{A}}=\begin{bmatrix} 
+        (\mathbf{G}+\mathbf{R})\mathbf{U} & \mathbf{R}\mathbf{P})-\mathbf{C}\\
+        \mathbf{U} & \mathbf{P}
+        \end{bmatrix}$}
+        \State\Return{$(\mathbf{A}=[\mathbf{A}_1|\mathbf{A}_2],\mathbf{T}_{\mathbf{A}})$}
+		\EndFunction
+	\end{algorithmic}
+	\caption{$\mathsf{TrapGen}(n,m,q)$ generates a uniformly random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its trapdoor $\mathbf{T}_\mathbf{A}\in\mathbb{Z}^{m\times m}$ such that $\mathbf{A}\mathbf{T}_{\mathbf{A}}=\mathbf{0}$} \label{alg:trapgen}
+\end{algorithm}
+
+The second approach is the trapdoor technique from ~\cite{MP12}, called the gadget trapdoor, which is simpler, has a more elegant nature, and supports more efficient cryptographic constructions. \cite{MP12} first defined a ``primitive vector'' $\mathbf{g}=\{g_1,\dots,g_k\}\in\mathbb{Z}^k_q$ where $\gcd(g_1,\dots,g_k,q)=1$ and $n\cdot k=m$, then generates the ``primitive matrix'' (or gadget matrix) $\mathbf{G}=\mathbf{I}_n\otimes\mathbf{g}^T\in\mathbb{Z}^{n\times m}_q$. The gadget trapdoor of a lattice $\mathcal{L}(\mathbf{A})$ is a matrix $\mathbf{R}\in\mathbb{Z}^{(m-\omega)\times \omega}$ such that 
+\begin{align}
+    \mathbf{A}\begin{pmatrix}
     \mathbf{R}\\ 
     \mathbf{I}
-  \end{pmatrix} = \mathbf{H}\mathbf{G}$ for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. 
+  \end{pmatrix} = \mathbf{H}\mathbf{G}
+  \label{eq:gadget_matrix}
+\end{align}
+for some invertible matrix $\mathbf{H}\in\mathbb{Z}^{n\times n}_q$. We refer to $\mathbf{H}$ as the \textbf{tag} or \textbf{label} of the trapdoor. The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly close to the uniform distribution. 
 
-The paper also presented an efficient algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns a matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ and a trapdoor $\mathbf{T}_{\mathbf{A}}=\mathbf{R}$ such that the distribution of $\mathbf{A}$ is negligibly (in $n$) close to the uniform distribution. 
+\begin{algorithm}[!htbp]
+	\begin{algorithmic}
+		\Function{Gentrap}{$(n,m,q)$}
+		\LComment{Sample a uniformly random matrix $\mathbf{A}_1$}
+        \State{$\mathbf{A}_1\gets\mathbb{Z}^{n\times m_1}_q$}
+		\LComment{Choose a desired tag $\mathbf{H}$}
+        \State{$\mathbf{H}\gets\mathbb{Z}^{n\times n}_q$ such that $\mathbf{H}$ is an invertible matrix. The algorithm can also set $\mathbf{H}=\mathbf{I}$.}
+		\LComment{Sample the gadget trapdoor $\mathbf{R}$ from a random distribution $\mathcal{D}$ over $\mathbb{Z}^{(m-\omega)\times \omega}$}
+        \State{$\mathbf{R}\gets\mathcal{D}$.}
+        \LComment{Compute matrix $\mathbf{A}$}
+        \State{$\mathbf{A}=[\mathbf{A}_1|\mathbf{H}\mathbf{G}-\mathbf{A}_1\mathbf{R}]\in\mathbb{Z}^{n\times m}_q$}
+        \State\Return{$(\mathbf{A},\mathbf{T}_{\mathbf{A}}=\mathbf{R})$}
+		\EndFunction
+	\end{algorithmic}
+	\caption{$\mathsf{Gentrap}(n,m,q)$ generates a (pseudo) random matrix $\mathbf{A}\in\mathbb{Z}^{n\times m}_q$ together with its gadget trapdoor $\mathbf{T}_\mathbf{A}=\mathbf{R}$ satisfies~\eqref{eq:gadget_matrix}} \label{alg:gentrap}
+\end{algorithm}
 
-Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mathbf{A}$, $t_{\mathbf{A}}$ and $\mathbf{A}\mathbf{s}+\mathbf{y}$ where $\mathbf{s}\in\mathbb{Z}^n_q$ is arbitrary and $\mathbf{y}\gets \mathcal{D}_{\mathbb{Z}^m,\alpha q}$ for $1/\alpha \geq \sqrt{n\log q}\cdot \omega(\sqrt{\log n})$, outputs $\mathbf{s}$ and $\mathbf{y}$ with overwhelming probability over $(\mathbf{A},\mathbf{t}_{\mathbf{A}})\gets \mathsf{GenTrap}(1^n,1^m,q)$. By using the ``strong'' trapdoor $\mathbf{R}$, one also can efficiently generate the ``weak'' trapdoor $\mathbf{T}_{\mathbf{A}}$ or $\mathbf{s}$. Since in lattice-based PQC, these trapdoors $\mathbf{R},\mathbf{T}_{\mathbf{A}}, \mathbf{s}$ can be used as the secret keys of hierarchical parties in some hierarchical cryptosystems.
 
-\peter{The above we could also expand to make more accessible.}
+%Moreover, there is an efficient algorithm $\mathsf{Invert}$ that, on input $\mathbf{A}$, $t_{\mathbf{A}}$ and $\mathbf{A}\mathbf{s}+\mathbf{y}$ where $\mathbf{s}\in\mathbb{Z}^n_q$ is arbitrary and $\mathbf{y}\gets \mathcal{D}_{\mathbb{Z}^m,\alpha q}$ for $1/\alpha \geq \sqrt{n\log q}\cdot \omega(\sqrt{\log n})$, outputs $\mathbf{s}$ and $\mathbf{y}$ with overwhelming probability over $(\mathbf{A},\mathbf{t}_{\mathbf{A}})\gets \mathsf{GenTrap}(1^n,1^m,q)$.
+
+In some cases, the pair of vector $(\mathbf{s},\mathbf{e})$ given an LWE problem instance $(\mathbf{A},\mathbf{y}=\mathbf{A}\mathbf{s}+\mathbf{e})$ is also used as the secret trapdoor.
+
+By using the ``strong'' trapdoor $\mathbf{R}$, one also can efficiently generate the ``weak'' trapdoor $\mathbf{T}_{\mathbf{A}}$ or $\mathbf{s}$. Since in lattice-based PQC, these trapdoors $\mathbf{R},\mathbf{T}_{\mathbf{A}}, \mathbf{s}$ can be used as the secret keys of hierarchical parties in some hierarchical cryptosystems.
+
+%\peter{The above we could also expand to make more accessible.}
 
 \subsection{RLWE problem}
 
@@ -542,7 +600,7 @@ Given $a_1,\dots, a_{m}\in R_q$ sampled independently and uniformly at random to
 
 \subsubsection{Trapdoor algorithms in the ring setting}
 
-The trapdoor mechanism techniques from~\cite{MP12} can be generalised to the ring setting where there exists an efficient randomised algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns $\mathbf{a}=(a_1,\dots,a_m)\in R^{m}_q$ and a trapdoor $t_{\mathbf{a}}$ such that the distribution of $\mathbf{a}$ is negligibly (in $n$) close to the uniform distribution. Moreover, there is an efficient algorithm $\mathsf{Invert}$ and a universal constant $C_T$ that, on input $\mathbf{a}$, $t_{\mathbf{a}}$ and $\mathbf{a}\cdot s+\mathbf{e}$ where $s \in R_q$ is arbitrary and $\|\mathbf{e}\|\leq q/(C_T\sqrt{n\log q})$, outputs $s$ with overwhelming probability.
+The trapdoor mechanism techniques from~\cite{MP12} can be generalised to the ring setting where there exists an efficient randomised algorithm $\mathsf{GenTrap}(1^n,1^m,q)$ that returns $\mathbf{a}=(a_1,\dots,a_m)\in R^{m}_q$ and a trapdoor $t_{\mathbf{a}}$ such that the distribution of $\mathbf{a}$ is statistically (in $n$) close to the uniform distribution. Moreover, there is an efficient algorithm $\mathsf{Invert}$ and a universal constant $C_T$ that, on input $\mathbf{a}$, $t_{\mathbf{a}}$ and $\mathbf{a}\cdot s+\mathbf{e}$ where $s \in R_q$ is arbitrary and $\|\mathbf{e}\|\leq q/(C_T\sqrt{n\log q})$, outputs $s$ with overwhelming probability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Trapdoor Claw Free Functions - TCFs} \label{tfcs}
@@ -581,7 +639,7 @@ For this reason, one needs a Boolean function (a Boolean predicate) $\mathcal{B}
 
 %In this section, we recall the definition of the trapdoor claw-free functions~\cite{GRM85},~\cite{Brakerski18_Interactiveproofofquantumness}.
 
-Trapdoor claw-free function (TCF), Fig.~\ref{fig:TCF}, is a two-to-one one-way function $f_\mathcal{I}(x)$ such that it is hard for a (quantum) polynomial-time adversary to simultaneously find the preimage pair $(x_0,x_1)$ and $x_0\neq x_1$ - \textit{``a claw''}, given any image $y = f_{\mathcal{I}}(x_0)=f_{\mathcal{I}}(x_1)$  where $\mathcal{I}$ is some problem instance. Sometimes, TCFs can also be defined as a pair of functions $f_{\mathcal{I},0}(x)$, $f_{\mathcal{I},1}(x)$ that are both one-to-one and have the same image space $\mathcal{Y}$ and it is cryptographically hard to find two inputs mapping to the same output. One special property of TCFs is that given a problem instance $\mathcal{I}$ sampled together with a suitable trapdoor $t_{k}$, it is possible for one to find all the pre-images of $y$ using the trapdoor $t_{k}$. 
+Trapdoor claw-free function (TCF), Fig.~\ref{fig:TCF}, is a two-to-one one-way function $f_\mathcal{I}(x)$ such that it is hard for a (quantum) polynomial-time adversary to simultaneously find the preimage pair $(x_0,x_1)$ and $x_0\neq x_1$ - \textit{``a claw''}, given any image $y = f_{\mathcal{I}}(x_0)=f_{\mathcal{I}}(x_1)$  where $\mathcal{I}$ is some problem instance. Sometimes, TCFs can also be defined as a pair of functions $f_{\mathcal{I},0}(x)$, $f_{\mathcal{I},1}(x)$ that is both one-to-one and have the same image space $\mathcal{Y}$ and it is cryptographically hard to find two inputs mapping to the same output. One special property of TCFs is that given a problem instance $\mathcal{I}$ sampled together with a suitable trapdoor $t_{k}$, it is possible for one to find all the pre-images of $y$ using the trapdoor $t_{k}$. 
 
 \begin{figure}[!htb]
 	\centering
@@ -603,7 +661,7 @@ More formally, we can define the trapdoor claw-free function as follows:
 \end{itemize}
 \end{Definition}
 
-\noindent Note that a quantum device can not invert the function a find the claw $(x_0,x_1)$, but it can hold these two preimages together with $w$ in a superposition
+\noindent Note that a quantum device cannot invert the function and find the claw $(x_0,x_1)$, but it can hold these two preimages together with $w$ in a superposition
 \begin{align}
     \frac{1}{\sqrt{2}}(\ket{x_0}+\ket{x_1})\ket{w}.
     \label{eq:tcfstate1}
@@ -616,7 +674,9 @@ then evaluating $f_{\mathcal{I},b}(x)$ into an output register to yield
 \begin{align}
     \frac{1}{\sqrt{\mathcal{X}}}\sum_{x\in\mathcal{X}}\ket{x}\ket{f_{\mathcal{I},b}(x)}.\label{eq:tcfstate3}
 \end{align}
-If one measures the output register of~\eqref{eq:tcfstate3} and obtains the result $y$, the state would collapse to the~\eqref{eq:tcfstate1} state such that $w=f_{\mathcal{I},0}(x_0)=f_{\mathcal{I},1}(x_1)$.
+
+When measuring the output register of the quantum state described by equation \eqref{eq:tcfstate3}, and obtaining a classical result $w$, the whole system undergoes a collapse, leading the state in the remaining register to collapse as well. The state would collapse to \eqref{eq:tcfstate1}, such that $w=f_{\mathcal{I},0}(x_0)=f_{\mathcal{I},1}(x_1)$. 
+
 Measuring the~\eqref{eq:tcfstate1} state in the standard basis ($Z$ basis), one would obtain a random preimage as the measurement result, i.e. $m=x_0$ or $m = x_1$, but not both, since measuring a quantum state means collapsing that state to one possible outcome. Besides, measuring the~\eqref{eq:tcfstate1} state in the $X$ basis yields a measurement result $m$ and a bit $c$ that satisfies $m \cdot (x_0\oplus x_1) = c$. One may observe that the measurement result using the $X$ basis $(m,c)$ can be used as the hardcore bit, as in the case of a one-way function. However, there is a subtle point in using TCFs in cryptographic protocols: not all TCFs possess the hardcore bit property, just as not all one-way functions successfully hide the information of the input. In all existing TCFs constructions, the only one that satisfies the hardcore bit property is the one utilising LWE problem, we will go into more detail and explaination in the next subsection.
 
 Note that these special properties of TCFs could be used to construct a Proof of Quantumness protocol, the details of which will be discussed in section~\ref{proof_of_quantumness}. However, a fully constructive TCFs that satisfies most cryptographic protocol requirements has not been explored yet. The paper \cite{Brakerski18_Interactiveproofofquantumness} considers a ``relaxed'' version of the TCFs, referred to as \textbf{Noisy trapdoor claw-free functions (NTCFs)}. For more detail and technical information about NTCFs, please refer to the Appendix~\ref{NTCFs}.
@@ -658,7 +718,7 @@ Moreover, we allow the adversary $\mathcal{A}$ to \textbf{\textit{adaptively cho
 %, i.e. the choice of $\mathbf{m}'$ depend upon the LWE sample. 
 
 Due to the \textit{leakage resilience} property of the LWE problem, the information of the $\mathbf{s}$ remains secret. The idea is that instead of sampling a uniformly random matrix $\mathbf{A}\in\mathbb{Z}^{m\times n}_q$ together with its trapdoor $\mathbf{s},\mathbf{e}$, we replace $\mathbf{A}$ by a ``lossy mode'' matrix $\tilde{\mathbf{A}}\in\mathbb{Z}^{m\times n}_q$, where $\tilde{\mathbf{A}}$ is sampled from a special distribution so that $\tilde{\mathbf{A}}=\mathbf{B}\mathbf{C}+\mathbf{E}$ for a skinny matrix $\mathbf{B}$, a wide matrix $\mathbf{C}$ and $\mathbf{E}\gets\mathcal{D}_{\mathbb{Z}_q}^{m\times n}$. It holds that $\tilde{\mathbf{A}}$ is indistinguishable from a uniformly random $\mathbf{A}$. Now, when we multiply $\tilde{\mathbf{A}}$ by $\mathbf{s}$, the matrix $\mathbf{C}$ compresses the information of $\mathbf{s}$. To be more specific, provided the matrix $\mathbf{C}$ is a uniformly random matrix with sufficiently few rows, the distribution $(\mathbf{C},\mathbf{C}\mathbf{s})$ for an arbitrary secret $\mathbf{s}$ does not reveal any parity of $\mathbf{s}$.
-Hence, even having the power to adaptively repeating the process of choosing $\mathbf{m}'$, an adversary can not find $\mathbf{s}$ (or information of both preimages $\mathbf{x}_0$ and $\mathbf{x}_1$).
+Hence, even having the power to adaptively repeat the process of choosing $\mathbf{m}'$, an adversary can not find $\mathbf{s}$ (or information of both preimages $\mathbf{x}_0$ and $\mathbf{x}_1$).
 More information on the proof can be found in~\cite{Brakerski18_Interactiveproofofquantumness}.
 
 
@@ -889,13 +949,13 @@ The following abbreviations are used in this manuscript:\\
 \begin{tabular}{@{}ll}
 PQC & Post-quantum cryptography\\
 RSA & Rivest-Shamir-Adleman algorithm\\
-ECC & Elliptic Curve  cryptography\\
-QKD & Quantum Key Distribution\\
+ECC & Elliptic curve cryptography\\
+QKD & Quantum key distribution\\
 IPQ & Interactive proof of quantumness\\
 SVP & Shortest vector problem\\
 SIVP & Shortest independent vectors problem\\
 CVP & Closest vector problem\\
-SIS & Shortest integer solution\\
+SIS & Short integer solution\\
 LWE & Learning with error\\
 RLWE & Ring-Learning with error\\
 TFCs & Trapdoor claw-free functions\\
