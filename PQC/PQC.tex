@@ -95,6 +95,24 @@
 		\end{align}
 		[a guess, check that] a reduced subspace of the allowed space of bijective maps. The full space cannot be efficiently encoded. 
 		\url{https://chatgpt.com/share/bbe8cbb0-7012-4959-a125-5bacfaac3e07}
+		\item The space of unique transformations over $X$ under the action of a permutation group is equivalent to the action of a common bitmask under XOR over the space, an eigenvalue-like relationship,
+		\begin{align}
+			\pi \circ x &= x \oplus c,\nonumber\\
+			S_n \times X &\sim \mathbb{Z}_2^n \times X.
+		\end{align}
+		\item Becomes,
+		\begin{align}
+			&f:\, X\to X,\, |X|=2^n,\nonumber\\
+			&|f| = 2^{(2^n)},	
+		\end{align}
+%		\begin{align}
+%			&|h| = 2^{|f|} = O(\log\log n),
+%		\end{align}
+		\item The action of a permutation group on a space of bit-strings is restricted to that of the action of bit-mask space, but with distinct algebraic properties.
+		\item Encoded against maximum entropy all codes becomes NP-hard rather than NP-complete. Enforces brute-force via random sampling. Samples uniformly over all images and pre-images. Not efficiently verifiable. (what does it become?)
+		\item Equivalent to \#P since inverse of solution count equates to knowing the respective uniform probability distribution.
+		\item Generalising TCFs to $k$ satisfying pre-images, claws correspond to independent points in the automorphism space of the second order braid which originate from distinct automorphism groups over the first braid. This reduces the problem to that of finding two distinct pre-pre-image automorphisms which map to a common pre-image automorphism group.
+		\item To construct a generalised TCF we take a single input and calculate
 \end{itemize}
 
 \section{Overview}
@@ -378,14 +396,16 @@ The respective group elements from both subgroups forming the computational subg
 	\phi:\, G_\mathcal{X}  \hookrightarrow \bar{G}_\mathcal{X}.
 \end{align}
 
-A universal gate set may be implemented via the NOT and CNOT (reversible XOR) gates,
+A universal gate set may be implemented via the NOT and CNOT (reversible XOR) gates, [complimentary encoding]
 \begin{align}
 	\mathrm{NOT}_i:&\, b_i \to \bar{b}_i \equiv b_i \to b_i\soplus \onevec,\\
 	\phi:&\, \mathcal{X}_i\soplus b_i \to \mathcal{X}_i\soplus b_i \soplus \onevec,\nonumber\\
 	\nonumber\\
-	\mathrm{CNOT}_{i,j}:&\, (b_i,b_j) \to (b_i\soplus b_j,b_j),\nonumber\\
-	\phi:\, &(s\soplus \mathcal{X}_i\soplus b_i, p\soplus \mathcal{X}_j\soplus b_j)\nonumber\\
-	\to\, &(s\soplus p \soplus \mathcal{X}_i \soplus \mathcal{X}_j \soplus b_i \soplus b_j, p\soplus \mathcal{X}_j\soplus b_j),\nonumber
+	\mathrm{CNOT}_{i,j}:&\, (b_i b_j,b_j) \to (b_i b_j,b_i),\nonumber\\
+\phi:\, &(\mathcal{X}_i \mathcal{X}_j b_i b_j, \mathcal{X}_j b_j) \to (\mathcal{X}_i \mathcal{X}_j b_i b_j, \mathcal{X}_i b_j),\nonumber\\
+%	\to &(\mathcal{X}_i\mathcal{X}_i' \mathcal{X}_j\mathcal{X}_j' b_i \soplus b_j, \mathcal{X}_j b_j)
+%	\phi:\, &(s\soplus \mathcal{X}_i\soplus b_i, p\soplus \mathcal{X}_j\soplus b_j)\nonumber\\
+%	\to\, &(s\soplus p \soplus \mathcal{X}_i \soplus \mathcal{X}_j \soplus b_i \soplus b_j, p\soplus \mathcal{X}_j\soplus b_j),\nonumber
 \end{align}
 with public,
 \begin{align}
