@@ -131,6 +131,29 @@ The security of asymmetric objects relates to their pre-image space which decomp
 
 The schemes resulting from this are compositional under binary XOR algebra.
 
+\section{Symmetric encryption}
+
+* Let $\pi\in S_n$ be shared secret key.
+
+* Let user $k$ prepare pair,
+\begin{align}
+	[\mathcal{X}_i^{(k)}, (\pi\circ \mathcal{X}_i^{(k)}) \oplus \mathcal{X}_j^{(k)}]_k.
+\end{align}
+
+* For known $\pi$ the tuple unlocks $\mathcal{X}_j^{(k)}$, a one-time entropy pad.
+
+* For a set of users the established shared secret is,
+\begin{align}
+	\tilde{\mathcal{X}}_j = \bigoplus_k \mathcal{X}_j^{(k)},
+\end{align}
+with entropy lower-bounded by the max of each contributing source.
+
+* The first round requires sharing a pair. Subsequent rounds only require sharing a single entropy term where $\mathcal{X}_j$ acts as the implied first term.
+
+* Following the initial two-key round, subsequent rounds daisy chain via differentially braiding against the previous term.
+
+* Affords multi-party unauthenticated secure entropy sharing.
+
 \section{Braid code summary}
 
 Asymmetric encryption ($A\to B: m$):
